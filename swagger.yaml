@@ -51,7 +51,6 @@ paths:
                   invoiceType: '1111'
                   location: TST
                   industry: TST
-                clientId: 01GG9M44GQRAFBR7H7AH0KN80K
       security:
         - bearerAuth: []
       responses:
@@ -209,7 +208,6 @@ paths:
                   currency: SAR
                   subject: Testing account
                   documentId: 2022100627
-                clientId: 01GG9M44GQRAFBR7H7AH0KN80K
       security:
         - bearerAuth: []
       responses:
