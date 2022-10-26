@@ -176,7 +176,7 @@ paths:
                     district: Riyadh
                     country: SA
                   documentLineItems:
-                      lineItemDesc: Ball point pen
+                    - lineItemDesc: Ball point pen
                       lineItemPrice: 10.00
                       lineItemQty: 10
                       lineItemTaxableAmount: 100
