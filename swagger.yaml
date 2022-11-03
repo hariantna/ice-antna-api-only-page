@@ -32,7 +32,7 @@ paths:
   /api/v1/proto/csrRequest:
     post:
       tags:
-        - Invoice/Note
+        - Onboarding
       summary: CsrReq
       requestBody:
         content:
@@ -146,7 +146,7 @@ paths:
               type: object
               example:
                 invoiceData:
-                  documentType: TAX_INVOICE
+                  documentType: SIMPLIFIED_TAX_INVOICE
                   referenceId: ''
                   documentIssueDateTime: '2022-10-21T12:53:13.000Z'
                   documentDueDateTime: '2022-10-26T12:53:13.000Z'
@@ -177,7 +177,7 @@ paths:
                     country: SA
                   documentLineItems:
                     - lineItemDesc: Ball point pen
-                      lineItemPrice: 10.00
+                      lineItemPrice: 10
                       lineItemQty: 10
                       lineItemTaxableAmount: 100
                       discountOnLineItem: 0
@@ -196,17 +196,13 @@ paths:
                   isExport: 'false'
                   isSummary: 'false'
                   supplyDate: '2022-10-21T12:53:13.000Z'
-                  sellerVatRegistrationNumber: '300244974200003'
+                  sellerVatRegistrationNumber: '300055184400003'
                   sellerGroupVatRegistrationNumber: ''
                   buyerVatRegistrationNumber: '300244974200003'
                   buyerGroupVatRegistrationNumber: '300244974200003'
                   discountOnDocumentTotal: 0
                   specialTaxTreatment: '0'
-                  customerNotes: Testing account
-                  termsAndConditions: Testing account
-                  documentStatus: CREATED
                   currency: SAR
-                  subject: Testing account
                   documentId: 2022100627
       security:
         - bearerAuth: []
@@ -217,7 +213,7 @@ paths:
             Date:
               schema:
                 type: string
-                example: Wed, 26 Oct 2022 05:08:40 GMT
+                example: Wed, 26 Oct 2022 05:19:17 GMT
             Content-Type:
               schema:
                 type: string
@@ -230,6 +226,10 @@ paths:
               schema:
                 type: string
                 example: keep-alive
+            x-amzn-RequestId:
+              schema:
+                type: string
+                example: 9b13af08-ab14-4239-9405-753724aed80b
             Access-Control-Allow-Origin:
               schema:
                 type: string
@@ -239,6 +239,10 @@ paths:
                 type: string
                 example: >-
                   Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,x-requested-with,UUID
+            x-amz-apigw-id:
+              schema:
+                type: string
+                example: amNzJETWhcwFkUQ=
             Access-Control-Allow-Methods:
               schema:
                 type: string
@@ -249,11 +253,15 @@ paths:
                 example: >-
                   Access-Control-Allow-Origin, Access-Control-Allow-Headers,
                   Access-Control-Allow-Methods
+            X-Amzn-Trace-Id:
+              schema:
+                type: string
+                example: Root=1-6358c347-39ad97b1376e30fd0f0f5d4b;Sampled=0
           content:
             application/json:
               schema:
                 type: object
-              examples:  
+              examples:
                 example-0:
                   summary: Report Document
                   value:
@@ -278,13 +286,86 @@ paths:
                   summary: Report Document
                   value:
                     isReported: false
-        '400':
-          description: BAD REQUEST
+  /api/v1/proto/generateQRCode:
+    post:
+      tags:
+        - QR Code
+      summary: QR Code(Simplified Invoice)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                invoiceData:
+                  documentType: SIMPLIFIED_TAX_INVOICE
+                  referenceId: ''
+                  documentIssueDateTime: '2022-10-21T12:53:13.000Z'
+                  documentDueDateTime: '2022-10-26T12:53:13.000Z'
+                  sellerName: Company Name
+                  sellerAddress:
+                    addrLine1: Makkah
+                    addrLine2: Al Alam Street
+                    city: Riyadh
+                    state: Riyadh
+                    zipCode: '24211'
+                    phone: '2121'
+                    fax: '8228'
+                    district: Riyadh
+                    country: Saudi Arabia
+                    additionalNo: ''
+                  buyerName: Antna
+                  buyerAddress:
+                    attention: Meiyappan MM
+                    countryOrRegion: SA
+                    addrLine1: 12, Masjid Street
+                    addrLine2: Amjad Building
+                    city: Dammam
+                    state: Riyadh
+                    zipCode: '12313'
+                    phone: '2121'
+                    fax: '8228'
+                    district: Riyadh
+                    country: SA
+                  documentLineItems:
+                    - lineItemDesc: Ball point pen
+                      lineItemPrice: 10
+                      lineItemQty: 10
+                      lineItemTaxableAmount: 100
+                      discountOnLineItem: 0
+                      vatRateOnLineItem: 15
+                      lineItemVatAmount: 15
+                      lineItemSubTotal: 115
+                  totalExcludingVat: 100
+                  totalTaxableAmountExcludingVat: 100
+                  vatTotal: 15
+                  documentTotal: 115
+                  isSpecialBillingAgreement: 'false'
+                  isTransactionType: 'false'
+                  isSelfBilled: 'false'
+                  isThirdParty: 'true'
+                  isNominalSupply: 'false'
+                  isExport: 'false'
+                  isSummary: 'false'
+                  supplyDate: '2022-10-21T12:53:13.000Z'
+                  sellerVatRegistrationNumber: '300055184400003'
+                  sellerGroupVatRegistrationNumber: ''
+                  buyerVatRegistrationNumber: '300244974200003'
+                  buyerGroupVatRegistrationNumber: '300244974200003'
+                  discountOnDocumentTotal: 0
+                  specialTaxTreatment: '0'
+                  currency: SAR
+                  documentId: 2022100627
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK
           headers:
             Date:
               schema:
                 type: string
-                example: Wed, 26 Oct 2022 05:08:40 GMT
+                example: Thu, 03 Nov 2022 04:09:31 GMT
             Content-Type:
               schema:
                 type: string
@@ -292,11 +373,15 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '349'
+                example: '433'
             Connection:
               schema:
                 type: string
                 example: keep-alive
+            x-amzn-RequestId:
+              schema:
+                type: string
+                example: 5cd50847-9ae0-4658-a452-2d8514d1f733
             Access-Control-Allow-Origin:
               schema:
                 type: string
@@ -306,6 +391,10 @@ paths:
                 type: string
                 example: >-
                   Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,x-requested-with,UUID
+            x-amz-apigw-id:
+              schema:
+                type: string
+                example: bAbHIGn-hcwFseQ=
             Access-Control-Allow-Methods:
               schema:
                 type: string
@@ -316,12 +405,14 @@ paths:
                 example: >-
                   Access-Control-Allow-Origin, Access-Control-Allow-Headers,
                   Access-Control-Allow-Methods
+            X-Amzn-Trace-Id:
+              schema:
+                type: string
+                example: Root=1-63633efa-0f4fd26f2a1ba8085aaae8cd;Sampled=0
           content:
             application/json:
               schema:
                 type: object
-              examples:  
-                example-1:
-                  summary: Report Document
-                  value:
-                    isReported: false            
+              example:
+                encodedQrCodeData: >-
+                  AQxDb21wYW55IE5hbWUCDzMwMDA1NTE4NDQwMDAwMwMUMjAyMi0xMC0yMVQwMDo1MzoxM1oEBjExNS4wMAUFMTUuMDAGLE9QUVJpUjRlVVpnL01QbXE1eStqMlVKTlZlOGxZbGF5ZkFiZ3pnTkFpdTQ9B2BNRVlDSVFDYzFJdlM3RVVGbXVGK0NHaDlCT0x5TUQ2UkF6elFvS043ckpmOXdZaXZjUUloQU9wdFkrbGx2bXd2TXZVaThvZjFWUFZCa1d0c1NjSXprSUZkSU1HOFR1emkIWDBWMBAGByqGSM49AgEGBSuBBAAKA0IABA/8G9pYQbwSAvAp52b6LqOjs0cpsplPTVkYSMmjIRkRAQhGQeBAFawbldsV4sWOKgWH/XXXq85FvQ8HaNyJR4I=
