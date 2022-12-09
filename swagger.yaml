@@ -1,28 +1,145 @@
 openapi: 3.0.0
 info:
-  title: Antna ICE - Invoice/Note Reporting API 1.0
-  description: |-
-    This is a test API for Reporting Invoice/Note with ZATCA's Fatoora Portal. 
-    
-    Some useful links for reference:
-    - [Blogs](https://blog.antna.co.in/)
-    - [Youtube Playlist](https://www.youtube.com/watch?v=QXdEyqZ2gs0&list=PLu4vz4jylcs4GuAyuUJbhKQOQImJexEt4)
+  title: Antna ICE - ZATCA Compliance APIs 1.0
+  description: >-
+    Welcome to Antna's API Documentation. We've designed this document to help
+    developers and Antna users fully understand and integrate our API for a
+    seamless and easy deployment. These APIs enable you to utilise most of your
+    Antna account's ZATCA features fully.
+
+
+    We've listed all the APIs, their required parameters, and their example
+    requests and responses on the right for easy understanding. The easiest way
+    to start using the Antna APIs is by clicking the **Run in Postman** button
+    above. The [Postman](https://www.getpostman.com/) is a free tool that helps
+    developers run and debug API requests.
+
+
+    Our APIs are based around
+    [REST](https://en.wikipedia.org/wiki/Representational_state_transfer)
+    architecture and use the basic
+    [HTTP](https://www.tutorialspoint.com/http/http_status_codes) request
+    methods. Our APIs accept
+    [JSON](https://www.w3schools.com/whatis/whatis_json.asp) - encoded body
+    requests and return data in the same form.
+
+
+    Read through the following sections for the integration process.
+
+
+    # Getting Started
+
+
+    First, you need to register with Antna and create an account. Click on
+    this [link](https://ice-antna-api-only.auth.ap-south-1.amazoncognito.com/signup?client_id=6q5j2vj9b0uqp3ekkurosh19ef&response_type=token&scope=aws.cognito.signin.user.admin+https://ap-south-1.console.aws.amazon.com/api&redirect_uri=https://oauth.pstmn.io/v1/browser-callback) and refer to this
+    [video](https://youtu.be/zHZnLG-cbho) to complete the sign-up process.
+
+
+    # Document and API Usage Guidelines
+
+
+    - Our APIs use the basic HTTP request codes: _POST_, _GET_, _PATCH_, &
+    _PUT_.
+
+    - You can select the required response and request code language by
+    selecting it from the drop-down menu on the top.
+
+    - You can import and test all our full API collection in the Postman app by
+    clicking on the **' Run in Postman'** button.
+
+    - **Note**: Any requests made using the valid API credentials will affect
+    the real-time data in your Antna account.
+
+    - Authorization: accessToken
+        
+
+    - All the APIs are provided with their appropriate example requests and
+    responses for successful and failed calls. The example definitions are:
+        - **Successful Call**: The API call was correct.
+        - **Invalid Data**: The data entered was incorrect.
+        - **Missing Fields**: Some of the required fields are missing.
+        - **Wrong Format**: There is a syntax error in the code.
+
+    # Errors and Response codes
+
+
+    While using Antna's APIs, you may run into some standard response and error
+    codes. The most common ones are listed along with their descriptions as
+    follows:
+
+
+    | **RESPONSE CODE** | **DESCRIPTION** |
+
+    | --- | --- |
+
+    | `200` & `202` - **OK** & **Accepted** | Everything worked as expected, and
+    you'll get a response. Some APIs may respond with an error message if data
+    is invalid. |
+
+    | `400` - **Bad Request** | The request was invalid or cannot be otherwise
+    served. |
+
+    | `401` - **Unauthorized** | There is some error during validation. You need
+    to check your token or credentials. |
+
+    | `404` - **Not Found** | The URI requested is invalid or the resource
+    requested does not exist. |
+
+    | `429` - **Too Many Requests** | You have exceeded the API call rate limit.
+    |
+
+    | `500`, `502`, `503`, `504` - **Server Errors** | Some server error has
+    occurred. Some APIs may show this due to syntax or parameter errors. Try
+    contacting support if this persists. |
+
+
+    ### Support:
+
+
+    - All the required information on integration is in this document. Please
+    read it thoroughly.
+
+    - For any integration and API-related support, you can feel free to drop us
+    an email at [support@antna.co.in](mailto:support@antna.co.in).  
+        For any other issues, please email us at: [support@antna.co.in](mailto:support@antna.co.in).
+    - The Antna terms of service are listed here: [Terms Of
+    Service](https://www.antna.co.in/terms.html)
   termsOfService: https://www.antna.co.in/terms.html
   contact:
     email: support@antna.co.in
   license:
     name: License
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.0.11
+    url: http://www.apache.org/licenses/LICENSE-2.0.html  
+  version: 1.0.0
+servers:
+  - url: https://kixq9sqvjc.execute-api.ap-south-1.amazonaws.com/test
 components:
   securitySchemes:
     bearerAuth:            # arbitrary name for the security scheme
       type: http
       scheme: bearer
-      bearerFormat: JWT
-servers:
-  - url: https://kixq9sqvjc.execute-api.ap-south-1.amazonaws.com/test
+      bearerFormat: JWT  
 tags:
+  - name: Zatca
+    description: >-
+      **ZATCA APIs:**
+
+
+      This folder consists of the APIs that will help your application get ZATCA
+      compliant upon integration.
+
+
+      All the APIs require an OAuth 2.0 Token header for authorization in the
+      header. Please sign-in through the postman for use in the test environment
+      for getting the OAuth Access Token.
+
+
+      For production environment, we'll provide an Authorization API to get the
+      access token & refresh token.
+
+
+      For security reasons, we've not enabled API sign-in in this test
+      environment.
   - name: Onboarding
     description: Onboarding an EGS(E-Invoice Generation Solution) with ZATCA's Fatoora Portal by raising CSR Request
   - name: QR Code
@@ -30,13 +147,113 @@ tags:
   - name: Reporting
     description: Reporting for Invoice/Note with ZATCA's Fatoora Portal
   - name: Clearance
-    description: Clearance for Invoice/Note with ZATCA's Fatoora Portal 
+    description: Clearance for Invoice/Note with ZATCA's Fatoora Portal   
 paths:
   /api/v1/proto/csrRequest:
     post:
       tags:
         - Onboarding
-      summary: CsrReq
+      summary: Onboarding by CSR Request
+      description: >-
+        Use this API to onboard your EGS(E-Invoice Generation Solution) in the
+        ZATCA sandbox environment.
+
+
+        You have to pass all the required params in the specified format at the
+        minimum to onboard your EGS successfully. You can add additional
+        parameters if applicable as per your preference.
+
+
+        #### Request Parameters:
+
+
+        | **PARAMS** | **REQUIRED** | **DATA TYPE** | **DESCRIPTION** |
+        **EXAMPLE** |
+
+        | --- | --- | --- | --- | --- |
+
+        | `csrInputs` | YES | _json_ | The csr(certificate signing request)
+        details you need to provide for onboarding the EGS. | {  <br>"otp":
+        "123345",  <br>"commonName": "TST-886431145-300055184400003", 
+        <br>"serialNumber": "1-TST |
+
+        | `otp` | YES | _string_ | The OTP that you'll get from the Fatoora
+        Portal(logged in using taxpayer credentials) after following the ZATCA
+        onboarding process as per Antna Guidelines document. | 123345 |
+
+        | `commonName` | YES | _string_ | A Unique Name or Asset Tracking Number
+        of your EGS. There is no specific format, any free text will be
+        accepted. | TST-886431145-300055184400003 |
+
+        | `serialNumber` | YES | _string_ | Unique identification code for the
+        EGS. Serial number should be in this **"1-xxx | 2-xxx |
+
+        | `organizationIdentifier` | YES | _string_ | It is the organization VAT
+        number. It is a **15** digit number with starting and ending digits as
+        **'3'.** | 300055184400003 |
+
+        | `organizationUnitName` | YES | _string_ | The branch name for
+        Taxpayers. In case of VAT Groups , this field should contain the
+        10-digit TIN number of the individual group member whose EGS Unit is
+        being onboarded. **If 11th digit of Organization Identifier is not = 1
+        then Free text and if 11th digit of Organization Identifier = 1 then
+        needs to be a 10 digit number.** | 3123456789 |
+
+        | `organizationName` | YES | _string_ | Name of the Taxpayer. It can be
+        free text. | Antna Technologies Private Limited |
+
+        | `countryName` | YES | _string_ | Name of the country.  <br>2 letter
+        code (**ISO 3166 Alpha-2**) | SA |
+
+        | `invoiceType` | YES | _string_ | The document type that the Taxpayer’s
+        solution unit will be issuing/generating. It can be one or a combination
+        of Standard Tax Invoice (T), Simplified Tax Invoice (S), (X), (Y). The
+        input should be using the digits 0 & 1 and mapping those to “TSXY”
+        where:  <br>0 = False/Not supported  <br>1= True/Supported  <br>(X) and
+        (Y) are for future use and should be set to 0 by default for the time
+        being.  <br>For example: 1000 would mean Solution will be generating
+        Standard Invoices only. 0100 would mean Solution will be generating
+        Simplified invoices (B2C) only and 1100 means Solution will be
+        generating both Standard (B2B) and Simplified invoices (B2C). | 1100 |
+
+        | `location` | YES | _string_ | The address of the Branch or location
+        where the device or solution unit is primarily situated (could be
+        website address for e-commerce). **Preferably(not mandatory)** in the
+        Short Address format of the Saudi National Address
+        [https://splonline](https://splonline). com.sa/en/national- address-1/.
+        Free text will be accepted.  <br> | Riyadh |
+
+        | `industry` | YES | _string_ | Industry or sector for which the device
+        or solution(EGS) will generate invoices. Free text will be accepted. |
+        Petroleum |
+
+
+        #### **Response Parameters:**
+
+
+        | **PARAMS** | **DATA TYPE** | **DESCRIPTION** | **EXAMPLE** |
+
+        | --- | --- | --- | --- |
+
+        | `status` | string | Status of onboarding by ZATCA.  <br> 
+        <br>Onboarding involves multiple internal steps(API calls) with the
+        ZATCA platform and, for API simplification the status is classified as
+        success or failure on the whole.  <br>  <br>The enum value is according
+        to the respective scenarios listed below:  <br>  <br>1) Successfully
+        onboarded with ZATCA's Fatoora Portal - **SUCCESS**2) OnboardiNg failed
+        with ZATCA's Fatoora Portal due to various errors - **ERROR**  <br>This
+        field will not be present for request level errors(field format errors)
+        | SUCCESS |
+
+        | `errors` | list | If onboarding fails because of error from the APIs
+        in ZATCA layer, the corresponding API error messages will be returned
+        here. Please log this error response for RCA. | \[...\] |
+
+        | `code` | string | Error status code of the failed ZATCA API. | 400
+        BAD_REQUEST |
+
+        | `message` | string | Error message from the corresponding API | OTP is
+        required field |
       requestBody:
         content:
           application/json:
@@ -46,16 +263,16 @@ paths:
                 csrInputs:
                   otp: '123345'
                   commonName: TST-886431145-300055184400003
-                  serialNumber: 1-TST|2-TST|3-ed22f1d8-e6a2-1118-9b58-d9a8f11e445f
+                  serialNumber: 1-TST|2-TST|3-ed22f1d8-e6a2-1118-9b58-d9a8f11e445e
                   organizationIdentifier: '300055184400003'
                   organizationUnitName: '3123456789'
                   organizationName: '3123456789'
                   countryName: SA
-                  invoiceType: '1111'
+                  invoiceType: '1100'
                   location: TST
                   industry: TST
       security:
-        - bearerAuth: []
+        - bearerAuth: []            
       responses:
         '200':
           description: OK
@@ -136,12 +353,225 @@ paths:
                     status: ERROR
                     errors:
                       - code: 400 BAD_REQUEST
-                        message: OTP is required field        
+                        message: OTP is required field3
   /api/v1/proto/reportDocument:
     post:
       tags:
         - Reporting
-      summary: Report Document
+      summary: Reporting for Invoice/Note with ZATCA's Fatoora Portal
+      description: >-
+        Use this API to report your EGS(E-Invoice Generation Solution) generated
+        B2C documents(**Simplified Tax Invoice** or **Simplified Tax Invoice
+        Credit Note** or **Simplified Tax Invoice Debit Note** )to the ZATCA's
+        sandbox environment.
+
+
+        You have to pass all the required params in the specified format at the
+        minimum to report your document successfully. You can add additional
+        parameters if applicable as per your preference.
+
+
+        #### Request Parameters:
+
+
+        | **PARAMS** | **REQUIRED** | **DATA TYPE** | **DESCRIPTION** |
+        **EXAMPLE** |
+
+        | --- | --- | --- | --- | --- |
+
+        | `invoiceData` | YES | _json_ | The csr(certificate signing request)
+        details you need to provide for onboarding the EGS. | {...} |
+
+        | `documentType` | YES | _string_ | For the following documents types,
+        use the corresponding enums:  <br>  <br>1) **Simplified Tax Invoice -**
+        SIMPLIFIED_TAX_INVOICE  <br>2) **Simplified Tax Invoice Credit Note -**
+        SIMPLIFIED_TAX_INVOICE_CREDIT_NOTE3) **Simplified Tax Invoice Debit Note
+        -** SIMPLIFIED_TAX_INVOICE_DEBIT_NOTE  <br> | SIMPLIFIED_TAX_INVOICE |
+
+        | `referenceId` | CONDITIONAL | _string_ | ID of the original
+        document(reference document) for which this document is generated. 
+        <br>  <br>Applicable only for document types:  <br>  <br>1) **Simplified
+        Tax Invoice Credit Note**2) **Simplified Tax Invoice Debit Note** 
+        <br>**Example**:  <br>If the document type is Simplified Credit Note,
+        the reference id should be Invoice number for which this credit note is
+        being created. | 2022100627 |
+
+        | `documentIssueDateTime` | YES | _string_ | Document Issue Date and
+        Time in **"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"** format. |
+        2022-10-21T12:53:13.000Z |
+
+        | `documentDueDateTime` | NO | _string_ | Document Due Date and Time in
+        **"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"** format. | 2022-10-21T12:53:13.000Z |
+
+        | `sellerName` | YES | _string_ | Name of the seller | Company Name |
+
+        | `sellerAddress` | YES | _json_ | Address of the seller with the below
+        mentioned fields. | {  <br>"addrLine1": "Makkah",  <br>"addrLine2": "Al
+        Alam Street",  <br>"city": "Riyadh",  <br>"state": "Riyadh", 
+        <br>"zipCode": "24211",  <br>"phone": "2121",  <br>"fax": "8228", 
+        <br>"district": "Riyadh",  <br>"country": "Saudi Arabia", 
+        <br>"additionalNo": ""  <br>} |
+
+        | `buyerName` | CONDITIONAL | string | Buyer Name is mandatory to be
+        filled as per the transactions mentioned in article 53 (7) and for
+        private education and private healthcare to citizens. | Vignesh K |
+
+        | buyerAddress | NO | json | Buyer address | {  <br>"attention":
+        "Meiyappan MM",  <br>"countryOrRegion": "SA",  <br>"addrLine1": "12,
+        Masjid Street",  <br>"addrLine2": "Amjad Building",  <br>"city":
+        "Dammam",  <br>"state": "Riyadh",  <br>"zipCode": "12313",  <br>"phone":
+        "2121",  <br>"fax": "8228",  <br>"district": "Riyadh",  <br>"country":
+        "SA"  <br>} |
+
+        | `addrLine1` | YES | _string_ | Address Line 1 | Makkah |
+
+        | `addrLine2` | YES | _string_ | Address Line 2 | Al Alam Street |
+
+        | `buildingNumber` | YES | string | Building Number | 20211 |
+
+        | `additionalNo` | YES | string | Additional Number(4 digits) | 2134 |
+
+        | `city` | YES | _string_ | City  <br> | Riyadh |
+
+        | `state` | YES | _string_ | State | Riyadh |
+
+        | `zipCode` | YES | string | Postal Code(5 digits) | 24211 |
+
+        | `phone` | YES | string | Phone | 2121 |
+
+        | `fax` | YES | string | Fax | 5646465654545 |
+
+        | `documentLineItems` | YES | list | Line items list | \[...\] |
+
+        | `lineItemDesc` | YES | string | Line item description | Ball point pen
+        |
+
+        | `lineItemPrice` | YES | string | Line item price | 10.00 |
+
+        | `lineItemQty` | YES | string | Line item quantity | 10.00 |
+
+        | `lineItemTaxableAmount` | YES | string | Line item taxable amount 
+        <br>  <br>lineItemTaxableAmount = (lineItemPrice \* lineItemQty) -
+        discountOnLineItem | 100.00 |
+
+        | `discountOnlineItem` | YES | string | Discount in amount applied on
+        the line item | 0.00 |
+
+        | `vatRateOnLineItem` | YES | string | Vat Rate applied to the line item
+        | 15.00 |
+
+        | `lineItemVatAmount` | YES | string | Vat amount of the line item 
+        <br>  <br>lineItemVatAmount = (lineItemTaxableAmount \*
+        vatRateOnLineItem)/100  <br> | 15.00 |
+
+        | `lineItemSubTotal` | YES | string | Total of the Line Item  <br> 
+        <br>lineItemSubTotal = lineItemTaxableAmount + lineItemVatAmount |
+        115.00 |
+
+        | `totalExcludingVat` | YES | string | totalExcludingVat = documentTotal
+        - totalVat | 100.00 |
+
+        | `totalTaxableAmountExcludingVat` | YES | string |
+        totalTaxableAmountExcludingVat = sum of all lineItemTaxableAmount of
+        line items - discountOnDocumentTotal(if applied) | 100.00 |
+
+        | `vatTotal` | YES | string | vatTotal = sum of all lineItemVatAmount of
+        line items | 15.00 |
+
+        | `documentTotal` | YES | string | documentTotal =
+        totalTaxableAmountExcludingVat + vatTotal | 115.00 |
+
+        | `isSpecialBillingAgreement` | YES | boolean | If transaction for the
+        following conditions:  <br>  <br>1) Self-billed invoice  <br>2) Third
+        party billed invoice on behalf of the supplier | false |
+
+        | `isTransactionType` | YES | boolean | If transaction is any of the
+        following(not mutually exclusive):  <br>  <br>1) Nominal Supply  <br>2)
+        Export  <br>3) Summary | false |
+
+        | `isSelfBilled` | YES | boolean | If `isSpecialBillingAgreement` is
+        true and self - billed condition | false |
+
+        | `isThirdParty` | YES | boolean | If `isSpecialBillingAgreement` is
+        true and Third party condition | true |
+
+        | `isNominalSupply` | YES | boolean | If `isTransactionType` is true and
+        nominal supply condition | false |
+
+        | `isExport` | YES | boolean | If `isTransactionType` is true and export
+        condition | false |
+
+        | `isSummary` | YES | boolean | If `isTransactionType` is true and
+        summary invoice condition | false |
+
+        | `supplyDate` | YES | string | Goods/Service supply Date and Time in
+        **"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"** format. |  |
+
+        | `sellerVatRegistrationNumber` | YES | string | Seller Vat registration
+        number | 300055184400003 |
+
+        | `additionalSellerIdType` | YES | string | For the following Seller ID
+        types, use the corresponding enums in bold:  <br>  <br>1) Commercial
+        registration number with "**CRN**" as schemeID  <br>2) Momra license
+        with "**MOM**" as schemeID -  <br>3) MLSD license with "**MLS**" as
+        schemeID  <br>4) Sagia license with "**SAG**" as schemeID  <br>5) Other
+        OD with "**OTH**" as schemeID  <br>In case multiple IDs exist then one
+        of the above must be entered following the sequence specified above |
+        CRN |
+
+        | `additionalSellerIdNumber` | YES | string | Additional seller ID
+        number of the ID type chosen | 1112233344 |
+
+        | `sellerGroupVatRegistrationNumber` | CONDITIONAL | string | Group Vat
+        registration number of the seller | 300244974200003 |
+
+        | `additionalBuyerIdType` | CONDITIONAL | string | Required only for
+        private education or private healthcare supplies to Citizens. This field
+        should contain the National ID only for invoices pertaining to private
+        education and private healthcare to citizens. National ID is mandatory
+        to be filled for private education and private healthcare to citizens. 
+        <br>  <br>Enum - **NATIONAL_ID** | NATIONAL_ID |
+
+        | `additionalBuyerIdNumber` | CONDITIONAL | string | Buyer's NATIONAL ID
+        number | 112233445566 |
+
+        | `discountOnDocumentTotal` | NO | string | Discount applied on document
+        total | 0.00 |
+
+        | `specialTaxTreatment` | CONDITIONAL | string | Where Tax is not
+        charged at the standard rate, this field should have a narration “Tax
+        treatment applied to the supply” as per Article 53 of the VAT
+        Implementing Regulation.  <br>  <br>Narration to be entered if Tax is
+        not charged at basic rate. | 0 |
+
+        | `currency` | YES | string | Transaction Currency of the document | SAR
+        |
+
+        | `documentId` | YES | string | A unique identification of the Invoice -
+        Invoice Reference number(IRN) | 2022100627 |
+
+
+        #### **Response Parameters:**
+
+
+        | **PARAMS** | **DATA TYPE** | **DESCRIPTION** | **EXAMPLE** |
+
+        | --- | --- | --- | --- |
+
+        | `isReported` | boolean | Reporting status of the B2C document with
+        ZATCA.  <br>  <br>Please refer to the `zatcaResponse` field if this
+        field is false to know more about the specific error from ZATCA. | true
+        |
+
+        | `zatcaResponse` | list | Proxy of ZATCA Reporting API response.  <br> 
+        <br>Will be populated for both success and failure scenarios. | { 
+        <br>"validationResults": {  <br>"infoMessages": \[  <br>{  <br>"type":
+        "INFO",  <br>"code": "XSD_ZATCA_VALID",  <br>"category": "XSD
+        validation",  <br>"message": "Complied with UBL 2.1 standards in line
+        with ZATCA specifications",  <br>"status": "PASS"  <br>}  <br>\], 
+        <br>"warningMessages": \[\],  <br>"errorMessages": \[\],  <br>"status":
+        "PASS"  <br>},  <br>"reportingStatus": "REPORTED",  <br>"timestamp": 0, 
+        <br>"status": 0  <br>} |
       requestBody:
         content:
           application/json:
@@ -201,15 +631,14 @@ paths:
                   supplyDate: '2022-10-21T12:53:13.000Z'
                   sellerVatRegistrationNumber: '300055184400003'
                   sellerGroupVatRegistrationNumber: ''
-                  buyerVatRegistrationNumber: '300244974200003'
-                  buyerGroupVatRegistrationNumber: '300244974200003'
+                  additionalSellerIdType: CRN
+                  additionalSellerIdNumber: '1122334455667788'
                   discountOnDocumentTotal: 0
                   specialTaxTreatment: '0'
                   currency: SAR
                   documentId: 2022100627
-                serialNumber: 1-TST|2-TST|3-ed22f1d8-e6a2-1118-9b58-d9a8f11e445f    
       security:
-        - bearerAuth: []
+        - bearerAuth: []             
       responses:
         '200':
           description: OK
@@ -290,142 +719,243 @@ paths:
                   summary: Report Document
                   value:
                     isReported: false
-  /api/v1/proto/generateQRCode:
-    post:
-      tags:
-        - QR Code
-      summary: QR Code(Simplified Invoice)
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              example:
-                invoiceData:
-                  documentType: SIMPLIFIED_TAX_INVOICE
-                  referenceId: ''
-                  documentIssueDateTime: '2022-10-21T12:53:13.000Z'
-                  documentDueDateTime: '2022-10-26T12:53:13.000Z'
-                  sellerName: Company Name
-                  sellerAddress:
-                    addrLine1: Makkah
-                    addrLine2: Al Alam Street
-                    city: Riyadh
-                    state: Riyadh
-                    zipCode: '24211'
-                    phone: '2121'
-                    fax: '8228'
-                    district: Riyadh
-                    country: Saudi Arabia
-                    additionalNo: ''
-                  buyerName: Antna
-                  buyerAddress:
-                    attention: Meiyappan MM
-                    countryOrRegion: SA
-                    addrLine1: 12, Masjid Street
-                    addrLine2: Amjad Building
-                    city: Dammam
-                    state: Riyadh
-                    zipCode: '12313'
-                    phone: '2121'
-                    fax: '8228'
-                    district: Riyadh
-                    country: SA
-                  documentLineItems:
-                    - lineItemDesc: Ball point pen
-                      lineItemPrice: 10
-                      lineItemQty: 10
-                      lineItemTaxableAmount: 100
-                      discountOnLineItem: 0
-                      vatRateOnLineItem: 15
-                      lineItemVatAmount: 15
-                      lineItemSubTotal: 115
-                  totalExcludingVat: 100
-                  totalTaxableAmountExcludingVat: 100
-                  vatTotal: 15
-                  documentTotal: 115
-                  isSpecialBillingAgreement: 'false'
-                  isTransactionType: 'false'
-                  isSelfBilled: 'false'
-                  isThirdParty: 'true'
-                  isNominalSupply: 'false'
-                  isExport: 'false'
-                  isSummary: 'false'
-                  supplyDate: '2022-10-21T12:53:13.000Z'
-                  sellerVatRegistrationNumber: '300055184400003'
-                  sellerGroupVatRegistrationNumber: ''
-                  buyerVatRegistrationNumber: '300244974200003'
-                  buyerGroupVatRegistrationNumber: '300244974200003'
-                  discountOnDocumentTotal: 0
-                  specialTaxTreatment: '0'
-                  currency: SAR
-                  documentId: 2022100627
-                serialNumber: 1-TST|2-TST|3-ed22f1d8-e6a2-1118-9b58-d9a8f11e445f    
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: OK
-          headers:
-            Date:
-              schema:
-                type: string
-                example: Thu, 03 Nov 2022 04:09:31 GMT
-            Content-Type:
-              schema:
-                type: string
-                example: application/json
-            Content-Length:
-              schema:
-                type: integer
-                example: '433'
-            Connection:
-              schema:
-                type: string
-                example: keep-alive
-            x-amzn-RequestId:
-              schema:
-                type: string
-                example: 5cd50847-9ae0-4658-a452-2d8514d1f733
-            Access-Control-Allow-Origin:
-              schema:
-                type: string
-                example: '*'
-            Access-Control-Allow-Headers:
-              schema:
-                type: string
-                example: >-
-                  Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,x-requested-with,UUID
-            x-amz-apigw-id:
-              schema:
-                type: string
-                example: bAbHIGn-hcwFseQ=
-            Access-Control-Allow-Methods:
-              schema:
-                type: string
-                example: DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT, ANY
-            Access-Control-Expose-Headers:
-              schema:
-                type: string
-                example: >-
-                  Access-Control-Allow-Origin, Access-Control-Allow-Headers,
-                  Access-Control-Allow-Methods
-            X-Amzn-Trace-Id:
-              schema:
-                type: string
-                example: Root=1-63633efa-0f4fd26f2a1ba8085aaae8cd;Sampled=0
-          content:
-            application/json:
-              schema:
-                type: object
-              example:
-                encodedQrCodeData: >-
-                  AQxDb21wYW55IE5hbWUCDzMwMDA1NTE4NDQwMDAwMwMUMjAyMi0xMC0yMVQwMDo1MzoxM1oEBjExNS4wMAUFMTUuMDAGLE9QUVJpUjRlVVpnL01QbXE1eStqMlVKTlZlOGxZbGF5ZkFiZ3pnTkFpdTQ9B2BNRVlDSVFDYzFJdlM3RVVGbXVGK0NHaDlCT0x5TUQ2UkF6elFvS043ckpmOXdZaXZjUUloQU9wdFkrbGx2bXd2TXZVaThvZjFWUFZCa1d0c1NjSXprSUZkSU1HOFR1emkIWDBWMBAGByqGSM49AgEGBSuBBAAKA0IABA/8G9pYQbwSAvAp52b6LqOjs0cpsplPTVkYSMmjIRkRAQhGQeBAFawbldsV4sWOKgWH/XXXq85FvQ8HaNyJR4I=
-  /test/api/v1/proto/clearDocument:
+  /api/v1/proto/clearDocument:
     post:
       tags:
         - Clearance
-      summary: Clear Document
+      summary: Clearance for Invoice/Note with ZATCA's Fatoora Portal
+      description: >-
+        Use this API to clear your EGS(E-Invoice Generation Solution) generated
+        B2B documents(**Tax Invoice** or **Tax Invoice Credit Note** or **Tax
+        Invoice Debit Note**)to the ZATCA's sandbox environment.
+
+
+        You have to pass all the required params in the specified format at the
+        minimum to report your document successfully. You can add additional
+        parameters if applicable as per your preference.
+
+
+        #### Request Parameters:
+
+
+        | **PARAMS** | **REQUIRED** | **DATA TYPE** | **DESCRIPTION** |
+        **EXAMPLE** |
+
+        | --- | --- | --- | --- | --- |
+
+        | `invoiceData` | YES | _json_ | The data of the B2B document | {...} |
+
+        | `documentType` | YES | _string_ | For the following documents types,
+        use the corresponding enums:  <br>  <br>1) **Tax Invoice -**
+        TAX_INVOICE  <br>2) **Tax Invoice Credit Note -**
+        TAX_INVOICE_CREDIT_NOTE  <br>3) **Tax Invoice Debit Note -**
+        TAX_INVOICE_DEBIT_NOTE  <br> | TAX_INVOICE |
+
+        | `referenceId` | CONDITIONAL | _string_ | ID of the original
+        document(reference document) for which this document is generated. 
+        <br>  <br>Applicable only for document types:  <br>  <br>1) **Tax
+        Invoice Credit Note**2) **Tax Invoice Debit Note**  <br>**Example**: 
+        <br>If the document type is Tax Credit Note, the reference id should be
+        Invoice number for which this credit note is being created. | 2022100627
+        |
+
+        | `documentIssueDateTime` | YES | _string_ | Document Issue Date and
+        Time in **"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"** format. |
+        2022-10-21T12:53:13.000Z |
+
+        | `documentDueDateTime` | NO | _string_ | Document Due Date and Time in
+        **"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"** format. | 2022-10-21T12:53:13.000Z |
+
+        | `sellerName` | YES | _string_ | Name of the seller | Company Name |
+
+        | `sellerAddress` | YES | _json_ | Address of the seller with the below
+        mentioned fields. | {  <br>"addrLine1": "Makkah",  <br>"addrLine2": "Al
+        Alam Street",  <br>"city": "Riyadh",  <br>"state": "Riyadh", 
+        <br>"zipCode": "24211",  <br>"phone": "2121",  <br>"fax": "8228", 
+        <br>"district": "Riyadh",  <br>"country": "Saudi Arabia", 
+        <br>"additionalNo": ""  <br>} |
+
+        | `buyerName` | YES | string | Buyer Name is mandatory to be filled as
+        per the transactions mentioned in article 53 (7) and for private
+        education and private healthcare to citizens |  |
+
+        | buyerAddress | YES | json | Buyer address | {  <br>"attention":
+        "Meiyappan MM",  <br>"countryOrRegion": "SA",  <br>"addrLine1": "12,
+        Masjid Street",  <br>"addrLine2": "Amjad Building",  <br>"city":
+        "Dammam",  <br>"state": "Riyadh",  <br>"zipCode": "12313",  <br>"phone":
+        "2121",  <br>"fax": "8228",  <br>"district": "Riyadh",  <br>"country":
+        "SA"  <br>} |
+
+        | `addrLine1` | YES | _string_ | Address Line 1 | Makkah |
+
+        | `addrLine2` | YES | _string_ | Address Line 2 | Al Alam Street |
+
+        | `buildingNumber` | YES | string | Building Number | 20211 |
+
+        | `additionalNo` | YES | string | Additional Number(4 digits) | 2134 |
+
+        | `city` | YES | _string_ | City  <br> | Riyadh |
+
+        | `state` | YES | _string_ | State | Riyadh |
+
+        | `zipCode` | YES | string | Postal Code(5 digits) | 24211 |
+
+        | `phone` | YES | string | Phone | 2121 |
+
+        | `fax` | YES | string | Fax | 5646465654545 |
+
+        | `documentLineItems` | YES | list | Line items list | \[...\] |
+
+        | `lineItemDesc` | YES | string | Line item description | Ball point pen
+        |
+
+        | `lineItemPrice` | YES | string | Line item price | 10.00 |
+
+        | `lineItemQty` | YES | string | Line item quantity | 10.00 |
+
+        | `lineItemTaxableAmount` | YES | string | Line item taxable amount 
+        <br>  <br>lineItemTaxableAmount = (lineItemPrice \* lineItemQty) -
+        discountOnLineItem | 100.00 |
+
+        | `discountOnlineItem` | YES | string | Discount in amount applied on
+        the line item | 0.00 |
+
+        | `vatRateOnLineItem` | YES | string | Vat Rate applied to the line item
+        | 15.00 |
+
+        | `lineItemVatAmount` | YES | string | Vat amount of the line item 
+        <br>  <br>lineItemVatAmount = (lineItemTaxableAmount \*
+        vatRateOnLineItem)/100  <br> | 15.00 |
+
+        | `lineItemSubTotal` | YES | string | Total of the Line Item  <br> 
+        <br>lineItemSubTotal = lineItemTaxableAmount + lineItemVatAmount |
+        115.00 |
+
+        | `totalExcludingVat` | YES | string | totalExcludingVat = documentTotal
+        - totalVat | 100.00 |
+
+        | `totalTaxableAmountExcludingVat` | YES | string |
+        totalTaxableAmountExcludingVat = sum of all lineItemTaxableAmount of
+        line items - discountOnDocumentTotal(if applied) | 100.00 |
+
+        | `vatTotal` | YES | string | vatTotal = sum of all lineItemVatAmount of
+        line items | 15.00 |
+
+        | `documentTotal` | YES | string | documentTotal =
+        totalTaxableAmountExcludingVat + vatTotal | 115.00 |
+
+        | `isSpecialBillingAgreement` | YES | boolean | If transaction for the
+        following conditions:  <br>  <br>1) Self-billed invoice  <br>2) Third
+        party billed invoice on behalf of the supplier | false |
+
+        | `isTransactionType` | YES | boolean | If transaction is any of the
+        following(not mutually exclusive):  <br>  <br>1) Nominal Supply  <br>2)
+        Export  <br>3) Summary | false |
+
+        | `isSelfBilled` | CONDITIONAL | boolean | If
+        `isSpecialBillingAgreement` is true and self - billed condition | false
+        |
+
+        | `isThirdParty` | CONDITIONAL | boolean | If
+        `isSpecialBillingAgreement` is true and Third party condition | true |
+
+        | `isNominalSupply` | CONDITIONAL | boolean | If `isTransactionType` is
+        true and nominal supply condition | false |
+
+        | `isExport` | CONDITIONAL | boolean | If `isTransactionType` is true
+        and export condition | false |
+
+        | `isSummary` | CONDITIONAL | boolean | If `isTransactionType` is true
+        and summary invoice condition | false |
+
+        | `supplyDate` | YES | string | Goods/Service supply Date and Time in
+        **"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"** format. |  |
+
+        | `sellerVatRegistrationNumber` | YES | string | Seller Vat registration
+        number | 300055184400003 |
+
+        | `additionalSellerIdType` | YES | string | For the following Seller ID
+        types, use the corresponding enums in bold:  <br>  <br>1) Commercial
+        registration number with "**CRN**" as schemeID  <br>2) Momra license
+        with "**MOM**" as schemeID -  <br>3) MLSD license with "**MLS**" as
+        schemeID  <br>4) Sagia license with "**SAG**" as schemeID  <br>5) Other
+        OD with "**OTH**" as schemeID  <br>In case multiple IDs exist then one
+        of the above must be entered following the sequence specified above |
+        CRN |
+
+        | `additionalSellerIdNumber` | YES | string | Additional seller ID
+        number of the ID type chosen | 1112233344 |
+
+        | `sellerGroupVatRegistrationNumber` | CONDITIONAL | string | Group Vat
+        registration number of the seller if applicable. | 300244974200003 |
+
+        | `additionalBuyerIdType` | YES | string | Other Buyer ID enum must be
+        one of the following list:  <br>  <br>1) Tax Identification Number
+        "**TIN**" as schemeID  <br>2) Commercial registration number with
+        "**CRN**" as schemeID  <br>3) Momra license with "**MOM**" as schemeID 
+        <br>4) MLSD license with "**MLS**" as schemeID  <br>5) 700 Number with
+        "**_700**" as schemeID  <br>6) Sagia license with "**SAG**" as schemeID 
+        <br>7) National ID with "**NAT**" as schemeID  <br>8) GCC ID with
+        "**GCC**" as schemeID  <br>9) Iqama Number with "**IQA**" as schemeID 
+        <br>10) Passport ID with "**PAS**" as schemeID  <br>11) Other ID with
+        "**OTH**" as schemeID  <br>In case multiple IDs exist then one of the
+        above must be entered following the sequence specified above | TIN |
+
+        | `additionalBuyerIdNumber` | YES | string | Buyer's NATIONAL ID number
+        | 300244974200003 |
+
+        | `buyerGroupVatRegistrationNumber` | CONDITIONAL | string | If Buyer is
+        part of a group company, provide Buyer's group VAT number |
+        300244974200003 |
+
+        | `discountOnDocumentTotal` | NO | string | Discount applied on document
+        total | 0.00 |
+
+        | `specialTaxTreatment` | CONDITIONAL | string | Where Tax is not
+        charged at the standard rate, this field should have a narration “Tax
+        treatment applied to the supply” as per Article 53 of the VAT
+        Implementing Regulation.  <br>  <br>Narration to be entered if Tax is
+        not charged at basic rate. | 0 |
+
+        | `currency` | YES | string | Transaction Currency of the document | SAR
+        |
+
+        | `documentId` | YES | string | A unique identification of the Invoice -
+        Invoice Reference number(IRN) | 2022100627 |
+
+
+        #### **Response Parameters:**
+
+
+        | **PARAMS** | **DATA TYPE** | **DESCRIPTION** | **EXAMPLE** |
+
+        | --- | --- | --- | --- |
+
+        | `isCleared` | boolean | Clearance status of the B2B document with
+        ZATCA.  <br>  <br>Please refer to the `zatcaResponse` field if this
+        field is false to know more about the specific error from ZATCA. | true
+        |
+
+        | `zatcaResponse` | json | Proxy of ZATCA Clearance API response.  <br> 
+        <br>Will be populated for both success and failure scenarios.  <br> 
+        <br>Usually ignored for success scenarios. | {  <br>"validationResults":
+        {  <br>"infoMessages": \[  <br>{  <br>"type": "INFO",  <br>"code":
+        "XSD_ZATCA_VALID",  <br>"category": "XSD validation",  <br>"message":
+        "Complied with UBL 2.1 standards in line with ZATCA specifications", 
+        <br>"status": "PASS"  <br>}  <br>\],  <br>"warningMessages": \[\], 
+        <br>"errorMessages": \[\],  <br>"status": "PASS"  <br>}, 
+        <br>"clearanceStatus": "CLEARED",  <br>"clearedInvoice":
+        "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPEludm9pY2UgeG1sbnM9InVybjpvYXNpczpuYW1lczpzcGVjaWZpY2F0aW9uOnVibDpzY2hlbWE6eHNkOkludm9pY2UtMiIgeG1sbnM6Y2FjPSJ1cm46b2FzaXM6bmFtZXM6c3BlY2lmaWNhdGlvbjp1Ymw6c2NoZW1hOnhzZDpDb21tb25BZ2dyZWdhdGVDb21wb25lbnRzLTIiIHhtbG5zOmNiYz0idXJuOm9hc2lzOm5hbWVzOnNwZWNpZmljYXRpb246dWJsOnNjaGVtYTp4c2Q6Q29tbW9uQmFzaWNDb21wb25lbnRzLTIiIHhtbG5zOmV4dD0idXJuOm9hc2lzOm5hbWVzOnNwZWNpZmljYXRpb246dWJsOnNjaGVtYTp4c2Q6Q29tbW9uRXh0ZW5zaW9uQ29tcG9uZW50cy0yIj48ZXh0OlVCTEV4dGVuc2lvbnM+CiAgICA8ZXh0OlVCTEV4dGVuc2lvbj4KICAgICAgICA8ZXh0OkV4dGVuc2lvblVSST51cm46b2FzaXM6bmFtZXM6c3BlY2lmaWNhdGlvbjp1Ymw6ZHNpZzplbnZlbG9wZWQ6eGFkZXM8L2V4dDpFeHRlbnNpb25VUkk+CiAgICAgICAgPGV4dDpFeHRlbnNpb25Db250ZW50PgogICAgICAgICAgICA8IS0tIFBsZWFzZSBub3RlIHRoYXQgdGhlIHNpZ25hdHVyZSB2YWx1ZXMgYXJlIHNhbXBsZSB2YWx1ZXMgb25seSAtLT4KICAgICAgICAgICAgPHNpZzpVQkxEb2N1bWVudFNpZ25hdHVyZXMgeG1sbnM6c2lnPSJ1cm46b2FzaXM6bmFtZXM6c3BlY2lmaWNhdGlvbjp1Ymw6c2NoZW1hOnhzZDpDb21tb25TaWduYXR1cmVDb21wb25lbnRzLTIiIHhtbG5zOnNhYz0idXJuOm9hc2lzOm5hbWVzOnNwZWNpZmljYXRpb246dWJsOnNjaGVtYTp4c2Q6U2lnbmF0dXJlQWdncmVnYXRlQ29tcG9uZW50cy0yIiB4bWxuczpzYmM9InVybjpvYXNpczpuYW1lczpzcGVjaWZpY2F0aW9uOnVibDpzY2hlbWE6eHNkOlNpZ25hdHVyZUJhc2ljQ29tcG9uZW50cy0yIj4KICAgICAgICAgICAgICAgIDxzYWM6U2lnbmF0dXJlSW5mb3JtYXRpb24+CiAgICAgICAgICAgICAgICAgICAgPGNiYzpJRD51cm46b2FzaXM6bmFtZXM6c3BlY2lmaWNhdGlvbjp1Ymw6c2lnbmF0dXJlOjE8L2NiYzpJRD4KICAgICAgICAgICAgICAgICAgICA8c2JjOlJlZmVyZW5jZWRTaWduYXR1cmVJRD51cm46b2FzaXM6bmFtZXM6c3BlY2lmaWNhdGlvbjp1Ymw6c2lnbmF0dXJlOkludm9pY2U8L3NiYzpSZWZlcmVuY2VkU2lnbmF0dXJlSUQ+CiAgICAgICAgICAgICAgICAgICAgPGRzOlNpZ25hdHVyZSB4bWxuczpkcz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgSWQ9InNpZ25hdHVyZSI+CiAgICAgICAgICAgICAgICAgICAgICAgIDxkczpTaWduZWRJbmZvPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRzOkNhbm9uaWNhbGl6YXRpb25NZXRob2QgQWxnb3JpdGhtPSJodHRwOi8vd3d3LnczLm9yZy8yMDA2LzEyL3htbC1jMTRuMTEiLz4KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkczpTaWduYXR1cmVNZXRob2QgQWxnb3JpdGhtPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNlY2RzYS1zaGEyNTYiLz4KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkczpSZWZlcmVuY2UgSWQ9Imludm9pY2VTaWduZWREYXRhIiBVUkk9IiI+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRzOlRyYW5zZm9ybXM+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkczpUcmFuc2Zvcm0gQWxnb3JpdGhtPSJodHRwOi8vd3d3LnczLm9yZy9UUi8xOTk5L1JFQy14cGF0aC0xOTk5MTExNiI+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZHM6WFBhdGg+bm90KC8vYW5jZXN0b3Itb3Itc2VsZjo6ZXh0OlVCTEV4dGVuc2lvbnMpPC9kczpYUGF0aD4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9kczpUcmFuc2Zvcm0+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkczpUcmFuc2Zvcm0gQWxnb3JpdGhtPSJodHRwOi8vd3d3LnczLm9yZy9UUi8xOTk5L1JFQy14cGF0aC0xOTk5MTExNiI+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZHM6WFBhdGg+bm90KC8vYW5jZXN0b3Itb3Itc2VsZjo6Y2FjOlNpZ25hdHVyZSk8L2RzOlhQYXRoPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2RzOlRyYW5zZm9ybT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRzOlRyYW5zZm9ybSBBbGdvcml0aG09Imh0dHA6Ly93d3cudzMub3JnL1RSLzE5OTkvUkVDLXhwYXRoLTE5OTkxMTE2Ij4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkczpYUGF0aD5ub3QoLy9hbmNlc3Rvci1vci1zZWxmOjpjYWM6QWRkaXRpb25hbERvY3VtZW50UmVmZXJlbmNlW2NiYzpJRD0nUVInXSk8L2RzOlhQYXRoPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2RzOlRyYW5zZm9ybT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRzOlRyYW5zZm9ybSBBbGdvcml0aG09Imh0dHA6Ly93d3cudzMub3JnLzIwMDYvMTIveG1sLWMxNG4xMSIvPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZHM6VHJhbnNmb3Jtcz4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZHM6RGlnZXN0TWV0aG9kIEFsZ29yaXRobT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS8wNC94bWxlbmMjc2hhMjU2Ii8+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRzOkRpZ2VzdFZhbHVlPjBueVRZTUo3ZXI1N1ZUbHJJMXNEelQvOFpKVFZMcHNlcjRlSTJKVmNYWFU9PC9kczpEaWdlc3RWYWx1ZT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZHM6UmVmZXJlbmNlPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRzOlJlZmVyZW5jZSBUeXBlPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjU2lnbmF0dXJlUHJvcGVydGllcyIgVVJJPSIjeGFkZXNTaWduZWRQcm9wZXJ0aWVzIj4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZHM6RGlnZXN0TWV0aG9kIEFsZ29yaXRobT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS8wNC94bWxlbmMjc2hhMjU2Ii8+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRzOkRpZ2VzdFZhbHVlPk16UTBNbUZpTVdFNU5UQmxPVGhsT1dRME9HTTRObUZtT0RaaFpURXhOVE0wTVdVMFlqa3dNalF5TnpRM01UTXlOR1JrTUdaaVpHSTBOREZqTUdZd1lRPT08L2RzOkRpZ2VzdFZhbHVlPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9kczpSZWZlcmVuY2U+CiAgICAgICAgICAgICAgICAgICAgICAgIDwvZHM6U2lnbmVkSW5mbz4KICAgICAgICAgICAgICAgICAgICAgICAgPGRzOlNpZ25hdHVyZVZhbHVlPk1FVUNJUUNTVllMcXdvTEJ0MlllVlhITGg3cmRrVUFsTFNQbUtMVlhkUWdVclZjaDlnSWdONkNvblBzYzNVRVhLRG51SHJUK3dqODJUcE5lRVZScnZjdkJYQXdJemdJPTwvZHM6U2lnbmF0dXJlVmFsdWU+CiAgICAgICAgICAgICAgICAgICAgICAgIDxkczpLZXlJbmZvPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRzOlg1MDlEYXRhPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkczpYNTA5Q2VydGlmaWNhdGU+TUlJQjdEQ0NBWkdnQXdJQkFnSUdBWDRxTGY1Uk1Bb0dDQ3FHU000OUJBTUNNQlV4RXpBUkJnTlZCQU1NQ21WSmJuWnZhV05wYm1jd0hoY05Nakl3TVRBMU1USXhPVEU1V2hjTk1qY3dNVEEwTWpJd01EQXdXakJPTVFzd0NRWURWUVFHRXdKVFFURVZNQk1HQTFVRUN3d01VbmxwWVdRZ1FuSmhibU5vTVE0d0RBWURWUVFLREFWS1pYSnBjakVZTUJZR0ExVUVBd3dQTVRJek5EVTBNekl4TWpFek1qTTBNRll3RUFZSEtvWkl6ajBDQVFZRks0RUVBQW9EUWdBRVIySitOMG5UZHZmNHpSMU0raDlrSkY4RXI3d1oxdXllSERoTTJZU3Bwd2NaTzJ0STFwdHJkUld2TnFZN0x1RlprdmFCUVZEM1kyNWpCNGJHR2lLNWpxT0JsakNCa3pBTUJnTlZIUk1CQWY4RUFqQUFNSUdDQmdOVkhSRUVlekI1cEhjd2RURWVNQndHQTFVRUJBd1ZNek0wTVRNek1UTXpNak16TXpNeU1USXhNakF3TVI4d0hRWUtDWkltaVpQeUxHUUJBUXdQTXpFd01USXlNemt6TlRBd01EQXpNUTB3Q3dZRFZRUU1EQVF4TVRBd01SSXdFQVlEVlFRYURBbEJaR1J5WlhOelpYTXhEekFOQmdOVkJBOE1CbEpsZEdGcGJEQUtCZ2dxaGtqT1BRUURBZ05KQURCR0FpRUEvMWdWTjNnenhWa1RuMURlaXc3dDF0eHdSV1c5eDBIL2s0VmJtcGJRSzA4Q0lRQzF6VldNNmo1UERTWkNhRWFJdHIvWGtXMGthaXhzZW12VkFpcG16L0syenc9PTwvZHM6WDUwOUNlcnRpZmljYXRlPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9kczpYNTA5RGF0YT4KICAgICAgICAgICAgICAgICAgICAgICAgPC9kczpLZXlJbmZvPgogICAgICAgICAgICAgICAgICAgICAgICA8ZHM6T2JqZWN0PgogICAgICAgICAgICAgICAgICAgICAgICAgICAgPHhhZGVzOlF1YWxpZnlpbmdQcm9wZXJ0aWVzIHhtbG5zOnhhZGVzPSJodHRwOi8vdXJpLmV0c2kub3JnLzAxOTAzL3YxLjMuMiMiIFRhcmdldD0ic2lnbmF0dXJlIj4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8eGFkZXM6U2lnbmVkUHJvcGVydGllcyBJZD0ieGFkZXNTaWduZWRQcm9wZXJ0aWVzIj4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPHhhZGVzOlNpZ25lZFNpZ25hdHVyZVByb3BlcnRpZXM+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8eGFkZXM6U2lnbmluZ1RpbWU+MjAyMi0xMS0xNlQwODoxMTowMlo8L3hhZGVzOlNpZ25pbmdUaW1lPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPHhhZGVzOlNpZ25pbmdDZXJ0aWZpY2F0ZT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8eGFkZXM6Q2VydD4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPHhhZGVzOkNlcnREaWdlc3Q+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZHM6RGlnZXN0TWV0aG9kIEFsZ29yaXRobT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS8wNC94bWxlbmMjc2hhMjU2Ii8+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZHM6RGlnZXN0VmFsdWU+T1RnMlpHVTFNemczT0Rjd00ySXlOVEkzTUdaaFltVmlNbUUwTlRVellUbGhOV0pqTm1ZM1lUZ3lZemd4TldJME0yRmhNV0V3TmpZeFpXVTFZbVE0TWc9PTwvZHM6RGlnZXN0VmFsdWU+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwveGFkZXM6Q2VydERpZ2VzdD4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPHhhZGVzOklzc3VlclNlcmlhbD4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkczpYNTA5SXNzdWVyTmFtZT5DTj1lSW52b2ljaW5nPC9kczpYNTA5SXNzdWVyTmFtZT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkczpYNTA5U2VyaWFsTnVtYmVyPjE2NDEzODUxNjQzNjk8L2RzOlg1MDlTZXJpYWxOdW1iZXI+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwveGFkZXM6SXNzdWVyU2VyaWFsPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwveGFkZXM6Q2VydD4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwveGFkZXM6U2lnbmluZ0NlcnRpZmljYXRlPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L3hhZGVzOlNpZ25lZFNpZ25hdHVyZVByb3BlcnRpZXM+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPC94YWRlczpTaWduZWRQcm9wZXJ0aWVzPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgPC94YWRlczpRdWFsaWZ5aW5nUHJvcGVydGllcz4KICAgICAgICAgICAgICAgICAgICAgICAgPC9kczpPYmplY3Q+CiAgICAgICAgICAgICAgICAgICAgPC9kczpTaWduYXR1cmU+CiAgICAgICAgICAgICAgICA8L3NhYzpTaWduYXR1cmVJbmZvcm1hdGlvbj4KICAgICAgICAgICAgPC9zaWc6VUJMRG9jdW1lbnRTaWduYXR1cmVzPgogICAgICAgIDwvZXh0OkV4dGVuc2lvbkNvbnRlbnQ+CiAgICA8L2V4dDpVQkxFeHRlbnNpb24+CjwvZXh0OlVCTEV4dGVuc2lvbnM+CiAgICA8Y2JjOlByb2ZpbGVJRD5yZXBvcnRpbmc6MS4wPC9jYmM6UHJvZmlsZUlEPgogICAgPGNiYzpJRD4xMDA8L2NiYzpJRD4KICAgIDxjYmM6VVVJRD4zMmQ2YmVlMy01MWI3LTQyZWYtOTFlOS02ODZhNTc2MDA1YWY8L2NiYzpVVUlEPgogICAgPGNiYzpJc3N1ZURhdGU+MjAyMS0wNC0yNTwvY2JjOklzc3VlRGF0ZT4KICAgIDxjYmM6SXNzdWVUaW1lPjE1OjMwOjAwPC9jYmM6SXNzdWVUaW1lPgogICAgPGNiYzpJbnZvaWNlVHlwZUNvZGUgbmFtZT0iMDEwMDAwMCI+Mzg4PC9jYmM6SW52b2ljZVR5cGVDb2RlPgogICAgPGNiYzpEb2N1bWVudEN1cnJlbmN5Q29kZT5TQVI8L2NiYzpEb2N1bWVudEN1cnJlbmN5Q29kZT4KICAgIDxjYmM6VGF4Q3VycmVuY3lDb2RlPlNBUjwvY2JjOlRheEN1cnJlbmN5Q29kZT4KICAgIDxjYmM6TGluZUNvdW50TnVtZXJpYz4yPC9jYmM6TGluZUNvdW50TnVtZXJpYz4KICAgIDxjYWM6QWRkaXRpb25hbERvY3VtZW50UmVmZXJlbmNlPgogICAgICAgIDxjYmM6SUQ+SUNWPC9jYmM6SUQ+CiAgICAgICAgPGNiYzpVVUlEPjQ2NTMyPC9jYmM6VVVJRD4KICAgIDwvY2FjOkFkZGl0aW9uYWxEb2N1bWVudFJlZmVyZW5jZT4KICAgIDxjYWM6QWRkaXRpb25hbERvY3VtZW50UmVmZXJlbmNlPgogICAgICAgIDxjYmM6SUQ+UElIPC9jYmM6SUQ+CiAgICAgICAgPGNhYzpBdHRhY2htZW50PgogICAgICAgICAgICA8Y2JjOkVtYmVkZGVkRG9jdW1lbnRCaW5hcnlPYmplY3QgbWltZUNvZGU9InRleHQvcGxhaW4iPjFjdUgrTGdOdzRzWDl2eHUyUS9TN0E2R3d4TFVNWmZiUXVWUC85VUxzR3c9PC9jYmM6RW1iZWRkZWREb2N1bWVudEJpbmFyeU9iamVjdD4KICAgICAgICA8L2NhYzpBdHRhY2htZW50PgogICAgPC9jYWM6QWRkaXRpb25hbERvY3VtZW50UmVmZXJlbmNlPgogICAgPGNhYzpBZGRpdGlvbmFsRG9jdW1lbnRSZWZlcmVuY2U+CiAgICAgICAgPGNiYzpJRD5RUjwvY2JjOklEPgogICAgICAgIDxjYWM6QXR0YWNobWVudD4KICAgICAgICAgICAgPGNiYzpFbWJlZGRlZERvY3VtZW50QmluYXJ5T2JqZWN0IG1pbWVDb2RlPSJ0ZXh0L3BsYWluIj5BUmxCYkNCVFlXeGhiU0JUZFhCd2JHbGxjeUJEYnk0Z1RGUkVBZzh6TVRBeE56VXpPVGMwTURBd01ETURGREl3TWpFdE1EUXRNalZVTVRVNk16QTZNREJhQkFjeE1ETTFMakF3QlFZeE16VXVNREFHTERCdWVWUlpUVW8zWlhJMU4xWlViSEpKTVhORWVsUXZPRnBLVkZaTWNITmxjalJsU1RKS1ZtTllXRlU5QjJCTlJWVkRTVkZEVTFaWlRIRjNiMHhDZERKWlpWWllTRXhvTjNKa2ExVkJiRXhUVUcxTFRGWllaRkZuVlhKV1kyZzVaMGxuVGpaRGIyNVFjMk16VlVWWVMwUnVkVWh5VkN0M2FqZ3lWSEJPWlVWV1VuSjJZM1pDV0VGM1NYcG5TVDBJV0RCV01CQUdCeXFHU000OUFnRUdCU3VCQkFBS0EwSUFCRWRpZmpkSjAzYjMrTTBkVFBvZlpDUmZCSys4R2Ric25odzRUTm1FcWFjSEdUdHJTTmFiYTNVVnJ6YW1PeTdoV1pMMmdVRlE5Mk51WXdlR3hob2l1WTQ9PC9jYmM6RW1iZWRkZWREb2N1bWVudEJpbmFyeU9iamVjdD4KICAgICAgICA8L2NhYzpBdHRhY2htZW50Pgo8L2NhYzpBZGRpdGlvbmFsRG9jdW1lbnRSZWZlcmVuY2U+PGNhYzpTaWduYXR1cmU+CiAgICAgIDxjYmM6SUQ+dXJuOm9hc2lzOm5hbWVzOnNwZWNpZmljYXRpb246dWJsOnNpZ25hdHVyZTpJbnZvaWNlPC9jYmM6SUQ+CiAgICAgIDxjYmM6U2lnbmF0dXJlTWV0aG9kPnVybjpvYXNpczpuYW1lczpzcGVjaWZpY2F0aW9uOnVibDpkc2lnOmVudmVsb3BlZDp4YWRlczwvY2JjOlNpZ25hdHVyZU1ldGhvZD4KPC9jYWM6U2lnbmF0dXJlPjxjYWM6QWNjb3VudGluZ1N1cHBsaWVyUGFydHk+CiAgICAgICAgPGNhYzpQYXJ0eT4KICAgICAgICAgICAgPGNhYzpQYXJ0eUlkZW50aWZpY2F0aW9uPgogICAgICAgICAgICAgICAgPGNiYzpJRCBzY2hlbWVJRD0iTUxTIj4xMjM0NTc4OTA8L2NiYzpJRD4KICAgICAgICAgICAgPC9jYWM6UGFydHlJZGVudGlmaWNhdGlvbj4KICAgICAgICAgICAgPGNhYzpQb3N0YWxBZGRyZXNzPgogICAgICAgICAgICAgICAgPGNiYzpTdHJlZXROYW1lPktpbmcgQWJkdWxheml6IFJvYWQ8L2NiYzpTdHJlZXROYW1lPgogICAgICAgICAgICAgICAgPGNiYzpCdWlsZGluZ051bWJlcj44MjI4PC9jYmM6QnVpbGRpbmdOdW1iZXI+CiAgICAgICAgICAgICAgICA8Y2JjOlBsb3RJZGVudGlmaWNhdGlvbj4yMTIxPC9jYmM6UGxvdElkZW50aWZpY2F0aW9uPgogICAgICAgICAgICAgICAgPGNiYzpDaXR5U3ViZGl2aXNpb25OYW1lPkFsIEFtYWw8L2NiYzpDaXR5U3ViZGl2aXNpb25OYW1lPgogICAgICAgICAgICAgICAgPGNiYzpDaXR5TmFtZT5SaXlhZGg8L2NiYzpDaXR5TmFtZT4KICAgICAgICAgICAgICAgIDxjYmM6UG9zdGFsWm9uZT4xMjY0MzwvY2JjOlBvc3RhbFpvbmU+CiAgICAgICAgICAgICAgICA8Y2JjOkNvdW50cnlTdWJlbnRpdHk+Uml5YWRoIFJlZ2lvbjwvY2JjOkNvdW50cnlTdWJlbnRpdHk+CiAgICAgICAgICAgICAgICA8Y2FjOkNvdW50cnk+CiAgICAgICAgICAgICAgICAgICAgPGNiYzpJZGVudGlmaWNhdGlvbkNvZGU+U0E8L2NiYzpJZGVudGlmaWNhdGlvbkNvZGU+CiAgICAgICAgICAgICAgICA8L2NhYzpDb3VudHJ5PgogICAgICAgICAgICA8L2NhYzpQb3N0YWxBZGRyZXNzPgogICAgICAgICAgICA8Y2FjOlBhcnR5VGF4U2NoZW1lPgogICAgICAgICAgICAgICAgPGNiYzpDb21wYW55SUQ+MzEwMTc1Mzk3NDAwMDAzPC9jYmM6Q29tcGFueUlEPgogICAgICAgICAgICAgICAgPGNhYzpUYXhTY2hlbWU+CiAgICAgICAgICAgICAgICAgICAgPGNiYzpJRD5WQVQ8L2NiYzpJRD4KICAgICAgICAgICAgICAgIDwvY2FjOlRheFNjaGVtZT4KICAgICAgICAgICAgPC9jYWM6UGFydHlUYXhTY2hlbWU+CiAgICAgICAgICAgIDxjYWM6UGFydHlMZWdhbEVudGl0eT4KICAgICAgICAgICAgICAgIDxjYmM6UmVnaXN0cmF0aW9uTmFtZT5BbCBTYWxhbSBTdXBwbGllcyBDby4gTFREPC9jYmM6UmVnaXN0cmF0aW9uTmFtZT4KICAgICAgICAgICAgPC9jYWM6UGFydHlMZWdhbEVudGl0eT4KICAgICAgICA8L2NhYzpQYXJ0eT4KICAgIDwvY2FjOkFjY291bnRpbmdTdXBwbGllclBhcnR5PgogICAgPGNhYzpBY2NvdW50aW5nQ3VzdG9tZXJQYXJ0eT4KICAgICAgICA8Y2FjOlBhcnR5PgogICAgICAgICAgICA8Y2FjOlBhcnR5SWRlbnRpZmljYXRpb24+CiAgICAgICAgICAgICAgICA8Y2JjOklEIHNjaGVtZUlEPSJTQUciPjEyM0MxMjM0NTY3ODwvY2JjOklEPgogICAgICAgICAgICA8L2NhYzpQYXJ0eUlkZW50aWZpY2F0aW9uPgogICAgICAgICAgICA8Y2FjOlBvc3RhbEFkZHJlc3M+CiAgICAgICAgICAgICAgICA8Y2JjOlN0cmVldE5hbWU+S2luZyBBYmR1bGxhaCBSb2FkPC9jYmM6U3RyZWV0TmFtZT4KICAgICAgICAgICAgICAgIDxjYmM6QnVpbGRpbmdOdW1iZXI+MzcwOTwvY2JjOkJ1aWxkaW5nTnVtYmVyPgogICAgICAgICAgICAgICAgPGNiYzpQbG90SWRlbnRpZmljYXRpb24+MTAwNDwvY2JjOlBsb3RJZGVudGlmaWNhdGlvbj4KICAgICAgICAgICAgICAgIDxjYmM6Q2l0eVN1YmRpdmlzaW9uTmFtZT5BbCBNdXJzYWxhdDwvY2JjOkNpdHlTdWJkaXZpc2lvbk5hbWU+CiAgICAgICAgICAgICAgICA8Y2JjOkNpdHlOYW1lPlJpeWFkaDwvY2JjOkNpdHlOYW1lPgogICAgICAgICAgICAgICAgPGNiYzpQb3N0YWxab25lPjExNTY0PC9jYmM6UG9zdGFsWm9uZT4KICAgICAgICAgICAgICAgIDxjYmM6Q291bnRyeVN1YmVudGl0eT5SaXlhZGggUmVnaW9uPC9jYmM6Q291bnRyeVN1YmVudGl0eT4KICAgICAgICAgICAgICAgIDxjYWM6Q291bnRyeT4KICAgICAgICAgICAgICAgICAgICA8Y2JjOklkZW50aWZpY2F0aW9uQ29kZT5TQTwvY2JjOklkZW50aWZpY2F0aW9uQ29kZT4KICAgICAgICAgICAgICAgIDwvY2FjOkNvdW50cnk+CiAgICAgICAgICAgIDwvY2FjOlBvc3RhbEFkZHJlc3M+CiAgICAgICAgICAgIDxjYWM6UGFydHlUYXhTY2hlbWU+CiAgICAgICAgICAgICAgICA8Y2FjOlRheFNjaGVtZT4KICAgICAgICAgICAgICAgICAgICA8Y2JjOklEPlZBVDwvY2JjOklEPgogICAgICAgICAgICAgICAgPC9jYWM6VGF4U2NoZW1lPgogICAgICAgICAgICA8L2NhYzpQYXJ0eVRheFNjaGVtZT4KICAgICAgICAgICAgPGNhYzpQYXJ0eUxlZ2FsRW50aXR5PgogICAgICAgICAgICAgICAgPGNiYzpSZWdpc3RyYXRpb25OYW1lPkFMIEtBV1RIQVIgTUFSS0VUUzwvY2JjOlJlZ2lzdHJhdGlvbk5hbWU+CiAgICAgICAgICAgIDwvY2FjOlBhcnR5TGVnYWxFbnRpdHk+CiAgICAgICAgPC9jYWM6UGFydHk+CiAgICA8L2NhYzpBY2NvdW50aW5nQ3VzdG9tZXJQYXJ0eT4KICAgIDxjYWM6RGVsaXZlcnk+CiAgICAgICAgPGNiYzpBY3R1YWxEZWxpdmVyeURhdGU+MjAyMi0wNC0yNTwvY2JjOkFjdHVhbERlbGl2ZXJ5RGF0ZT4KICAgIDwvY2FjOkRlbGl2ZXJ5PgogICAgPGNhYzpQYXltZW50TWVhbnM+CiAgICAgICAgPGNiYzpQYXltZW50TWVhbnNDb2RlPjQyPC9jYmM6UGF5bWVudE1lYW5zQ29kZT4KICAgIDwvY2FjOlBheW1lbnRNZWFucz4KICAgIDxjYWM6VGF4VG90YWw+CiAgICAgICAgPGNiYzpUYXhBbW91bnQgY3VycmVuY3lJRD0iU0FSIj4xMzUuMDA8L2NiYzpUYXhBbW91bnQ+CiAgICAgICAgPGNhYzpUYXhTdWJ0b3RhbD4KICAgICAgICAgICAgPGNiYzpUYXhhYmxlQW1vdW50IGN1cnJlbmN5SUQ9IlNBUiI+OTAwLjAwPC9jYmM6VGF4YWJsZUFtb3VudD4KICAgICAgICAgICAgPGNiYzpUYXhBbW91bnQgY3VycmVuY3lJRD0iU0FSIj4xMzUuMDA8L2NiYzpUYXhBbW91bnQ+CiAgICAgICAgICAgIDxjYWM6VGF4Q2F0ZWdvcnk+CiAgICAgICAgICAgICAgICA8Y2JjOklEPlM8L2NiYzpJRD4KICAgICAgICAgICAgICAgIDxjYmM6UGVyY2VudD4xNTwvY2JjOlBlcmNlbnQ+CiAgICAgICAgICAgICAgICA8Y2FjOlRheFNjaGVtZT4KICAgICAgICAgICAgICAgICAgICA8Y2JjOklEPlZBVDwvY2JjOklEPgogICAgICAgICAgICAgICAgPC9jYWM6VGF4U2NoZW1lPgogICAgICAgICAgICA8L2NhYzpUYXhDYXRlZ29yeT4KICAgICAgICA8L2NhYzpUYXhTdWJ0b3RhbD4KICAgIDwvY2FjOlRheFRvdGFsPgogICAgPGNhYzpUYXhUb3RhbD4KICAgICAgICA8Y2JjOlRheEFtb3VudCBjdXJyZW5jeUlEPSJTQVIiPjEzNS4wMDwvY2JjOlRheEFtb3VudD4KICAgIDwvY2FjOlRheFRvdGFsPgogICAgPGNhYzpMZWdhbE1vbmV0YXJ5VG90YWw+CiAgICAgICAgPGNiYzpMaW5lRXh0ZW5zaW9uQW1vdW50IGN1cnJlbmN5SUQ9IlNBUiI+OTAwLjAwPC9jYmM6TGluZUV4dGVuc2lvbkFtb3VudD4KICAgICAgICA8Y2JjOlRheEV4Y2x1c2l2ZUFtb3VudCBjdXJyZW5jeUlEPSJTQVIiPjkwMC4wMDwvY2JjOlRheEV4Y2x1c2l2ZUFtb3VudD4KICAgICAgICA8Y2JjOlRheEluY2x1c2l2ZUFtb3VudCBjdXJyZW5jeUlEPSJTQVIiPjEwMzUuMDA8L2NiYzpUYXhJbmNsdXNpdmVBbW91bnQ+CiAgICAgICAgPGNiYzpBbGxvd2FuY2VUb3RhbEFtb3VudCBjdXJyZW5jeUlEPSJTQVIiPjAuMDA8L2NiYzpBbGxvd2FuY2VUb3RhbEFtb3VudD4KICAgICAgICA8Y2JjOlBheWFibGVBbW91bnQgY3VycmVuY3lJRD0iU0FSIj4xMDM1LjAwPC9jYmM6UGF5YWJsZUFtb3VudD4KICAgIDwvY2FjOkxlZ2FsTW9uZXRhcnlUb3RhbD4KICAgIDxjYWM6SW52b2ljZUxpbmU+CiAgICAgICAgPGNiYzpJRD4xPC9jYmM6SUQ+CiAgICAgICAgPGNiYzpJbnZvaWNlZFF1YW50aXR5IHVuaXRDb2RlPSJQQ0UiPjE8L2NiYzpJbnZvaWNlZFF1YW50aXR5PgogICAgICAgIDxjYmM6TGluZUV4dGVuc2lvbkFtb3VudCBjdXJyZW5jeUlEPSJTQVIiPjIwMC4wMDwvY2JjOkxpbmVFeHRlbnNpb25BbW91bnQ+CiAgICAgICAgPGNhYzpUYXhUb3RhbD4KICAgICAgICAgICAgPGNiYzpUYXhBbW91bnQgY3VycmVuY3lJRD0iU0FSIj4zMC4wMDwvY2JjOlRheEFtb3VudD4KICAgICAgICAgICAgPGNiYzpSb3VuZGluZ0Ftb3VudCBjdXJyZW5jeUlEPSJTQVIiPjIzMC4wMDwvY2JjOlJvdW5kaW5nQW1vdW50PgogICAgICAgIDwvY2FjOlRheFRvdGFsPgogICAgICAgIDxjYWM6SXRlbT4KICAgICAgICAgICAgPGNiYzpOYW1lPkl0ZW0gQTwvY2JjOk5hbWU+CiAgICAgICAgICAgIDxjYWM6Q2xhc3NpZmllZFRheENhdGVnb3J5PgogICAgICAgICAgICAgICAgPGNiYzpJRD5TPC9jYmM6SUQ+CiAgICAgICAgICAgICAgICA8Y2JjOlBlcmNlbnQ+MTU8L2NiYzpQZXJjZW50PgogICAgICAgICAgICAgICAgPGNhYzpUYXhTY2hlbWU+CiAgICAgICAgICAgICAgICAgICAgPGNiYzpJRD5WQVQ8L2NiYzpJRD4KICAgICAgICAgICAgICAgIDwvY2FjOlRheFNjaGVtZT4KICAgICAgICAgICAgPC9jYWM6Q2xhc3NpZmllZFRheENhdGVnb3J5PgogICAgICAgIDwvY2FjOkl0ZW0+CiAgICAgICAgPGNhYzpQcmljZT4KICAgICAgICAgICAgPGNiYzpQcmljZUFtb3VudCBjdXJyZW5jeUlEPSJTQVIiPjIwMC4wMDwvY2JjOlByaWNlQW1vdW50PgogICAgICAgIDwvY2FjOlByaWNlPgogICAgPC9jYWM6SW52b2ljZUxpbmU+CiAgICA8Y2FjOkludm9pY2VMaW5lPgogICAgICAgIDxjYmM6SUQ+MjwvY2JjOklEPgogICAgICAgIDxjYmM6SW52b2ljZWRRdWFudGl0eSB1bml0Q29kZT0iUENFIj4yPC9jYmM6SW52b2ljZWRRdWFudGl0eT4KICAgICAgICA8Y2JjOkxpbmVFeHRlbnNpb25BbW91bnQgY3VycmVuY3lJRD0iU0FSIj43MDAuMDA8L2NiYzpMaW5lRXh0ZW5zaW9uQW1vdW50PgogICAgICAgIDxjYWM6VGF4VG90YWw+CiAgICAgICAgICAgIDxjYmM6VGF4QW1vdW50IGN1cnJlbmN5SUQ9IlNBUiI+MTA1LjAwPC9jYmM6VGF4QW1vdW50PgogICAgICAgICAgICA8Y2JjOlJvdW5kaW5nQW1vdW50IGN1cnJlbmN5SUQ9IlNBUiI+ODA1LjAwPC9jYmM6Um91bmRpbmdBbW91bnQ+CiAgICAgICAgPC9jYWM6VGF4VG90YWw+CiAgICAgICAgPGNhYzpJdGVtPgogICAgICAgICAgICA8Y2JjOk5hbWU+SXRlbSBCPC9jYmM6TmFtZT4KICAgICAgICAgICAgPGNhYzpDbGFzc2lmaWVkVGF4Q2F0ZWdvcnk+CiAgICAgICAgICAgICAgICA8Y2JjOklEPlM8L2NiYzpJRD4KICAgICAgICAgICAgICAgIDxjYmM6UGVyY2VudD4xNTwvY2JjOlBlcmNlbnQ+CiAgICAgICAgICAgICAgICA8Y2FjOlRheFNjaGVtZT4KICAgICAgICAgICAgICAgICAgICA8Y2JjOklEPlZBVDwvY2JjOklEPgogICAgICAgICAgICAgICAgPC9jYWM6VGF4U2NoZW1lPgogICAgICAgICAgICA8L2NhYzpDbGFzc2lmaWVkVGF4Q2F0ZWdvcnk+CiAgICAgICAgPC9jYWM6SXRlbT4KICAgICAgICA8Y2FjOlByaWNlPgogICAgICAgICAgICA8Y2JjOlByaWNlQW1vdW50IGN1cnJlbmN5SUQ9IlNBUiI+MzUwLjAwPC9jYmM6UHJpY2VBbW91bnQ+CiAgICAgICAgPC9jYWM6UHJpY2U+CiAgICA8L2NhYzpJbnZvaWNlTGluZT4KPC9JbnZvaWNlPg==", 
+        <br>"timestamp": 0,  <br>"status": 0 |
+
+        | clearedInvoice | string | Base64 encoded string of the Cleared B2B
+        document as XML. |
+        PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPEludm9pY2UgeG1sbnM9InVybjpvYXNpczpuYW1lczpzcGVjaWZpY2F0aW9uOnVibDpzY2hlbWE6eHNkOkludm9pY2UtMiIgeG1sbnM6Y2FjPSJ1cm46b2FzaXM6bmFtZXM6c3BlY2lmaWNhdGlvbjp1Ymw6c2NoZW1hOnhzZDpDb21tb25BZ2dyZWdhdGVDb21wb25lbnRzLTIiIHhtbG5zOmNiYz0idXJuOm9hc2lzOm5hbWVzOnNwZWNpZmljYXRpb246dWJsOnNjaGVtYTp4c2Q6Q29tbW9uQmFzaWNDb21wb25lbnRzLTIiIHhtbG5zOmV4dD0idXJuOm9hc2lzOm5hbWVzOnNwZWNpZmljYXRpb246dWJsOnNjaGVtYTp4c2Q6Q29tbW9uRXh0ZW5zaW9uQ29tcG9uZW50cy0yIj48ZXh0OlVCTEV4dGVuc2lvbnM+CiAgICA8ZXh0OlVCTEV4dGVuc2lvbj4KICAgICAgICA8ZXh0OkV4dGVuc2lvblVSST51cm46b2FzaXM6bmFtZXM6c3BlY2lmaWNhdGlvbjp1Ymw6ZHNpZzplbnZlbG9wZWQ6eGFkZXM8L2V4dDpFeHRlbnNpb25VUkk+CiAgICAgICAgPGV4dDpFeHRlbnNpb25Db250ZW50PgogICAgICAgICAgICA8IS0tIFBsZWFzZSBub3RlIHRoYXQgdGhlIHNpZ25hdHVyZSB2YWx1ZXMgYXJlIHNhbXBsZSB2YWx1ZXMgb25seSAtLT4KICAgICAgICAgICAgPHNpZzpVQkxEb2N1bWVudFNpZ25hdHVyZXMgeG1sbnM6c2lnPSJ1cm46b2FzaXM6bmFtZXM6c3BlY2lmaWNhdGlvbjp1Ymw6c2NoZW1hOnhzZDpDb21tb25TaWduYXR1cmVDb21wb25lbnRzLTIiIHhtbG5zOnNhYz0idXJuOm9hc2lzOm5hbWVzOnNwZWNpZmljYXRpb246dWJsOnNjaGVtYTp4c2Q6U2lnbmF0dXJlQWdncmVnYXRlQ29tcG9uZW50cy0yIiB4bWxuczpzYmM9InVybjpvYXNpczpuYW1lczpzcGVjaWZpY2F0aW9uOnVibDpzY2hlbWE6eHNkOlNpZ25hdHVyZUJhc2ljQ29tcG9uZW50cy0yIj4KICAgICAgICAgICAgICAgIDxzYWM6U2lnbmF0dXJlSW5mb3JtYXRpb24+CiAgICAgICAgICAgICAgICAgICAgPGNiYzpJRD51cm46b2FzaXM6bmFtZXM6c3BlY2lmaWNhdGlvbjp1Ymw6c2lnbmF0dXJlOjE8L2NiYzpJRD4KICAgICAgICAgICAgICAgICAgICA8c2JjOlJlZmVyZW5jZWRTaWduYXR1cmVJRD51cm46b2FzaXM6bmFtZXM6c3BlY2lmaWNhdGlvbjp1Ymw6c2lnbmF0dXJlOkludm9pY2U8L3NiYzpSZWZlcmVuY2VkU2lnbmF0dXJlSUQ+CiAgICAgICAgICAgICAgICAgICAgPGRzOlNpZ25hdHVyZSB4bWxuczpkcz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgSWQ9InNpZ25hdHVyZSI+CiAgICAgICAgICAgICAgICAgICAgICAgIDxkczpTaWduZWRJbmZvPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRzOkNhbm9uaWNhbGl6YXRpb25NZXRob2QgQWxnb3JpdGhtPSJodHRwOi8vd3d3LnczLm9yZy8yMDA2LzEyL3htbC1jMTRuMTEiLz4KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkczpTaWduYXR1cmVNZXRob2QgQWxnb3JpdGhtPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNlY2RzYS1zaGEyNTYiLz4KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkczpSZWZlcmVuY2UgSWQ9Imludm9pY2VTaWduZWREYXRhIiBVUkk9IiI+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRzOlRyYW5zZm9ybXM+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkczpUcmFuc2Zvcm0gQWxnb3JpdGhtPSJodHRwOi8vd3d3LnczLm9yZy9UUi8xOTk5L1JFQy14cGF0aC0xOTk5MTExNiI+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZHM6WFBhdGg+bm90KC8vYW5jZXN0b3Itb3Itc2VsZjo6ZXh0OlVCTEV4dGVuc2lvbnMpPC9kczpYUGF0aD4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9kczpUcmFuc2Zvcm0+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkczpUcmFuc2Zvcm0gQWxnb3JpdGhtPSJodHRwOi8vd3d3LnczLm9yZy9UUi8xOTk5L1JFQy14cGF0aC0xOTk5MTExNiI+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZHM6WFBhdGg+bm90KC8vYW5jZXN0b3Itb3Itc2VsZjo6Y2FjOlNpZ25hdHVyZSk8L2RzOlhQYXRoPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2RzOlRyYW5zZm9ybT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRzOlRyYW5zZm9ybSBBbGdvcml0aG09Imh0dHA6Ly93d3cudzMub3JnL1RSLzE5OTkvUkVDLXhwYXRoLTE5OTkxMTE2Ij4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkczpYUGF0aD5ub3QoLy9hbmNlc3Rvci1vci1zZWxmOjpjYWM6QWRkaXRpb25hbERvY3VtZW50UmVmZXJlbmNlW2NiYzpJRD0nUVInXSk8L2RzOlhQYXRoPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2RzOlRyYW5zZm9ybT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRzOlRyYW5zZm9ybSBBbGdvcml0aG09Imh0dHA6Ly93d3cudzMub3JnLzIwMDYvMTIveG1sLWMxNG4xMSIvPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZHM6VHJhbnNmb3Jtcz4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZHM6RGlnZXN0TWV0aG9kIEFsZ29yaXRobT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS8wNC94bWxlbmMjc2hhMjU2Ii8+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRzOkRpZ2VzdFZhbHVlPjBueVRZTUo3ZXI1N1ZUbHJJMXNEelQvOFpKVFZMcHNlcjRlSTJKVmNYWFU9PC9kczpEaWdlc3RWYWx1ZT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZHM6UmVmZXJlbmNlPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRzOlJlZmVyZW5jZSBUeXBlPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjU2lnbmF0dXJlUHJvcGVydGllcyIgVVJJPSIjeGFkZXNTaWduZWRQcm9wZXJ0aWVzIj4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZHM6RGlnZXN0TWV0aG9kIEFsZ29yaXRobT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS8wNC94bWxlbmMjc2hhMjU2Ii8+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRzOkRpZ2VzdFZhbHVlPk16UTBNbUZpTVdFNU5UQmxPVGhsT1dRME9HTTRObUZtT0RaaFpURXhOVE0wTVdVMFlqa3dNalF5TnpRM01UTXlOR1JrTUdaaVpHSTBOREZqTUdZd1lRPT08L2RzOkRpZ2VzdFZhbHVlPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9kczpSZWZlcmVuY2U+CiAgICAgICAgICAgICAgICAgICAgICAgIDwvZHM6U2lnbmVkSW5mbz4KICAgICAgICAgICAgICAgICAgICAgICAgPGRzOlNpZ25hdHVyZVZhbHVlPk1FVUNJUUNTVllMcXdvTEJ0MlllVlhITGg3cmRrVUFsTFNQbUtMVlhkUWdVclZjaDlnSWdONkNvblBzYzNVRVhLRG51SHJUK3dqODJUcE5lRVZScnZjdkJYQXdJemdJPTwvZHM6U2lnbmF0dXJlVmFsdWU+CiAgICAgICAgICAgICAgICAgICAgICAgIDxkczpLZXlJbmZvPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRzOlg1MDlEYXRhPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkczpYNTA5Q2VydGlmaWNhdGU+TUlJQjdEQ0NBWkdnQXdJQkFnSUdBWDRxTGY1Uk1Bb0dDQ3FHU000OUJBTUNNQlV4RXpBUkJnTlZCQU1NQ21WSmJuWnZhV05wYm1jd0hoY05Nakl3TVRBMU1USXhPVEU1V2hjTk1qY3dNVEEwTWpJd01EQXdXakJPTVFzd0NRWURWUVFHRXdKVFFURVZNQk1HQTFVRUN3d01VbmxwWVdRZ1FuSmhibU5vTVE0d0RBWURWUVFLREFWS1pYSnBjakVZTUJZR0ExVUVBd3dQTVRJek5EVTBNekl4TWpFek1qTTBNRll3RUFZSEtvWkl6ajBDQVFZRks0RUVBQW9EUWdBRVIySitOMG5UZHZmNHpSMU0raDlrSkY4RXI3d1oxdXllSERoTTJZU3Bwd2NaTzJ0STFwdHJkUld2TnFZN0x1RlprdmFCUVZEM1kyNWpCNGJHR2lLNWpxT0JsakNCa3pBTUJnTlZIUk1CQWY4RUFqQUFNSUdDQmdOVkhSRUVlekI1cEhjd2RURWVNQndHQTFVRUJBd1ZNek0wTVRNek1UTXpNak16TXpNeU1USXhNakF3TVI4d0hRWUtDWkltaVpQeUxHUUJBUXdQTXpFd01USXlNemt6TlRBd01EQXpNUTB3Q3dZRFZRUU1EQVF4TVRBd01SSXdFQVlEVlFRYURBbEJaR1J5WlhOelpYTXhEekFOQmdOVkJBOE1CbEpsZEdGcGJEQUtCZ2dxaGtqT1BRUURBZ05KQURCR0FpRUEvMWdWTjNnenhWa1RuMURlaXc3dDF0eHdSV1c5eDBIL2s0VmJtcGJRSzA4Q0lRQzF6VldNNmo1UERTWkNhRWFJdHIvWGtXMGthaXhzZW12VkFpcG16L0syenc9PTwvZHM6WDUwOUNlcnRpZmljYXRlPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9kczpYNTA5RGF0YT4KICAgICAgICAgICAgICAgICAgICAgICAgPC9kczpLZXlJbmZvPgogICAgICAgICAgICAgICAgICAgICAgICA8ZHM6T2JqZWN0PgogICAgICAgICAgICAgICAgICAgICAgICAgICAgPHhhZGVzOlF1YWxpZnlpbmdQcm9wZXJ0aWVzIHhtbG5zOnhhZGVzPSJodHRwOi8vdXJpLmV0c2kub3JnLzAxOTAzL3YxLjMuMiMiIFRhcmdldD0ic2lnbmF0dXJlIj4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8eGFkZXM6U2lnbmVkUHJvcGVydGllcyBJZD0ieGFkZXNTaWduZWRQcm9wZXJ0aWVzIj4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPHhhZGVzOlNpZ25lZFNpZ25hdHVyZVByb3BlcnRpZXM+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8eGFkZXM6U2lnbmluZ1RpbWU+MjAyMi0xMS0xNlQwODoxMTowMlo8L3hhZGVzOlNpZ25pbmdUaW1lPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPHhhZGVzOlNpZ25pbmdDZXJ0aWZpY2F0ZT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8eGFkZXM6Q2VydD4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPHhhZGVzOkNlcnREaWdlc3Q+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZHM6RGlnZXN0TWV0aG9kIEFsZ29yaXRobT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS8wNC94bWxlbmMjc2hhMjU2Ii8+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZHM6RGlnZXN0VmFsdWU+T1RnMlpHVTFNemczT0Rjd00ySXlOVEkzTUdaaFltVmlNbUUwTlRVellUbGhOV0pqTm1ZM1lUZ3lZemd4TldJME0yRmhNV0V3TmpZeFpXVTFZbVE0TWc9PTwvZHM6RGlnZXN0VmFsdWU+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwveGFkZXM6Q2VydERpZ2VzdD4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPHhhZGVzOklzc3VlclNlcmlhbD4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkczpYNTA5SXNzdWVyTmFtZT5DTj1lSW52b2ljaW5nPC9kczpYNTA5SXNzdWVyTmFtZT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkczpYNTA5U2VyaWFsTnVtYmVyPjE2NDEzODUxNjQzNjk8L2RzOlg1MDlTZXJpYWxOdW1iZXI+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwveGFkZXM6SXNzdWVyU2VyaWFsPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwveGFkZXM6Q2VydD4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwveGFkZXM6U2lnbmluZ0NlcnRpZmljYXRlPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L3hhZGVzOlNpZ25lZFNpZ25hdHVyZVByb3BlcnRpZXM+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPC94YWRlczpTaWduZWRQcm9wZXJ0aWVzPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgPC94YWRlczpRdWFsaWZ5aW5nUHJvcGVydGllcz4KICAgICAgICAgICAgICAgICAgICAgICAgPC9kczpPYmplY3Q+CiAgICAgICAgICAgICAgICAgICAgPC9kczpTaWduYXR1cmU+CiAgICAgICAgICAgICAgICA8L3NhYzpTaWduYXR1cmVJbmZvcm1hdGlvbj4KICAgICAgICAgICAgPC9zaWc6VUJMRG9jdW1lbnRTaWduYXR1cmVzPgogICAgICAgIDwvZXh0OkV4dGVuc2lvbkNvbnRlbnQ+CiAgICA8L2V4dDpVQkxFeHRlbnNpb24+CjwvZXh0OlVCTEV4dGVuc2lvbnM+CiAgICA8Y2JjOlByb2ZpbGVJRD5yZXBvcnRpbmc6MS4wPC9jYmM6UHJvZmlsZUlEPgogICAgPGNiYzpJRD4xMDA8L2NiYzpJRD4KICAgIDxjYmM6VVVJRD4zMmQ2YmVlMy01MWI3LTQyZWYtOTFlOS02ODZhNTc2MDA1YWY8L2NiYzpVVUlEPgogICAgPGNiYzpJc3N1ZURhdGU+MjAyMS0wNC0yNTwvY2JjOklzc3VlRGF0ZT4KICAgIDxjYmM6SXNzdWVUaW1lPjE1OjMwOjAwPC9jYmM6SXNzdWVUaW1lPgogICAgPGNiYzpJbnZvaWNlVHlwZUNvZGUgbmFtZT0iMDEwMDAwMCI+Mzg4PC9jYmM6SW52b2ljZVR5cGVDb2RlPgogICAgPGNiYzpEb2N1bWVudEN1cnJlbmN5Q29kZT5TQVI8L2NiYzpEb2N1bWVudEN1cnJlbmN5Q29kZT4KICAgIDxjYmM6VGF4Q3VycmVuY3lDb2RlPlNBUjwvY2JjOlRheEN1cnJlbmN5Q29kZT4KICAgIDxjYmM6TGluZUNvdW50TnVtZXJpYz4yPC9jYmM6TGluZUNvdW50TnVtZXJpYz4KICAgIDxjYWM6QWRkaXRpb25hbERvY3VtZW50UmVmZXJlbmNlPgogICAgICAgIDxjYmM6SUQ+SUNWPC9jYmM6SUQ+CiAgICAgICAgPGNiYzpVVUlEPjQ2NTMyPC9jYmM6VVVJRD4KICAgIDwvY2FjOkFkZGl0aW9uYWxEb2N1bWVudFJlZmVyZW5jZT4KICAgIDxjYWM6QWRkaXRpb25hbERvY3VtZW50UmVmZXJlbmNlPgogICAgICAgIDxjYmM6SUQ+UElIPC9jYmM6SUQ+CiAgICAgICAgPGNhYzpBdHRhY2htZW50PgogICAgICAgICAgICA8Y2JjOkVtYmVkZGVkRG9jdW1lbnRCaW5hcnlPYmplY3QgbWltZUNvZGU9InRleHQvcGxhaW4iPjFjdUgrTGdOdzRzWDl2eHUyUS9TN0E2R3d4TFVNWmZiUXVWUC85VUxzR3c9PC9jYmM6RW1iZWRkZWREb2N1bWVudEJpbmFyeU9iamVjdD4KICAgICAgICA8L2NhYzpBdHRhY2htZW50PgogICAgPC9jYWM6QWRkaXRpb25hbERvY3VtZW50UmVmZXJlbmNlPgogICAgPGNhYzpBZGRpdGlvbmFsRG9jdW1lbnRSZWZlcmVuY2U+CiAgICAgICAgPGNiYzpJRD5RUjwvY2JjOklEPgogICAgICAgIDxjYWM6QXR0YWNobWVudD4KICAgICAgICAgICAgPGNiYzpFbWJlZGRlZERvY3VtZW50QmluYXJ5T2JqZWN0IG1pbWVDb2RlPSJ0ZXh0L3BsYWluIj5BUmxCYkNCVFlXeGhiU0JUZFhCd2JHbGxjeUJEYnk0Z1RGUkVBZzh6TVRBeE56VXpPVGMwTURBd01ETURGREl3TWpFdE1EUXRNalZVTVRVNk16QTZNREJhQkFjeE1ETTFMakF3QlFZeE16VXVNREFHTERCdWVWUlpUVW8zWlhJMU4xWlViSEpKTVhORWVsUXZPRnBLVkZaTWNITmxjalJsU1RKS1ZtTllXRlU5QjJCTlJWVkRTVkZEVTFaWlRIRjNiMHhDZERKWlpWWllTRXhvTjNKa2ExVkJiRXhUVUcxTFRGWllaRkZuVlhKV1kyZzVaMGxuVGpaRGIyNVFjMk16VlVWWVMwUnVkVWh5VkN0M2FqZ3lWSEJPWlVWV1VuSjJZM1pDV0VGM1NYcG5TVDBJV0RCV01CQUdCeXFHU000OUFnRUdCU3VCQkFBS0EwSUFCRWRpZmpkSjAzYjMrTTBkVFBvZlpDUmZCSys4R2Ric25odzRUTm1FcWFjSEdUdHJTTmFiYTNVVnJ6YW1PeTdoV1pMMmdVRlE5Mk51WXdlR3hob2l1WTQ9PC9jYmM6RW1iZWRkZWREb2N1bWVudEJpbmFyeU9iamVjdD4KICAgICAgICA8L2NhYzpBdHRhY2htZW50Pgo8L2NhYzpBZGRpdGlvbmFsRG9jdW1lbnRSZWZlcmVuY2U+PGNhYzpTaWduYXR1cmU+CiAgICAgIDxjYmM6SUQ+dXJuOm9hc2lzOm5hbWVzOnNwZWNpZmljYXRpb246dWJsOnNpZ25hdHVyZTpJbnZvaWNlPC9jYmM6SUQ+CiAgICAgIDxjYmM6U2lnbmF0dXJlTWV0aG9kPnVybjpvYXNpczpuYW1lczpzcGVjaWZpY2F0aW9uOnVibDpkc2lnOmVudmVsb3BlZDp4YWRlczwvY2JjOlNpZ25hdHVyZU1ldGhvZD4KPC9jYWM6U2lnbmF0dXJlPjxjYWM6QWNjb3VudGluZ1N1cHBsaWVyUGFydHk+CiAgICAgICAgPGNhYzpQYXJ0eT4KICAgICAgICAgICAgPGNhYzpQYXJ0eUlkZW50aWZpY2F0aW9uPgogICAgICAgICAgICAgICAgPGNiYzpJRCBzY2hlbWVJRD0iTUxTIj4xMjM0NTc4OTA8L2NiYzpJRD4KICAgICAgICAgICAgPC9jYWM6UGFydHlJZGVudGlmaWNhdGlvbj4KICAgICAgICAgICAgPGNhYzpQb3N0YWxBZGRyZXNzPgogICAgICAgICAgICAgICAgPGNiYzpTdHJlZXROYW1lPktpbmcgQWJkdWxheml6IFJvYWQ8L2NiYzpTdHJlZXROYW1lPgogICAgICAgICAgICAgICAgPGNiYzpCdWlsZGluZ051bWJlcj44MjI4PC9jYmM6QnVpbGRpbmdOdW1iZXI+CiAgICAgICAgICAgICAgICA8Y2JjOlBsb3RJZGVudGlmaWNhdGlvbj4yMTIxPC9jYmM6UGxvdElkZW50aWZpY2F0aW9uPgogICAgICAgICAgICAgICAgPGNiYzpDaXR5U3ViZGl2aXNpb25OYW1lPkFsIEFtYWw8L2NiYzpDaXR5U3ViZGl2aXNpb25OYW1lPgogICAgICAgICAgICAgICAgPGNiYzpDaXR5TmFtZT5SaXlhZGg8L2NiYzpDaXR5TmFtZT4KICAgICAgICAgICAgICAgIDxjYmM6UG9zdGFsWm9uZT4xMjY0MzwvY2JjOlBvc3RhbFpvbmU+CiAgICAgICAgICAgICAgICA8Y2JjOkNvdW50cnlTdWJlbnRpdHk+Uml5YWRoIFJlZ2lvbjwvY2JjOkNvdW50cnlTdWJlbnRpdHk+CiAgICAgICAgICAgICAgICA8Y2FjOkNvdW50cnk+CiAgICAgICAgICAgICAgICAgICAgPGNiYzpJZGVudGlmaWNhdGlvbkNvZGU+U0E8L2NiYzpJZGVudGlmaWNhdGlvbkNvZGU+CiAgICAgICAgICAgICAgICA8L2NhYzpDb3VudHJ5PgogICAgICAgICAgICA8L2NhYzpQb3N0YWxBZGRyZXNzPgogICAgICAgICAgICA8Y2FjOlBhcnR5VGF4U2NoZW1lPgogICAgICAgICAgICAgICAgPGNiYzpDb21wYW55SUQ+MzEwMTc1Mzk3NDAwMDAzPC9jYmM6Q29tcGFueUlEPgogICAgICAgICAgICAgICAgPGNhYzpUYXhTY2hlbWU+CiAgICAgICAgICAgICAgICAgICAgPGNiYzpJRD5WQVQ8L2NiYzpJRD4KICAgICAgICAgICAgICAgIDwvY2FjOlRheFNjaGVtZT4KICAgICAgICAgICAgPC9jYWM6UGFydHlUYXhTY2hlbWU+CiAgICAgICAgICAgIDxjYWM6UGFydHlMZWdhbEVudGl0eT4KICAgICAgICAgICAgICAgIDxjYmM6UmVnaXN0cmF0aW9uTmFtZT5BbCBTYWxhbSBTdXBwbGllcyBDby4gTFREPC9jYmM6UmVnaXN0cmF0aW9uTmFtZT4KICAgICAgICAgICAgPC9jYWM6UGFydHlMZWdhbEVudGl0eT4KICAgICAgICA8L2NhYzpQYXJ0eT4KICAgIDwvY2FjOkFjY291bnRpbmdTdXBwbGllclBhcnR5PgogICAgPGNhYzpBY2NvdW50aW5nQ3VzdG9tZXJQYXJ0eT4KICAgICAgICA8Y2FjOlBhcnR5PgogICAgICAgICAgICA8Y2FjOlBhcnR5SWRlbnRpZmljYXRpb24+CiAgICAgICAgICAgICAgICA8Y2JjOklEIHNjaGVtZUlEPSJTQUciPjEyM0MxMjM0NTY3ODwvY2JjOklEPgogICAgICAgICAgICA8L2NhYzpQYXJ0eUlkZW50aWZpY2F0aW9uPgogICAgICAgICAgICA8Y2FjOlBvc3RhbEFkZHJlc3M+CiAgICAgICAgICAgICAgICA8Y2JjOlN0cmVldE5hbWU+S2luZyBBYmR1bGxhaCBSb2FkPC9jYmM6U3RyZWV0TmFtZT4KICAgICAgICAgICAgICAgIDxjYmM6QnVpbGRpbmdOdW1iZXI+MzcwOTwvY2JjOkJ1aWxkaW5nTnVtYmVyPgogICAgICAgICAgICAgICAgPGNiYzpQbG90SWRlbnRpZmljYXRpb24+MTAwNDwvY2JjOlBsb3RJZGVudGlmaWNhdGlvbj4KICAgICAgICAgICAgICAgIDxjYmM6Q2l0eVN1YmRpdmlzaW9uTmFtZT5BbCBNdXJzYWxhdDwvY2JjOkNpdHlTdWJkaXZpc2lvbk5hbWU+CiAgICAgICAgICAgICAgICA8Y2JjOkNpdHlOYW1lPlJpeWFkaDwvY2JjOkNpdHlOYW1lPgogICAgICAgICAgICAgICAgPGNiYzpQb3N0YWxab25lPjExNTY0PC9jYmM6UG9zdGFsWm9uZT4KICAgICAgICAgICAgICAgIDxjYmM6Q291bnRyeVN1YmVudGl0eT5SaXlhZGggUmVnaW9uPC9jYmM6Q291bnRyeVN1YmVudGl0eT4KICAgICAgICAgICAgICAgIDxjYWM6Q291bnRyeT4KICAgICAgICAgICAgICAgICAgICA8Y2JjOklkZW50aWZpY2F0aW9uQ29kZT5TQTwvY2JjOklkZW50aWZpY2F0aW9uQ29kZT4KICAgICAgICAgICAgICAgIDwvY2FjOkNvdW50cnk+CiAgICAgICAgICAgIDwvY2FjOlBvc3RhbEFkZHJlc3M+CiAgICAgICAgICAgIDxjYWM6UGFydHlUYXhTY2hlbWU+CiAgICAgICAgICAgICAgICA8Y2FjOlRheFNjaGVtZT4KICAgICAgICAgICAgICAgICAgICA8Y2JjOklEPlZBVDwvY2JjOklEPgogICAgICAgICAgICAgICAgPC9jYWM6VGF4U2NoZW1lPgogICAgICAgICAgICA8L2NhYzpQYXJ0eVRheFNjaGVtZT4KICAgICAgICAgICAgPGNhYzpQYXJ0eUxlZ2FsRW50aXR5PgogICAgICAgICAgICAgICAgPGNiYzpSZWdpc3RyYXRpb25OYW1lPkFMIEtBV1RIQVIgTUFSS0VUUzwvY2JjOlJlZ2lzdHJhdGlvbk5hbWU+CiAgICAgICAgICAgIDwvY2FjOlBhcnR5TGVnYWxFbnRpdHk+CiAgICAgICAgPC9jYWM6UGFydHk+CiAgICA8L2NhYzpBY2NvdW50aW5nQ3VzdG9tZXJQYXJ0eT4KICAgIDxjYWM6RGVsaXZlcnk+CiAgICAgICAgPGNiYzpBY3R1YWxEZWxpdmVyeURhdGU+MjAyMi0wNC0yNTwvY2JjOkFjdHVhbERlbGl2ZXJ5RGF0ZT4KICAgIDwvY2FjOkRlbGl2ZXJ5PgogICAgPGNhYzpQYXltZW50TWVhbnM+CiAgICAgICAgPGNiYzpQYXltZW50TWVhbnNDb2RlPjQyPC9jYmM6UGF5bWVudE1lYW5zQ29kZT4KICAgIDwvY2FjOlBheW1lbnRNZWFucz4KICAgIDxjYWM6VGF4VG90YWw+CiAgICAgICAgPGNiYzpUYXhBbW91bnQgY3VycmVuY3lJRD0iU0FSIj4xMzUuMDA8L2NiYzpUYXhBbW91bnQ+CiAgICAgICAgPGNhYzpUYXhTdWJ0b3RhbD4KICAgICAgICAgICAgPGNiYzpUYXhhYmxlQW1vdW50IGN1cnJlbmN5SUQ9IlNBUiI+OTAwLjAwPC9jYmM6VGF4YWJsZUFtb3VudD4KICAgICAgICAgICAgPGNiYzpUYXhBbW91bnQgY3VycmVuY3lJRD0iU0FSIj4xMzUuMDA8L2NiYzpUYXhBbW91bnQ+CiAgICAgICAgICAgIDxjYWM6VGF4Q2F0ZWdvcnk+CiAgICAgICAgICAgICAgICA8Y2JjOklEPlM8L2NiYzpJRD4KICAgICAgICAgICAgICAgIDxjYmM6UGVyY2VudD4xNTwvY2JjOlBlcmNlbnQ+CiAgICAgICAgICAgICAgICA8Y2FjOlRheFNjaGVtZT4KICAgICAgICAgICAgICAgICAgICA8Y2JjOklEPlZBVDwvY2JjOklEPgogICAgICAgICAgICAgICAgPC9jYWM6VGF4U2NoZW1lPgogICAgICAgICAgICA8L2NhYzpUYXhDYXRlZ29yeT4KICAgICAgICA8L2NhYzpUYXhTdWJ0b3RhbD4KICAgIDwvY2FjOlRheFRvdGFsPgogICAgPGNhYzpUYXhUb3RhbD4KICAgICAgICA8Y2JjOlRheEFtb3VudCBjdXJyZW5jeUlEPSJTQVIiPjEzNS4wMDwvY2JjOlRheEFtb3VudD4KICAgIDwvY2FjOlRheFRvdGFsPgogICAgPGNhYzpMZWdhbE1vbmV0YXJ5VG90YWw+CiAgICAgICAgPGNiYzpMaW5lRXh0ZW5zaW9uQW1vdW50IGN1cnJlbmN5SUQ9IlNBUiI+OTAwLjAwPC9jYmM6TGluZUV4dGVuc2lvbkFtb3VudD4KICAgICAgICA8Y2JjOlRheEV4Y2x1c2l2ZUFtb3VudCBjdXJyZW5jeUlEPSJTQVIiPjkwMC4wMDwvY2JjOlRheEV4Y2x1c2l2ZUFtb3VudD4KICAgICAgICA8Y2JjOlRheEluY2x1c2l2ZUFtb3VudCBjdXJyZW5jeUlEPSJTQVIiPjEwMzUuMDA8L2NiYzpUYXhJbmNsdXNpdmVBbW91bnQ+CiAgICAgICAgPGNiYzpBbGxvd2FuY2VUb3RhbEFtb3VudCBjdXJyZW5jeUlEPSJTQVIiPjAuMDA8L2NiYzpBbGxvd2FuY2VUb3RhbEFtb3VudD4KICAgICAgICA8Y2JjOlBheWFibGVBbW91bnQgY3VycmVuY3lJRD0iU0FSIj4xMDM1LjAwPC9jYmM6UGF5YWJsZUFtb3VudD4KICAgIDwvY2FjOkxlZ2FsTW9uZXRhcnlUb3RhbD4KICAgIDxjYWM6SW52b2ljZUxpbmU+CiAgICAgICAgPGNiYzpJRD4xPC9jYmM6SUQ+CiAgICAgICAgPGNiYzpJbnZvaWNlZFF1YW50aXR5IHVuaXRDb2RlPSJQQ0UiPjE8L2NiYzpJbnZvaWNlZFF1YW50aXR5PgogICAgICAgIDxjYmM6TGluZUV4dGVuc2lvbkFtb3VudCBjdXJyZW5jeUlEPSJTQVIiPjIwMC4wMDwvY2JjOkxpbmVFeHRlbnNpb25BbW91bnQ+CiAgICAgICAgPGNhYzpUYXhUb3RhbD4KICAgICAgICAgICAgPGNiYzpUYXhBbW91bnQgY3VycmVuY3lJRD0iU0FSIj4zMC4wMDwvY2JjOlRheEFtb3VudD4KICAgICAgICAgICAgPGNiYzpSb3VuZGluZ0Ftb3VudCBjdXJyZW5jeUlEPSJTQVIiPjIzMC4wMDwvY2JjOlJvdW5kaW5nQW1vdW50PgogICAgICAgIDwvY2FjOlRheFRvdGFsPgogICAgICAgIDxjYWM6SXRlbT4KICAgICAgICAgICAgPGNiYzpOYW1lPkl0ZW0gQTwvY2JjOk5hbWU+CiAgICAgICAgICAgIDxjYWM6Q2xhc3NpZmllZFRheENhdGVnb3J5PgogICAgICAgICAgICAgICAgPGNiYzpJRD5TPC9jYmM6SUQ+CiAgICAgICAgICAgICAgICA8Y2JjOlBlcmNlbnQ+MTU8L2NiYzpQZXJjZW50PgogICAgICAgICAgICAgICAgPGNhYzpUYXhTY2hlbWU+CiAgICAgICAgICAgICAgICAgICAgPGNiYzpJRD5WQVQ8L2NiYzpJRD4KICAgICAgICAgICAgICAgIDwvY2FjOlRheFNjaGVtZT4KICAgICAgICAgICAgPC9jYWM6Q2xhc3NpZmllZFRheENhdGVnb3J5PgogICAgICAgIDwvY2FjOkl0ZW0+CiAgICAgICAgPGNhYzpQcmljZT4KICAgICAgICAgICAgPGNiYzpQcmljZUFtb3VudCBjdXJyZW5jeUlEPSJTQVIiPjIwMC4wMDwvY2JjOlByaWNlQW1vdW50PgogICAgICAgIDwvY2FjOlByaWNlPgogICAgPC9jYWM6SW52b2ljZUxpbmU+CiAgICA8Y2FjOkludm9pY2VMaW5lPgogICAgICAgIDxjYmM6SUQ+MjwvY2JjOklEPgogICAgICAgIDxjYmM6SW52b2ljZWRRdWFudGl0eSB1bml0Q29kZT0iUENFIj4yPC9jYmM6SW52b2ljZWRRdWFudGl0eT4KICAgICAgICA8Y2JjOkxpbmVFeHRlbnNpb25BbW91bnQgY3VycmVuY3lJRD0iU0FSIj43MDAuMDA8L2NiYzpMaW5lRXh0ZW5zaW9uQW1vdW50PgogICAgICAgIDxjYWM6VGF4VG90YWw+CiAgICAgICAgICAgIDxjYmM6VGF4QW1vdW50IGN1cnJlbmN5SUQ9IlNBUiI+MTA1LjAwPC9jYmM6VGF4QW1vdW50PgogICAgICAgICAgICA8Y2JjOlJvdW5kaW5nQW1vdW50IGN1cnJlbmN5SUQ9IlNBUiI+ODA1LjAwPC9jYmM6Um91bmRpbmdBbW91bnQ+CiAgICAgICAgPC9jYWM6VGF4VG90YWw+CiAgICAgICAgPGNhYzpJdGVtPgogICAgICAgICAgICA8Y2JjOk5hbWU+SXRlbSBCPC9jYmM6TmFtZT4KICAgICAgICAgICAgPGNhYzpDbGFzc2lmaWVkVGF4Q2F0ZWdvcnk+CiAgICAgICAgICAgICAgICA8Y2JjOklEPlM8L2NiYzpJRD4KICAgICAgICAgICAgICAgIDxjYmM6UGVyY2VudD4xNTwvY2JjOlBlcmNlbnQ+CiAgICAgICAgICAgICAgICA8Y2FjOlRheFNjaGVtZT4KICAgICAgICAgICAgICAgICAgICA8Y2JjOklEPlZBVDwvY2JjOklEPgogICAgICAgICAgICAgICAgPC9jYWM6VGF4U2NoZW1lPgogICAgICAgICAgICA8L2NhYzpDbGFzc2lmaWVkVGF4Q2F0ZWdvcnk+CiAgICAgICAgPC9jYWM6SXRlbT4KICAgICAgICA8Y2FjOlByaWNlPgogICAgICAgICAgICA8Y2JjOlByaWNlQW1vdW50IGN1cnJlbmN5SUQ9IlNBUiI+MzUwLjAwPC9jYmM6UHJpY2VBbW91bnQ+CiAgICAgICAgPC9jYWM6UHJpY2U+CiAgICA8L2NhYzpJbnZvaWNlTGluZT4KPC9JbnZvaWNlPg==
+        |
+
+        | clearedQrCode | string | Base64 encoded string of the QR code |
+        AQxDb21wYW55IE5hbWUCDzMwMDA1NTE4NDQwMDAwMwMUMjAyMi0xMC0yMVQwMDo1MzoxM1oEBjExNS4wMAUFMTUuMDAGLE9QUVJpUjRlVVpnL01QbXE1eStqMlVKTlZlOGxZbGF5ZkFiZ3pnTkFpdTQ9B2BNRVlDSVFDYzFJdlM3RVVGbXVGK0NHaDlCT0x5TUQ2UkF6elFvS043ckpmOXdZaXZjUUloQU9wdFkrbGx2bXd2TXZVaThvZjFWUFZCa1d0c1NjSXprSUZkSU1HOFR1emkIWDBWMBAGByqGSM49AgEGBSuBBAAKA0IABA/8G9pYQbwSAvAp52b6LqOjs0cpsplPTVkYSMmjIRkRAQhGQeBAFawbldsV4sWOKgWH/XXXq85FvQ8HaNyJR4I=
+        |
       requestBody:
         content:
           application/json:
@@ -484,16 +1014,18 @@ paths:
                   isSummary: 'false'
                   supplyDate: '2022-10-21T12:53:13.000Z'
                   sellerVatRegistrationNumber: '300055184400003'
+                  additionalSellerIdType: CRN
+                  additionalSellerIdNumber: '1122334455667788'
                   sellerGroupVatRegistrationNumber: ''
-                  buyerVatRegistrationNumber: '300244974200003'
+                  additionalBuyerIdType: CRN
+                  additionalBuyerIdNumber: '1122334455667788'
                   buyerGroupVatRegistrationNumber: '300244974200003'
                   discountOnDocumentTotal: 0
                   specialTaxTreatment: '0'
                   currency: SAR
                   documentId: 2022100627
-                serialNumber: 1-TST|2-TST|3-ed22f1d8-e6a2-1118-9b58-d9a8f11e445f    
       security:
-        - bearerAuth: []
+        - bearerAuth: []             
       responses:
         '200':
           description: OK
@@ -576,4 +1108,354 @@ paths:
                 example-1:
                   summary: Clear Document
                   value:
-                    isCleared: false                
+                    isCleared: false
+  /api/v1/proto/generateQRCode:
+    post:
+      tags:
+        - QR Code
+      summary: Generate Phase-2 compliant QR Code for Simplified Invoices/Notes(B2C)
+      description: >-
+        Use this API to generate cryptographically signed base64 encoded QR code
+        your EGS(E-Invoice Generation Solution) generated B2C
+        documents(**Simplified Tax Invoice** or **Simplified Tax Invoice Credit
+        Note** or **Simplified Tax Invoice Debit Note** )to the ZATCA's sandbox
+        environment.
+
+
+        You have to pass all the required params in the specified format at the
+        minimum to report your document successfully. You can add additional
+        parameters if applicable as per your preference.
+
+
+        **Note:**
+
+
+        - Use this base64 encoded QR code to generate scannable QR image.
+            
+
+        #### Request Parameters:
+
+
+        | **PARAMS** | **REQUIRED** | **DATA TYPE** | **DESCRIPTION** |
+        **EXAMPLE** |
+
+        | --- | --- | --- | --- | --- |
+
+        | `invoiceData` | YES | _json_ | The data of the B2C document | {...} |
+
+        | `documentType` | YES | _string_ | For the following documents types,
+        use the corresponding enums:  <br>  <br>1) **Simplified Tax Invoice -**
+        SIMPLIFIED_TAX_INVOICE  <br>2) **Simplified Tax Invoice Credit Note -**
+        SIMPLIFIED_TAX_INVOICE_CREDIT_NOTE3) **Simplified Tax Invoice Debit Note
+        -** SIMPLIFIED_TAX_INVOICE_DEBIT_NOTE  <br> | SIMPLIFIED_TAX_INVOICE |
+
+        | `referenceId` | CONDITIONAL | _string_ | ID of the original
+        document(reference document) for which this document is generated. 
+        <br>  <br>Applicable only for document types:  <br>  <br>1) **Simplified
+        Tax Invoice Credit Note**2) **Simplified Tax Invoice Debit Note** 
+        <br>**Example**:  <br>If the document type is Simplified Credit Note,
+        the reference id should be Invoice number for which this credit note is
+        being created. | 2022100627 |
+
+        | `documentIssueDateTime` | YES | _string_ | Document Issue Date and
+        Time in **"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"** format. |
+        2022-10-21T12:53:13.000Z |
+
+        | `documentDueDateTime` | NO | _string_ | Document Due Date and Time in
+        **"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"** format. | 2022-10-21T12:53:13.000Z |
+
+        | `sellerName` | YES | _string_ | Name of the seller | Company Name |
+
+        | `sellerAddress` | YES | _json_ | Address of the seller with the below
+        mentioned fields. | {  <br>"addrLine1": "Makkah",  <br>"addrLine2": "Al
+        Alam Street",  <br>"city": "Riyadh",  <br>"state": "Riyadh", 
+        <br>"zipCode": "24211",  <br>"phone": "2121",  <br>"fax": "8228", 
+        <br>"district": "Riyadh",  <br>"country": "Saudi Arabia", 
+        <br>"additionalNo": ""  <br>} |
+
+        | `buyerName` | CONDITIONAL | string | Buyer Name is mandatory to be
+        filled as per the transactions mentioned in article 53 (7) and for
+        private education and private healthcare to citizens. | Vignesh K |
+
+        | buyerAddress | NO | json | Buyer address | {  <br>"attention":
+        "Meiyappan MM",  <br>"countryOrRegion": "SA",  <br>"addrLine1": "12,
+        Masjid Street",  <br>"addrLine2": "Amjad Building",  <br>"city":
+        "Dammam",  <br>"state": "Riyadh",  <br>"zipCode": "12313",  <br>"phone":
+        "2121",  <br>"fax": "8228",  <br>"district": "Riyadh",  <br>"country":
+        "SA"  <br>} |
+
+        | `addrLine1` | YES | _string_ | Address Line 1 | Makkah |
+
+        | `addrLine2` | YES | _string_ | Address Line 2 | Al Alam Street |
+
+        | `buildingNumber` | YES | string | Building Number | 20211 |
+
+        | `additionalNo` | YES | string | Additional Number(4 digits) | 2134 |
+
+        | `city` | YES | _string_ | City  <br> | Riyadh |
+
+        | `state` | YES | _string_ | State | Riyadh |
+
+        | `zipCode` | YES | string | Postal Code(5 digits) | 24211 |
+
+        | `phone` | YES | string | Phone | 2121 |
+
+        | `fax` | YES | string | Fax | 5646465654545 |
+
+        | `documentLineItems` | YES | list | Line items list | \[...\] |
+
+        | `lineItemDesc` | YES | string | Line item description | Ball point pen
+        |
+
+        | `lineItemPrice` | YES | string | Line item price | 10.00 |
+
+        | `lineItemQty` | YES | string | Line item quantity | 10.00 |
+
+        | `lineItemTaxableAmount` | YES | string | Line item taxable amount 
+        <br>  <br>lineItemTaxableAmount = (lineItemPrice \* lineItemQty) -
+        discountOnLineItem | 100.00 |
+
+        | `discountOnlineItem` | YES | string | Discount in amount applied on
+        the line item | 0.00 |
+
+        | `vatRateOnLineItem` | YES | string | Vat Rate applied to the line item
+        | 15.00 |
+
+        | `lineItemVatAmount` | YES | string | Vat amount of the line item 
+        <br>  <br>lineItemVatAmount = (lineItemTaxableAmount \*
+        vatRateOnLineItem)/100  <br> | 15.00 |
+
+        | `lineItemSubTotal` | YES | string | Total of the Line Item  <br> 
+        <br>lineItemSubTotal = lineItemTaxableAmount + lineItemVatAmount |
+        115.00 |
+
+        | `totalExcludingVat` | YES | string | totalExcludingVat = documentTotal
+        - totalVat | 100.00 |
+
+        | `totalTaxableAmountExcludingVat` | YES | string |
+        totalTaxableAmountExcludingVat = sum of all lineItemTaxableAmount of
+        line items - discountOnDocumentTotal(if applied) | 100.00 |
+
+        | `vatTotal` | YES | string | vatTotal = sum of all lineItemVatAmount of
+        line items | 15.00 |
+
+        | `documentTotal` | YES | string | documentTotal =
+        totalTaxableAmountExcludingVat + vatTotal | 115.00 |
+
+        | `isSpecialBillingAgreement` | YES | boolean | If transaction for the
+        following conditions:  <br>  <br>1) Self-billed invoice  <br>2) Third
+        party billed invoice on behalf of the supplier | false |
+
+        | `isTransactionType` | YES | boolean | If transaction is any of the
+        following(not mutually exclusive):  <br>  <br>1) Nominal Supply  <br>2)
+        Export  <br>3) Summary | false |
+
+        | `isSelfBilled` | YES | boolean | If `isSpecialBillingAgreement` is
+        true and self - billed condition | false |
+
+        | `isThirdParty` | YES | boolean | If `isSpecialBillingAgreement` is
+        true and Third party condition | true |
+
+        | `isNominalSupply` | YES | boolean | If `isTransactionType` is true and
+        nominal supply condition | false |
+
+        | `isExport` | YES | boolean | If `isTransactionType` is true and export
+        condition | false |
+
+        | `isSummary` | YES | boolean | If `isTransactionType` is true and
+        summary invoice condition | false |
+
+        | `supplyDate` | YES | string | Goods/Service supply Date and Time in
+        **"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"** format. |  |
+
+        | `sellerVatRegistrationNumber` | YES | string | Seller Vat registration
+        number | 300055184400003 |
+
+        | `additionalSellerIdType` | YES | string | For the following Seller ID
+        types, use the corresponding enums in bold:  <br>  <br>1) Commercial
+        registration number with "**CRN**" as schemeID  <br>2) Momra license
+        with "**MOM**" as schemeID -  <br>3) MLSD license with "**MLS**" as
+        schemeID  <br>4) Sagia license with "**SAG**" as schemeID  <br>5) Other
+        OD with "**OTH**" as schemeID  <br>In case multiple IDs exist then one
+        of the above must be entered following the sequence specified above |
+        CRN |
+
+        | `additionalSellerIdNumber` | YES | string | Additional seller ID
+        number of the ID type chosen | 1112233344 |
+
+        | `sellerGroupVatRegistrationNumber` | CONDITIONAL | string | Group Vat
+        registration number of the seller | 300244974200003 |
+
+        | `additionalBuyerIdType` | CONDITIONAL | string | Required only for
+        private education or private healthcare supplies to Citizens. This field
+        should contain the National ID only for invoices pertaining to private
+        education and private healthcare to citizens. National ID is mandatory
+        to be filled for private education and private healthcare to citizens. 
+        <br>  <br>Other Buyer ID enum must be one of the following list:  <br> 
+        <br>1) Tax Identification Number "**TIN**" as schemeID  <br>2)
+        Commercial registration number with "**CRN**" as schemeID  <br>3) Momra
+        license with "**MOM**" as schemeID  <br>4) MLSD license with "**MLS**"
+        as schemeID  <br>5) 700 Number with "**_700**" as schemeID  <br>6) Sagia
+        license with "**SAG**" as schemeID  <br>7) National ID with "**NAT**" as
+        schemeID  <br>8) GCC ID with "**GCC**" as schemeID  <br>9) Iqama Number
+        with "**IQA**" as schemeID  <br>10) Passport ID with "**PAS**" as
+        schemeID  <br>11) Other ID with "**OTH**" as schemeID  <br>In case
+        multiple IDs exist then one of the above must be entered following the
+        sequence specified above | NATIONAL_ID |
+
+        | `additionalBuyerIdNumber` | CONDITIONAL | string | Buyer's NATIONAL ID
+        number | 112233445566 |
+
+        | `discountOnDocumentTotal` | NO | string | Discount applied on document
+        total | 0.00 |
+
+        | `specialTaxTreatment` | CONDITIONAL | string | Where Tax is not
+        charged at the standard rate, this field should have a narration “Tax
+        treatment applied to the supply” as per Article 53 of the VAT
+        Implementing Regulation.  <br>  <br>Narration to be entered if Tax is
+        not charged at basic rate. | 0 |
+
+        | `currency` | YES | string | Transaction Currency of the document | SAR
+        |
+
+        | `documentId` | YES | string | A unique identification of the Invoice -
+        Invoice Reference number(IRN) | 2022100627 |
+
+
+        #### **Response Parameters:**
+
+
+        | **PARAMS** | **DATA TYPE** | **DESCRIPTION** | **EXAMPLE** |
+
+        | --- | --- | --- | --- |
+
+        | `encodedQrCodeData` | string | Base64 encoded QR code string.  <br>Use
+        this string to create QR image to be used on the printed B2C document. 
+        <br>  <br>Use it only on B2C documents. |
+        AQxDb21wYW55IE5hbWUCDzMwMDA1NTE4NDQwMDAwMwMUMjAyMi0xMC0yMVQwMDo1MzoxM1oEBjExNS4wMAUFMTUuMDAGLE9QUVJpUjRlVVpnL01QbXE1eStqMlVKTlZlOGxZbGF5ZkFiZ3pnTkFpdTQ9B2BNRVlDSVFDYzFJdlM3RVVGbXVGK0NHaDlCT0x5TUQ2UkF6elFvS043ckpmOXdZaXZjUUloQU9wdFkrbGx2bXd2TXZVaThvZjFWUFZCa1d0c1NjSXprSUZkSU1HOFR1emkIWDBWMBAGByqGSM49AgEGBSuBBAAKA0IABA/8G9pYQbwSAvAp52b6LqOjs0cpsplPTVkYSMmjIRkRAQhGQeBAFawbldsV4sWOKgWH/XXXq85FvQ8HaNyJR4I=
+        |
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                invoiceData:
+                  documentType: SIMPLIFIED_TAX_INVOICE
+                  referenceId: ''
+                  documentIssueDateTime: '2022-10-21T12:53:13.000Z'
+                  documentDueDateTime: '2022-10-26T12:53:13.000Z'
+                  sellerName: Company Name
+                  sellerAddress:
+                    addrLine1: Makkah
+                    addrLine2: Al Alam Street
+                    city: Riyadh
+                    state: Riyadh
+                    zipCode: '24211'
+                    phone: '2121'
+                    fax: '8228'
+                    district: Riyadh
+                    country: Saudi Arabia
+                    additionalNo: ''
+                  buyerName: Antna
+                  buyerAddress:
+                    attention: Meiyappan MM
+                    countryOrRegion: SA
+                    addrLine1: 12, Masjid Street
+                    addrLine2: Amjad Building
+                    city: Dammam
+                    state: Riyadh
+                    zipCode: '12313'
+                    phone: '2121'
+                    fax: '8228'
+                    district: Riyadh
+                    country: SA
+                  documentLineItems:
+                    - lineItemDesc: Ball point pen
+                      lineItemPrice: 10
+                      lineItemQty: 10
+                      lineItemTaxableAmount: 100
+                      discountOnLineItem: 0
+                      vatRateOnLineItem: 15
+                      lineItemVatAmount: 15
+                      lineItemSubTotal: 115
+                  totalExcludingVat: 100
+                  totalTaxableAmountExcludingVat: 100
+                  vatTotal: 15
+                  documentTotal: 115
+                  isSpecialBillingAgreement: 'false'
+                  isTransactionType: 'false'
+                  isSelfBilled: 'false'
+                  isThirdParty: 'true'
+                  isNominalSupply: 'false'
+                  isExport: 'false'
+                  isSummary: 'false'
+                  supplyDate: '2022-10-21T12:53:13.000Z'
+                  sellerVatRegistrationNumber: '300055184400003'
+                  sellerGroupVatRegistrationNumber: ''
+                  additionalSellerIdType: CRN
+                  additionalSellerIdNumber: '1122334455667788'
+                  discountOnDocumentTotal: 0
+                  specialTaxTreatment: '0'
+                  currency: SAR
+                  documentId: 2022100627
+      security:
+        - bearerAuth: []             
+      responses:
+        '200':
+          description: OK
+          headers:
+            Date:
+              schema:
+                type: string
+                example: Thu, 03 Nov 2022 04:09:31 GMT
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '433'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            x-amzn-RequestId:
+              schema:
+                type: string
+                example: 5cd50847-9ae0-4658-a452-2d8514d1f733
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: >-
+                  Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,x-requested-with,UUID
+            x-amz-apigw-id:
+              schema:
+                type: string
+                example: bAbHIGn-hcwFseQ=
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT, ANY
+            Access-Control-Expose-Headers:
+              schema:
+                type: string
+                example: >-
+                  Access-Control-Allow-Origin, Access-Control-Allow-Headers,
+                  Access-Control-Allow-Methods
+            X-Amzn-Trace-Id:
+              schema:
+                type: string
+                example: Root=1-63633efa-0f4fd26f2a1ba8085aaae8cd;Sampled=0
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                encodedQrCodeData: >-
+                  AQxDb21wYW55IE5hbWUCDzMwMDA1NTE4NDQwMDAwMwMUMjAyMi0xMC0yMVQwMDo1MzoxM1oEBjExNS4wMAUFMTUuMDAGLE9QUVJpUjRlVVpnL01QbXE1eStqMlVKTlZlOGxZbGF5ZkFiZ3pnTkFpdTQ9B2BNRVlDSVFDYzFJdlM3RVVGbXVGK0NHaDlCT0x5TUQ2UkF6elFvS043ckpmOXdZaXZjUUloQU9wdFkrbGx2bXd2TXZVaThvZjFWUFZCa1d0c1NjSXprSUZkSU1HOFR1emkIWDBWMBAGByqGSM49AgEGBSuBBAAKA0IABA/8G9pYQbwSAvAp52b6LqOjs0cpsplPTVkYSMmjIRkRAQhGQeBAFawbldsV4sWOKgWH/XXXq85FvQ8HaNyJR4I=
