@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: Antna ICE - ZATCA Compliance APIs 1.0
+  title: ZATCA
   description: >-
     Welcome to Antna's API Documentation. We've designed this document to help
     developers and Antna users fully understand and integrate our API for a
@@ -27,11 +27,30 @@ info:
     Read through the following sections for the integration process.
 
 
+    # API Workflows:
+
+
+    ## B2C Tax Document Flow:
+
+
+    <img
+    src="https://content.pstmn.io/6a1be8f8-141e-4e7f-b003-d8df79e5a874/RnJhbWUgNDEucG5n"
+    alt="">
+
+
+    ## B2B Tax Document Flow:
+
+
+    <img
+    src="https://content.pstmn.io/18fd0f1f-147a-4ba8-98d8-a8057f1c9841/RnJhbWUgNDIucG5n"
+    alt="">
+
+
     # Getting Started
 
 
-    First, you need to register with Antna and create an account. Click on
-    this [link](https://ice-antna-api-only.auth.ap-south-1.amazoncognito.com/signup?client_id=6q5j2vj9b0uqp3ekkurosh19ef&response_type=token&scope=aws.cognito.signin.user.admin+https://ap-south-1.console.aws.amazon.com/api&redirect_uri=https://oauth.pstmn.io/v1/browser-callback) and refer to this
+    First, you need to register with Antna and create an account. Click on this
+    [link](https://app.shiprocket.in/register) and refer to this
     [video](https://youtu.be/zHZnLG-cbho) to complete the sign-up process.
 
 
@@ -104,24 +123,39 @@ info:
         For any other issues, please email us at: [support@antna.co.in](mailto:support@antna.co.in).
     - The Antna terms of service are listed here: [Terms Of
     Service](https://www.antna.co.in/terms.html)
-  termsOfService: https://www.antna.co.in/terms.html
-  contact:
-    email: support@antna.co.in
-  license:
-    name: License
-    url: http://www.apache.org/licenses/LICENSE-2.0.html  
   version: 1.0.0
 servers:
-  - url: https://kixq9sqvjc.execute-api.ap-south-1.amazonaws.com/test
+  - url: https://t5wtfl1d2e.execute-api.ap-south-1.amazonaws.com
+  - url: https://kixq9sqvjc.execute-api.ap-south-1.amazonaws.com
 components:
   securitySchemes:
-    bearerAuth:            # arbitrary name for the security scheme
+    oauth2Auth:
       type: http
-      scheme: bearer
-      bearerFormat: JWT  
+      scheme: oauth2
+security:
+  - oauth2Auth: []
 tags:
   - name: Zatca
     description: >-
+      # API Workflows:
+
+
+      ## B2C Tax Document Flow:
+
+
+      <img
+      src="https://content.pstmn.io/6a1be8f8-141e-4e7f-b003-d8df79e5a874/RnJhbWUgNDEucG5n"
+      alt="">
+
+
+      ## B2B Tax Document Flow:
+
+
+      <img
+      src="https://content.pstmn.io/18fd0f1f-147a-4ba8-98d8-a8057f1c9841/RnJhbWUgNDIucG5n"
+      alt="">
+
+
       **ZATCA APIs:**
 
 
@@ -140,20 +174,12 @@ tags:
 
       For security reasons, we've not enabled API sign-in in this test
       environment.
-  - name: Onboarding
-    description: Onboarding an EGS(E-Invoice Generation Solution) with ZATCA's Fatoora Portal by raising CSR Request
-  - name: QR Code
-    description: Generate Phase-2 compliant QR Code for Simplified Invoices/Notes(B2C)    
-  - name: Reporting
-    description: Reporting for Invoice/Note with ZATCA's Fatoora Portal
-  - name: Clearance
-    description: Clearance for Invoice/Note with ZATCA's Fatoora Portal   
 paths:
-  /api/v1/proto/csrRequest:
+  /dev/api/v1/proto/signUp:
     post:
       tags:
-        - Onboarding
-      summary: Onboarding by CSR Request
+        - Zatca
+      summary: Sign Up
       description: >-
         Use this API to onboard your EGS(E-Invoice Generation Solution) in the
         ZATCA sandbox environment.
@@ -173,9 +199,123 @@ paths:
         | --- | --- | --- | --- | --- |
 
         | `csrInputs` | YES | _json_ | The csr(certificate signing request)
-        details you need to provide for onboarding the EGS. | {  <br>"otp":
-        "123345",  <br>"commonName": "TST-886431145-300055184400003", 
-        <br>"serialNumber": "1-TST |
+        details you need to provide for onboarding the EGS. | {} |
+
+        | `otp` | YES | _string_ | The OTP that you'll get from the Fatoora
+        Portal(logged in using taxpayer credentials) after following the ZATCA
+        onboarding process as per Antna Guidelines document. | 123345 |
+
+        | `commonName` | YES | _string_ | A Unique Name or Asset Tracking Number
+        of your EGS. There is no specific format, any free text will be
+        accepted. | TST-886431145-300055184400003 |
+
+        | `serialNumber` | YES | _string_ | Unique identification code for the
+        EGS. Serial number should be in this **"1-xxx | 2-xxx |
+
+        | `organizationIdentifier` | YES | _string_ | It is the organization VAT
+        number. It is a **15** digit number with starting and ending digits as
+        **'3'.** | 300055184400003 |
+
+        | `organizationUnitName` | YES | _string_ | The branch name for
+        Taxpayers. In case of VAT Groups , this field should contain the
+        10-digit TIN number of the individual group member whose EGS Unit is
+        being onboarded. **If 11th digit of Organization Identifier is not = 1
+        then Free text and if 11th digit of Organization Identifier = 1 then
+        needs to be a 10 digit number.** | 3123456789 |
+
+        | `organizationName` | YES | _string_ | Name of the Taxpayer. It can be
+        free text. | Antna Technologies Private Limited |
+
+        | `countryName` | YES | _string_ | Name of the country.  <br>2 letter
+        code (**ISO 3166 Alpha-2**) | SA |
+
+        | `invoiceType` | YES | _string_ | The document type that the Taxpayer’s
+        solution unit will be issuing/generating. It can be one or a combination
+        of Standard Tax Invoice (T), Simplified Tax Invoice (S), (X), (Y). The
+        input should be using the digits 0 & 1 and mapping those to “TSXY”
+        where:  <br>0 = False/Not supported  <br>1= True/Supported  <br>(X) and
+        (Y) are for future use and should be set to 0 by default for the time
+        being.  <br>For example: 1000 would mean Solution will be generating
+        Standard Invoices only. 0100 would mean Solution will be generating
+        Simplified invoices (B2C) only and 1100 means Solution will be
+        generating both Standard (B2B) and Simplified invoices (B2C). | 1100 |
+
+        | `location` | YES | _string_ | The address of the Branch or location
+        where the device or solution unit is primarily situated (could be
+        website address for e-commerce). **Preferably(not mandatory)** in the
+        Short Address format of the Saudi National Address
+        [https://splonline](https://splonline). com.sa/en/national- address-1/.
+        Free text will be accepted.  <br> | Riyadh |
+
+        | `industry` | YES | _string_ | Industry or sector for which the device
+        or solution(EGS) will generate invoices. Free text will be accepted. |
+        Petroleum |
+
+
+        #### **Response Parameters:**
+
+
+        | **PARAMS** | **DATA TYPE** | **DESCRIPTION** | **EXAMPLE** |
+
+        | --- | --- | --- | --- |
+
+        | `status` | string | Status of onboarding by ZATCA.  <br> 
+        <br>Onboarding involves multiple internal steps(API calls) with the
+        ZATCA platform and, for API simplification the status is classified as
+        success or failure on the whole.  <br>  <br>The enum value is according
+        to the respective scenarios listed below:  <br>  <br>1) Successfully
+        onboarded with ZATCA's Fatoora Portal - **SUCCESS**2) OnboardiNg failed
+        with ZATCA's Fatoora Portal due to various errors - **ERROR**  <br>This
+        field will not be present for request level errors(field format errors)
+        | SUCCESS |
+
+        | `errors` | list | If onboarding fails because of error from the APIs
+        in ZATCA layer, the corresponding API error messages will be returned
+        here. Please log this error response for RCA. | \[...\] |
+
+        | `code` | string | Error status code of the failed ZATCA API. | 400
+        BAD_REQUEST |
+
+        | `message` | string | Error message from the corresponding API | OTP is
+        required field |
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: harik9917@gmail.com
+                password: Example@123
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /test/api/v1/proto/csrRequest:
+    post:
+      tags:
+        - Zatca
+      summary: Onboarding
+      description: >-
+        Use this API to onboard your EGS(E-Invoice Generation Solution) in the
+        ZATCA sandbox environment.
+
+
+        You have to pass all the required params in the specified format at the
+        minimum to onboard your EGS successfully. You can add additional
+        parameters if applicable as per your preference.
+
+
+        #### Request Parameters:
+
+
+        | **PARAMS** | **REQUIRED** | **DATA TYPE** | **DESCRIPTION** |
+        **EXAMPLE** |
+
+        | --- | --- | --- | --- | --- |
+
+        | `csrInputs` | YES | _json_ | The csr(certificate signing request)
+        details you need to provide for onboarding the EGS. | {} |
 
         | `otp` | YES | _string_ | The OTP that you'll get from the Fatoora
         Portal(logged in using taxpayer credentials) after following the ZATCA
@@ -271,8 +411,6 @@ paths:
                   invoiceType: '1100'
                   location: TST
                   industry: TST
-      security:
-        - bearerAuth: []            
       responses:
         '200':
           description: OK
@@ -280,7 +418,7 @@ paths:
             Date:
               schema:
                 type: string
-                example: Wed, 26 Oct 2022 05:10:17 GMT
+                example: Wed, 26 Oct 2022 07:17:59 GMT
             Content-Type:
               schema:
                 type: string
@@ -296,69 +434,373 @@ paths:
             x-amzn-RequestId:
               schema:
                 type: string
-                example: 0beb71fd-3142-4bfe-9733-38110050387e
+                example: 94dda0f9-063d-44f6-b975-76cd122e2b60
             x-amz-apigw-id:
               schema:
                 type: string
-                example: amMf4HXLhcwFWTQ=
+                example: amfN7FGFhcwFvyA=
             X-Amzn-Trace-Id:
               schema:
                 type: string
-                example: Root=1-6358c132-5950e1cf30dc3d414c1a349b;Sampled=0
+                example: Root=1-6358df25-18ad99cb19cd21963bb4b36d;Sampled=0
           content:
             application/json:
               schema:
                 type: object
-              example:
-                status: SUCCESS
-                errors: []
-        '400':
-          description: BAD REQUEST
-          headers:
-            Date:
-              schema:
-                type: string
-                example: Wed, 26 Oct 2022 05:10:17 GMT
-            Content-Type:
-              schema:
-                type: string
-                example: application/json
-            Content-Length:
-              schema:
-                type: integer
-                example: '32'
-            Connection:
-              schema:
-                type: string
-                example: keep-alive
-            x-amzn-RequestId:
-              schema:
-                type: string
-                example: 0beb71fd-3142-4bfe-9733-38110050387e
-            x-amz-apigw-id:
-              schema:
-                type: string
-                example: amMf4HXLhcwFWTQ=
-            X-Amzn-Trace-Id:
-              schema:
-                type: string
-                example: Root=1-6358c132-5950e1cf30dc3d414c1a349b;Sampled=0
-          content:
-            application/json:
-              schema:
-                type: object
-              example:
-                  summary: CsrReq
+              examples:
+                example-0:
+                  summary: Success
+                  value:
+                    status: SUCCESS
+                    errors: []
+                example-1:
+                  summary: Failure
                   value:
                     status: ERROR
                     errors:
                       - code: 400 BAD_REQUEST
-                        message: OTP is required field3
-  /api/v1/proto/reportDocument:
+                        message: OTP is required field
+  /test/api/v1/proto/generateQRCode:
     post:
       tags:
-        - Reporting
-      summary: Reporting for Invoice/Note with ZATCA's Fatoora Portal
+        - Zatca
+      summary: QR Code(Simplified Invoice)
+      description: >-
+        Use this API to generate cryptographically signed base64 encoded QR code
+        your EGS(E-Invoice Generation Solution) generated B2C
+        documents(**Simplified Tax Invoice** or **Simplified Tax Invoice Credit
+        Note** or **Simplified Tax Invoice Debit Note** )to the ZATCA's sandbox
+        environment.
+
+
+        You have to pass all the required params in the specified format at the
+        minimum to report your document successfully. You can add additional
+        parameters if applicable as per your preference.
+
+
+        **Note:**
+
+
+        - Use this base64 encoded QR code to generate scannable QR image.
+            
+
+        #### Request Parameters:
+
+
+        | **PARAMS** | **REQUIRED** | **DATA TYPE** | **DESCRIPTION** |
+        **EXAMPLE** |
+
+        | --- | --- | --- | --- | --- |
+
+        | `invoiceData` | YES | _json_ | The data of the B2C document | {...} |
+
+        | `documentType` | YES | _string_ | For the following documents types,
+        use the corresponding enums:  <br>  <br>1) **Simplified Tax Invoice -**
+        SIMPLIFIED_TAX_INVOICE  <br>2) **Simplified Tax Invoice Credit Note -**
+        SIMPLIFIED_TAX_INVOICE_CREDIT_NOTE3) **Simplified Tax Invoice Debit Note
+        -** SIMPLIFIED_TAX_INVOICE_DEBIT_NOTE  <br> | SIMPLIFIED_TAX_INVOICE |
+
+        | `referenceId` | CONDITIONAL | _string_ | ID of the original
+        document(reference document) for which this document is generated. 
+        <br>  <br>Applicable only for document types:  <br>  <br>1) **Simplified
+        Tax Invoice Credit Note**2) **Simplified Tax Invoice Debit Note** 
+        <br>**Example**:  <br>If the document type is Simplified Credit Note,
+        the reference id should be Invoice number for which this credit note is
+        being created. | 2022100627 |
+
+        | `documentIssueDateTime` | YES | _string_ | Document Issue Date and
+        Time in **"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"** format. |
+        2022-10-21T12:53:13.000Z |
+
+        | `documentDueDateTime` | NO | _string_ | Document Due Date and Time in
+        **"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"** format. | 2022-10-21T12:53:13.000Z |
+
+        | `sellerName` | YES | _string_ | Name of the seller | Company Name |
+
+        | `sellerAddress` | YES | _json_ | Address of the seller with the below
+        mentioned fields. | {  <br>"addrLine1": "Makkah",  <br>"addrLine2": "Al
+        Alam Street",  <br>"city": "Riyadh",  <br>"state": "Riyadh", 
+        <br>"zipCode": "24211",  <br>"phone": "2121",  <br>"fax": "8228", 
+        <br>"district": "Riyadh",  <br>"country": "Saudi Arabia", 
+        <br>"additionalNo": ""  <br>} |
+
+        | `buyerName` | CONDITIONAL | string | Buyer Name is mandatory to be
+        filled as per the transactions mentioned in article 53 (7) and for
+        private education and private healthcare to citizens. | Vignesh K |
+
+        | buyerAddress | NO | json | Buyer address | {  <br>"attention":
+        "Meiyappan MM",  <br>"countryOrRegion": "SA",  <br>"addrLine1": "12,
+        Masjid Street",  <br>"addrLine2": "Amjad Building",  <br>"city":
+        "Dammam",  <br>"state": "Riyadh",  <br>"zipCode": "12313",  <br>"phone":
+        "2121",  <br>"fax": "8228",  <br>"district": "Riyadh",  <br>"country":
+        "SA"  <br>} |
+
+        | `addrLine1` | YES | _string_ | Address Line 1 | Makkah |
+
+        | `addrLine2` | YES | _string_ | Address Line 2 | Al Alam Street |
+
+        | `buildingNumber` | YES | string | Building Number | 20211 |
+
+        | `additionalNo` | YES | string | Additional Number(4 digits) | 2134 |
+
+        | `city` | YES | _string_ | City  <br> | Riyadh |
+
+        | `state` | YES | _string_ | State | Riyadh |
+
+        | `zipCode` | YES | string | Postal Code(5 digits) | 24211 |
+
+        | `phone` | YES | string | Phone | 2121 |
+
+        | `fax` | YES | string | Fax | 5646465654545 |
+
+        | `documentLineItems` | YES | list | Line items list | \[...\] |
+
+        | `lineItemDesc` | YES | string | Line item description | Ball point pen
+        |
+
+        | `lineItemPrice` | YES | string | Line item price | 10.00 |
+
+        | `lineItemQty` | YES | string | Line item quantity | 10.00 |
+
+        | `lineItemTaxableAmount` | YES | string | Line item taxable amount 
+        <br>  <br>lineItemTaxableAmount = (lineItemPrice \* lineItemQty) -
+        discountOnLineItem | 100.00 |
+
+        | `discountOnlineItem` | YES | string | Discount in amount applied on
+        the line item | 0.00 |
+
+        | `vatRateOnLineItem` | YES | string | Vat Rate applied to the line item
+        | 15.00 |
+
+        | `lineItemVatAmount` | YES | string | Vat amount of the line item 
+        <br>  <br>lineItemVatAmount = (lineItemTaxableAmount \*
+        vatRateOnLineItem)/100  <br> | 15.00 |
+
+        | `lineItemSubTotal` | YES | string | Total of the Line Item  <br> 
+        <br>lineItemSubTotal = lineItemTaxableAmount + lineItemVatAmount |
+        115.00 |
+
+        | `totalExcludingVat` | YES | string | totalExcludingVat = documentTotal
+        - totalVat | 100.00 |
+
+        | `totalTaxableAmountExcludingVat` | YES | string |
+        totalTaxableAmountExcludingVat = sum of all lineItemTaxableAmount of
+        line items - discountOnDocumentTotal(if applied) | 100.00 |
+
+        | `vatTotal` | YES | string | vatTotal = sum of all lineItemVatAmount of
+        line items | 15.00 |
+
+        | `documentTotal` | YES | string | documentTotal =
+        totalTaxableAmountExcludingVat + vatTotal | 115.00 |
+
+        | `isSpecialBillingAgreement` | YES | boolean | If transaction for the
+        following conditions:  <br>  <br>1) Self-billed invoice  <br>2) Third
+        party billed invoice on behalf of the supplier | false |
+
+        | `isTransactionType` | YES | boolean | If transaction is any of the
+        following(not mutually exclusive):  <br>  <br>1) Nominal Supply  <br>2)
+        Export  <br>3) Summary | false |
+
+        | `isSelfBilled` | YES | boolean | If `isSpecialBillingAgreement` is
+        true and self - billed condition | false |
+
+        | `isThirdParty` | YES | boolean | If `isSpecialBillingAgreement` is
+        true and Third party condition | true |
+
+        | `isNominalSupply` | YES | boolean | If `isTransactionType` is true and
+        nominal supply condition | false |
+
+        | `isExport` | YES | boolean | If `isTransactionType` is true and export
+        condition | false |
+
+        | `isSummary` | YES | boolean | If `isTransactionType` is true and
+        summary invoice condition | false |
+
+        | `supplyDate` | YES | string | Goods/Service supply Date and Time in
+        **"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"** format. |  |
+
+        | `sellerVatRegistrationNumber` | YES | string | Seller Vat registration
+        number | 300055184400003 |
+
+        | `additionalSellerIdType` | YES | string | For the following Seller ID
+        types, use the corresponding enums in bold:  <br>  <br>1) Commercial
+        registration number with "**CRN**" as schemeID  <br>2) Momra license
+        with "**MOM**" as schemeID -  <br>3) MLSD license with "**MLS**" as
+        schemeID  <br>4) Sagia license with "**SAG**" as schemeID  <br>5) Other
+        OD with "**OTH**" as schemeID  <br>In case multiple IDs exist then one
+        of the above must be entered following the sequence specified above |
+        CRN |
+
+        | `additionalSellerIdNumber` | YES | string | Additional seller ID
+        number of the ID type chosen | 1112233344 |
+
+        | `sellerGroupVatRegistrationNumber` | CONDITIONAL | string | Group Vat
+        registration number of the seller | 300244974200003 |
+
+        | `additionalBuyerIdType` | CONDITIONAL | string | Required only for
+        private education or private healthcare supplies to Citizens. This field
+        should contain the National ID only for invoices pertaining to private
+        education and private healthcare to citizens. National ID is mandatory
+        to be filled for private education and private healthcare to citizens. 
+        <br>  <br>Other Buyer ID enum must be one of the following list:  <br> 
+        <br>1) Tax Identification Number "**TIN**" as schemeID  <br>2)
+        Commercial registration number with "**CRN**" as schemeID  <br>3) Momra
+        license with "**MOM**" as schemeID  <br>4) MLSD license with "**MLS**"
+        as schemeID  <br>5) 700 Number with "**_700**" as schemeID  <br>6) Sagia
+        license with "**SAG**" as schemeID  <br>7) National ID with "**NAT**" as
+        schemeID  <br>8) GCC ID with "**GCC**" as schemeID  <br>9) Iqama Number
+        with "**IQA**" as schemeID  <br>10) Passport ID with "**PAS**" as
+        schemeID  <br>11) Other ID with "**OTH**" as schemeID  <br>In case
+        multiple IDs exist then one of the above must be entered following the
+        sequence specified above | NATIONAL_ID |
+
+        | `additionalBuyerIdNumber` | CONDITIONAL | string | Buyer's NATIONAL ID
+        number | 112233445566 |
+
+        | `discountOnDocumentTotal` | NO | string | Discount applied on document
+        total | 0.00 |
+
+        | `specialTaxTreatment` | CONDITIONAL | string | Where Tax is not
+        charged at the standard rate, this field should have a narration “Tax
+        treatment applied to the supply” as per Article 53 of the VAT
+        Implementing Regulation.  <br>  <br>Narration to be entered if Tax is
+        not charged at basic rate. | 0 |
+
+        | `currency` | YES | string | Transaction Currency of the document | SAR
+        |
+
+        | `documentId` | YES | string | A unique identification of the Invoice -
+        Invoice Reference number(IRN) | 2022100627 |
+
+
+        #### **Response Parameters:**
+
+
+        | **PARAMS** | **DATA TYPE** | **DESCRIPTION** | **EXAMPLE** |
+
+        | --- | --- | --- | --- |
+
+        | `encodedQrCodeData` | string | Base64 encoded QR code string.  <br>Use
+        this string to create QR image to be used on the printed B2C document. 
+        <br>  <br>Use it only on B2C documents. |
+        AQxDb21wYW55IE5hbWUCDzMwMDA1NTE4NDQwMDAwMwMUMjAyMi0xMC0yMVQwMDo1MzoxM1oEBjExNS4wMAUFMTUuMDAGLE9QUVJpUjRlVVpnL01QbXE1eStqMlVKTlZlOGxZbGF5ZkFiZ3pnTkFpdTQ9B2BNRVlDSVFDYzFJdlM3RVVGbXVGK0NHaDlCT0x5TUQ2UkF6elFvS043ckpmOXdZaXZjUUloQU9wdFkrbGx2bXd2TXZVaThvZjFWUFZCa1d0c1NjSXprSUZkSU1HOFR1emkIWDBWMBAGByqGSM49AgEGBSuBBAAKA0IABA/8G9pYQbwSAvAp52b6LqOjs0cpsplPTVkYSMmjIRkRAQhGQeBAFawbldsV4sWOKgWH/XXXq85FvQ8HaNyJR4I=
+        |
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                invoiceData:
+                  documentType: SIMPLIFIED_TAX_INVOICE
+                  referenceId: ''
+                  documentIssueDateTime: '2022-12-30T09:58:24.000Z'
+                  documentDueDateTime: '2022-12-30T09:58:24.000Z'
+                  sellerName: ahmad abdurrahman
+                  sellerAddress:
+                    addrLine1: 12, Masjid Street
+                    addrLine2: Amjad Building
+                    buildingNumber: '1234'
+                    additionalNo: '1234'
+                    city: Dammam
+                    state: Riyadh
+                    zipCode: '12313'
+                    phone: '2121'
+                    district: Riyadh
+                    country: SA
+                  buyerName: Zahid Gani
+                  documentLineItems:
+                    - lineItemDesc: HP Laptop/Hp Laptop
+                      lineItemPrice: 85
+                      lineItemQty: '1'
+                      lineItemTaxableAmount: 85
+                      discountOnLineItem: 0
+                      vatRateOnLineItem: '15'
+                      lineItemVatAmount: '12.75'
+                      lineItemSubTotal: 97.75
+                  totalExcludingVat: 85
+                  totalTaxableAmountExcludingVat: 85
+                  vatTotal: 12.75
+                  documentTotal: 97.75
+                  isSpecialBillingAgreement: 'false'
+                  isTransactionType: 'false'
+                  isSelfBilled: 'false'
+                  isThirdParty: 'true'
+                  isNominalSupply: 'false'
+                  isExport: 'false'
+                  isSummary: 'false'
+                  supplyDate: '2022-12-30T09:58:24.000Z'
+                  sellerVatRegistrationNumber: '300055184400003'
+                  sellerGroupVatRegistrationNumber: ''
+                  additionalSellerIdType: CRN
+                  additionalSellerIdNumber: ''
+                  discountOnDocumentTotal: 0
+                  specialTaxTreatment: '0'
+                  currency: SAR
+                  documentId: '0009'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Date:
+              schema:
+                type: string
+                example: Thu, 03 Nov 2022 04:09:31 GMT
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '433'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            x-amzn-RequestId:
+              schema:
+                type: string
+                example: 5cd50847-9ae0-4658-a452-2d8514d1f733
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: >-
+                  Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,x-requested-with,UUID
+            x-amz-apigw-id:
+              schema:
+                type: string
+                example: bAbHIGn-hcwFseQ=
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT, ANY
+            Access-Control-Expose-Headers:
+              schema:
+                type: string
+                example: >-
+                  Access-Control-Allow-Origin, Access-Control-Allow-Headers,
+                  Access-Control-Allow-Methods
+            X-Amzn-Trace-Id:
+              schema:
+                type: string
+                example: Root=1-63633efa-0f4fd26f2a1ba8085aaae8cd;Sampled=0
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                encodedQrCodeData: >-
+                  AQxDb21wYW55IE5hbWUCDzMwMDA1NTE4NDQwMDAwMwMUMjAyMi0xMC0yMVQwMDo1MzoxM1oEBjExNS4wMAUFMTUuMDAGLE9QUVJpUjRlVVpnL01QbXE1eStqMlVKTlZlOGxZbGF5ZkFiZ3pnTkFpdTQ9B2BNRVlDSVFDYzFJdlM3RVVGbXVGK0NHaDlCT0x5TUQ2UkF6elFvS043ckpmOXdZaXZjUUloQU9wdFkrbGx2bXd2TXZVaThvZjFWUFZCa1d0c1NjSXprSUZkSU1HOFR1emkIWDBWMBAGByqGSM49AgEGBSuBBAAKA0IABA/8G9pYQbwSAvAp52b6LqOjs0cpsplPTVkYSMmjIRkRAQhGQeBAFawbldsV4sWOKgWH/XXXq85FvQ8HaNyJR4I=
+  /test/api/v1/proto/reportDocument:
+    post:
+      tags:
+        - Zatca
+      summary: Report Document
       description: >-
         Use this API to report your EGS(E-Invoice Generation Solution) generated
         B2C documents(**Simplified Tax Invoice** or **Simplified Tax Invoice
@@ -581,46 +1023,34 @@ paths:
                 invoiceData:
                   documentType: SIMPLIFIED_TAX_INVOICE
                   referenceId: ''
-                  documentIssueDateTime: '2022-10-21T12:53:13.000Z'
-                  documentDueDateTime: '2022-10-26T12:53:13.000Z'
-                  sellerName: Company Name
+                  documentIssueDateTime: '2022-12-30T09:58:24.000Z'
+                  documentDueDateTime: '2022-12-30T09:58:24.000Z'
+                  sellerName: ahmad abdurrahman
                   sellerAddress:
-                    addrLine1: Makkah
-                    addrLine2: Al Alam Street
-                    city: Riyadh
-                    state: Riyadh
-                    zipCode: '24211'
-                    phone: '2121'
-                    fax: '8228'
-                    district: Riyadh
-                    country: Saudi Arabia
-                    additionalNo: ''
-                  buyerName: Antna
-                  buyerAddress:
-                    attention: Meiyappan MM
-                    countryOrRegion: SA
                     addrLine1: 12, Masjid Street
                     addrLine2: Amjad Building
+                    buildingNumber: '1234'
+                    additionalNo: '1234'
                     city: Dammam
                     state: Riyadh
                     zipCode: '12313'
                     phone: '2121'
-                    fax: '8228'
                     district: Riyadh
                     country: SA
+                  buyerName: Zahid Gani
                   documentLineItems:
-                    - lineItemDesc: Ball point pen
-                      lineItemPrice: 10
-                      lineItemQty: 10
-                      lineItemTaxableAmount: 100
+                    - lineItemDesc: HP Laptop/Hp Laptop
+                      lineItemPrice: 85
+                      lineItemQty: '1'
+                      lineItemTaxableAmount: 85
                       discountOnLineItem: 0
-                      vatRateOnLineItem: 15
-                      lineItemVatAmount: 15
-                      lineItemSubTotal: 115
-                  totalExcludingVat: 100
-                  totalTaxableAmountExcludingVat: 100
-                  vatTotal: 15
-                  documentTotal: 115
+                      vatRateOnLineItem: '15'
+                      lineItemVatAmount: '12.75'
+                      lineItemSubTotal: 97.75
+                  totalExcludingVat: 85
+                  totalTaxableAmountExcludingVat: 85
+                  vatTotal: 12.75
+                  documentTotal: 97.75
                   isSpecialBillingAgreement: 'false'
                   isTransactionType: 'false'
                   isSelfBilled: 'false'
@@ -628,17 +1058,15 @@ paths:
                   isNominalSupply: 'false'
                   isExport: 'false'
                   isSummary: 'false'
-                  supplyDate: '2022-10-21T12:53:13.000Z'
+                  supplyDate: '2022-12-30T09:58:24.000Z'
                   sellerVatRegistrationNumber: '300055184400003'
                   sellerGroupVatRegistrationNumber: ''
                   additionalSellerIdType: CRN
-                  additionalSellerIdNumber: '1122334455667788'
+                  additionalSellerIdNumber: ''
                   discountOnDocumentTotal: 0
                   specialTaxTreatment: '0'
                   currency: SAR
-                  documentId: 2022100627
-      security:
-        - bearerAuth: []             
+                  documentId: '0007'
       responses:
         '200':
           description: OK
@@ -696,7 +1124,7 @@ paths:
                 type: object
               examples:
                 example-0:
-                  summary: Report Document
+                  summary: Sucess
                   value:
                     zatcaResponse:
                       validationResults:
@@ -716,14 +1144,14 @@ paths:
                       status: 0
                     isReported: true
                 example-1:
-                  summary: Report Document
+                  summary: Failure
                   value:
                     isReported: false
-  /api/v1/proto/clearDocument:
+  /test/api/v1/proto/clearDocument:
     post:
       tags:
-        - Clearance
-      summary: Clearance for Invoice/Note with ZATCA's Fatoora Portal
+        - Zatca
+      summary: Clear Document
       description: >-
         Use this API to clear your EGS(E-Invoice Generation Solution) generated
         B2B documents(**Tax Invoice** or **Tax Invoice Credit Note** or **Tax
@@ -969,27 +1397,26 @@ paths:
                   documentDueDateTime: '2022-10-26T12:53:13.000Z'
                   sellerName: Company Name
                   sellerAddress:
-                    addrLine1: Makkah
-                    addrLine2: Al Alam Street
-                    city: Riyadh
-                    state: Riyadh
-                    zipCode: '24211'
-                    phone: '2121'
-                    fax: '8228'
-                    district: Riyadh
-                    country: Saudi Arabia
-                    additionalNo: ''
-                  buyerName: Antna
-                  buyerAddress:
-                    attention: Meiyappan MM
-                    countryOrRegion: SA
                     addrLine1: 12, Masjid Street
                     addrLine2: Amjad Building
+                    buildingNumber: '1234'
+                    additionalNo: '1234'
                     city: Dammam
                     state: Riyadh
                     zipCode: '12313'
                     phone: '2121'
-                    fax: '8228'
+                    district: Riyadh
+                    country: SA
+                  buyerName: Antna
+                  buyerAddress:
+                    addrLine1: 12, Masjid Street
+                    addrLine2: Amjad Building
+                    buildingNumber: '1234'
+                    additionalNo: '1234'
+                    city: Dammam
+                    state: Riyadh
+                    zipCode: '12313'
+                    phone: '2121'
                     district: Riyadh
                     country: SA
                   documentLineItems:
@@ -1023,9 +1450,7 @@ paths:
                   discountOnDocumentTotal: 0
                   specialTaxTreatment: '0'
                   currency: SAR
-                  documentId: 2022100627
-      security:
-        - bearerAuth: []             
+                  documentId: '2022100642'
       responses:
         '200':
           description: OK
@@ -1083,7 +1508,7 @@ paths:
                 type: object
               examples:
                 example-0:
-                  summary: Clear Document
+                  summary: Success
                   value:
                     zatcaResponse:
                       validationResults:
@@ -1106,32 +1531,23 @@ paths:
                     isReported: false
                     isCleared: true
                 example-1:
-                  summary: Clear Document
+                  summary: Failure
                   value:
                     isCleared: false
-  /api/v1/proto/generateQRCode:
+  /test/api/v1/proto/addUser:
     post:
       tags:
-        - QR Code
-      summary: Generate Phase-2 compliant QR Code for Simplified Invoices/Notes(B2C)
+        - Zatca
+      summary: Add user
       description: >-
-        Use this API to generate cryptographically signed base64 encoded QR code
-        your EGS(E-Invoice Generation Solution) generated B2C
-        documents(**Simplified Tax Invoice** or **Simplified Tax Invoice Credit
-        Note** or **Simplified Tax Invoice Debit Note** )to the ZATCA's sandbox
-        environment.
+        Use this API to onboard your EGS(E-Invoice Generation Solution) in the
+        ZATCA sandbox environment.
 
 
         You have to pass all the required params in the specified format at the
-        minimum to report your document successfully. You can add additional
+        minimum to onboard your EGS successfully. You can add additional
         parameters if applicable as per your preference.
 
-
-        **Note:**
-
-
-        - Use this base64 encoded QR code to generate scannable QR image.
-            
 
         #### Request Parameters:
 
@@ -1141,185 +1557,58 @@ paths:
 
         | --- | --- | --- | --- | --- |
 
-        | `invoiceData` | YES | _json_ | The data of the B2C document | {...} |
+        | `csrInputs` | YES | _json_ | The csr(certificate signing request)
+        details you need to provide for onboarding the EGS. | {} |
 
-        | `documentType` | YES | _string_ | For the following documents types,
-        use the corresponding enums:  <br>  <br>1) **Simplified Tax Invoice -**
-        SIMPLIFIED_TAX_INVOICE  <br>2) **Simplified Tax Invoice Credit Note -**
-        SIMPLIFIED_TAX_INVOICE_CREDIT_NOTE3) **Simplified Tax Invoice Debit Note
-        -** SIMPLIFIED_TAX_INVOICE_DEBIT_NOTE  <br> | SIMPLIFIED_TAX_INVOICE |
+        | `otp` | YES | _string_ | The OTP that you'll get from the Fatoora
+        Portal(logged in using taxpayer credentials) after following the ZATCA
+        onboarding process as per Antna Guidelines document. | 123345 |
 
-        | `referenceId` | CONDITIONAL | _string_ | ID of the original
-        document(reference document) for which this document is generated. 
-        <br>  <br>Applicable only for document types:  <br>  <br>1) **Simplified
-        Tax Invoice Credit Note**2) **Simplified Tax Invoice Debit Note** 
-        <br>**Example**:  <br>If the document type is Simplified Credit Note,
-        the reference id should be Invoice number for which this credit note is
-        being created. | 2022100627 |
+        | `commonName` | YES | _string_ | A Unique Name or Asset Tracking Number
+        of your EGS. There is no specific format, any free text will be
+        accepted. | TST-886431145-300055184400003 |
 
-        | `documentIssueDateTime` | YES | _string_ | Document Issue Date and
-        Time in **"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"** format. |
-        2022-10-21T12:53:13.000Z |
+        | `serialNumber` | YES | _string_ | Unique identification code for the
+        EGS. Serial number should be in this **"1-xxx | 2-xxx |
 
-        | `documentDueDateTime` | NO | _string_ | Document Due Date and Time in
-        **"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"** format. | 2022-10-21T12:53:13.000Z |
+        | `organizationIdentifier` | YES | _string_ | It is the organization VAT
+        number. It is a **15** digit number with starting and ending digits as
+        **'3'.** | 300055184400003 |
 
-        | `sellerName` | YES | _string_ | Name of the seller | Company Name |
+        | `organizationUnitName` | YES | _string_ | The branch name for
+        Taxpayers. In case of VAT Groups , this field should contain the
+        10-digit TIN number of the individual group member whose EGS Unit is
+        being onboarded. **If 11th digit of Organization Identifier is not = 1
+        then Free text and if 11th digit of Organization Identifier = 1 then
+        needs to be a 10 digit number.** | 3123456789 |
 
-        | `sellerAddress` | YES | _json_ | Address of the seller with the below
-        mentioned fields. | {  <br>"addrLine1": "Makkah",  <br>"addrLine2": "Al
-        Alam Street",  <br>"city": "Riyadh",  <br>"state": "Riyadh", 
-        <br>"zipCode": "24211",  <br>"phone": "2121",  <br>"fax": "8228", 
-        <br>"district": "Riyadh",  <br>"country": "Saudi Arabia", 
-        <br>"additionalNo": ""  <br>} |
+        | `organizationName` | YES | _string_ | Name of the Taxpayer. It can be
+        free text. | Antna Technologies Private Limited |
 
-        | `buyerName` | CONDITIONAL | string | Buyer Name is mandatory to be
-        filled as per the transactions mentioned in article 53 (7) and for
-        private education and private healthcare to citizens. | Vignesh K |
+        | `countryName` | YES | _string_ | Name of the country.  <br>2 letter
+        code (**ISO 3166 Alpha-2**) | SA |
 
-        | buyerAddress | NO | json | Buyer address | {  <br>"attention":
-        "Meiyappan MM",  <br>"countryOrRegion": "SA",  <br>"addrLine1": "12,
-        Masjid Street",  <br>"addrLine2": "Amjad Building",  <br>"city":
-        "Dammam",  <br>"state": "Riyadh",  <br>"zipCode": "12313",  <br>"phone":
-        "2121",  <br>"fax": "8228",  <br>"district": "Riyadh",  <br>"country":
-        "SA"  <br>} |
+        | `invoiceType` | YES | _string_ | The document type that the Taxpayer’s
+        solution unit will be issuing/generating. It can be one or a combination
+        of Standard Tax Invoice (T), Simplified Tax Invoice (S), (X), (Y). The
+        input should be using the digits 0 & 1 and mapping those to “TSXY”
+        where:  <br>0 = False/Not supported  <br>1= True/Supported  <br>(X) and
+        (Y) are for future use and should be set to 0 by default for the time
+        being.  <br>For example: 1000 would mean Solution will be generating
+        Standard Invoices only. 0100 would mean Solution will be generating
+        Simplified invoices (B2C) only and 1100 means Solution will be
+        generating both Standard (B2B) and Simplified invoices (B2C). | 1100 |
 
-        | `addrLine1` | YES | _string_ | Address Line 1 | Makkah |
+        | `location` | YES | _string_ | The address of the Branch or location
+        where the device or solution unit is primarily situated (could be
+        website address for e-commerce). **Preferably(not mandatory)** in the
+        Short Address format of the Saudi National Address
+        [https://splonline](https://splonline). com.sa/en/national- address-1/.
+        Free text will be accepted.  <br> | Riyadh |
 
-        | `addrLine2` | YES | _string_ | Address Line 2 | Al Alam Street |
-
-        | `buildingNumber` | YES | string | Building Number | 20211 |
-
-        | `additionalNo` | YES | string | Additional Number(4 digits) | 2134 |
-
-        | `city` | YES | _string_ | City  <br> | Riyadh |
-
-        | `state` | YES | _string_ | State | Riyadh |
-
-        | `zipCode` | YES | string | Postal Code(5 digits) | 24211 |
-
-        | `phone` | YES | string | Phone | 2121 |
-
-        | `fax` | YES | string | Fax | 5646465654545 |
-
-        | `documentLineItems` | YES | list | Line items list | \[...\] |
-
-        | `lineItemDesc` | YES | string | Line item description | Ball point pen
-        |
-
-        | `lineItemPrice` | YES | string | Line item price | 10.00 |
-
-        | `lineItemQty` | YES | string | Line item quantity | 10.00 |
-
-        | `lineItemTaxableAmount` | YES | string | Line item taxable amount 
-        <br>  <br>lineItemTaxableAmount = (lineItemPrice \* lineItemQty) -
-        discountOnLineItem | 100.00 |
-
-        | `discountOnlineItem` | YES | string | Discount in amount applied on
-        the line item | 0.00 |
-
-        | `vatRateOnLineItem` | YES | string | Vat Rate applied to the line item
-        | 15.00 |
-
-        | `lineItemVatAmount` | YES | string | Vat amount of the line item 
-        <br>  <br>lineItemVatAmount = (lineItemTaxableAmount \*
-        vatRateOnLineItem)/100  <br> | 15.00 |
-
-        | `lineItemSubTotal` | YES | string | Total of the Line Item  <br> 
-        <br>lineItemSubTotal = lineItemTaxableAmount + lineItemVatAmount |
-        115.00 |
-
-        | `totalExcludingVat` | YES | string | totalExcludingVat = documentTotal
-        - totalVat | 100.00 |
-
-        | `totalTaxableAmountExcludingVat` | YES | string |
-        totalTaxableAmountExcludingVat = sum of all lineItemTaxableAmount of
-        line items - discountOnDocumentTotal(if applied) | 100.00 |
-
-        | `vatTotal` | YES | string | vatTotal = sum of all lineItemVatAmount of
-        line items | 15.00 |
-
-        | `documentTotal` | YES | string | documentTotal =
-        totalTaxableAmountExcludingVat + vatTotal | 115.00 |
-
-        | `isSpecialBillingAgreement` | YES | boolean | If transaction for the
-        following conditions:  <br>  <br>1) Self-billed invoice  <br>2) Third
-        party billed invoice on behalf of the supplier | false |
-
-        | `isTransactionType` | YES | boolean | If transaction is any of the
-        following(not mutually exclusive):  <br>  <br>1) Nominal Supply  <br>2)
-        Export  <br>3) Summary | false |
-
-        | `isSelfBilled` | YES | boolean | If `isSpecialBillingAgreement` is
-        true and self - billed condition | false |
-
-        | `isThirdParty` | YES | boolean | If `isSpecialBillingAgreement` is
-        true and Third party condition | true |
-
-        | `isNominalSupply` | YES | boolean | If `isTransactionType` is true and
-        nominal supply condition | false |
-
-        | `isExport` | YES | boolean | If `isTransactionType` is true and export
-        condition | false |
-
-        | `isSummary` | YES | boolean | If `isTransactionType` is true and
-        summary invoice condition | false |
-
-        | `supplyDate` | YES | string | Goods/Service supply Date and Time in
-        **"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"** format. |  |
-
-        | `sellerVatRegistrationNumber` | YES | string | Seller Vat registration
-        number | 300055184400003 |
-
-        | `additionalSellerIdType` | YES | string | For the following Seller ID
-        types, use the corresponding enums in bold:  <br>  <br>1) Commercial
-        registration number with "**CRN**" as schemeID  <br>2) Momra license
-        with "**MOM**" as schemeID -  <br>3) MLSD license with "**MLS**" as
-        schemeID  <br>4) Sagia license with "**SAG**" as schemeID  <br>5) Other
-        OD with "**OTH**" as schemeID  <br>In case multiple IDs exist then one
-        of the above must be entered following the sequence specified above |
-        CRN |
-
-        | `additionalSellerIdNumber` | YES | string | Additional seller ID
-        number of the ID type chosen | 1112233344 |
-
-        | `sellerGroupVatRegistrationNumber` | CONDITIONAL | string | Group Vat
-        registration number of the seller | 300244974200003 |
-
-        | `additionalBuyerIdType` | CONDITIONAL | string | Required only for
-        private education or private healthcare supplies to Citizens. This field
-        should contain the National ID only for invoices pertaining to private
-        education and private healthcare to citizens. National ID is mandatory
-        to be filled for private education and private healthcare to citizens. 
-        <br>  <br>Other Buyer ID enum must be one of the following list:  <br> 
-        <br>1) Tax Identification Number "**TIN**" as schemeID  <br>2)
-        Commercial registration number with "**CRN**" as schemeID  <br>3) Momra
-        license with "**MOM**" as schemeID  <br>4) MLSD license with "**MLS**"
-        as schemeID  <br>5) 700 Number with "**_700**" as schemeID  <br>6) Sagia
-        license with "**SAG**" as schemeID  <br>7) National ID with "**NAT**" as
-        schemeID  <br>8) GCC ID with "**GCC**" as schemeID  <br>9) Iqama Number
-        with "**IQA**" as schemeID  <br>10) Passport ID with "**PAS**" as
-        schemeID  <br>11) Other ID with "**OTH**" as schemeID  <br>In case
-        multiple IDs exist then one of the above must be entered following the
-        sequence specified above | NATIONAL_ID |
-
-        | `additionalBuyerIdNumber` | CONDITIONAL | string | Buyer's NATIONAL ID
-        number | 112233445566 |
-
-        | `discountOnDocumentTotal` | NO | string | Discount applied on document
-        total | 0.00 |
-
-        | `specialTaxTreatment` | CONDITIONAL | string | Where Tax is not
-        charged at the standard rate, this field should have a narration “Tax
-        treatment applied to the supply” as per Article 53 of the VAT
-        Implementing Regulation.  <br>  <br>Narration to be entered if Tax is
-        not charged at basic rate. | 0 |
-
-        | `currency` | YES | string | Transaction Currency of the document | SAR
-        |
-
-        | `documentId` | YES | string | A unique identification of the Invoice -
-        Invoice Reference number(IRN) | 2022100627 |
+        | `industry` | YES | _string_ | Industry or sector for which the device
+        or solution(EGS) will generate invoices. Free text will be accepted. |
+        Petroleum |
 
 
         #### **Response Parameters:**
@@ -1329,133 +1618,151 @@ paths:
 
         | --- | --- | --- | --- |
 
-        | `encodedQrCodeData` | string | Base64 encoded QR code string.  <br>Use
-        this string to create QR image to be used on the printed B2C document. 
-        <br>  <br>Use it only on B2C documents. |
-        AQxDb21wYW55IE5hbWUCDzMwMDA1NTE4NDQwMDAwMwMUMjAyMi0xMC0yMVQwMDo1MzoxM1oEBjExNS4wMAUFMTUuMDAGLE9QUVJpUjRlVVpnL01QbXE1eStqMlVKTlZlOGxZbGF5ZkFiZ3pnTkFpdTQ9B2BNRVlDSVFDYzFJdlM3RVVGbXVGK0NHaDlCT0x5TUQ2UkF6elFvS043ckpmOXdZaXZjUUloQU9wdFkrbGx2bXd2TXZVaThvZjFWUFZCa1d0c1NjSXprSUZkSU1HOFR1emkIWDBWMBAGByqGSM49AgEGBSuBBAAKA0IABA/8G9pYQbwSAvAp52b6LqOjs0cpsplPTVkYSMmjIRkRAQhGQeBAFawbldsV4sWOKgWH/XXXq85FvQ8HaNyJR4I=
-        |
+        | `status` | string | Status of onboarding by ZATCA.  <br> 
+        <br>Onboarding involves multiple internal steps(API calls) with the
+        ZATCA platform and, for API simplification the status is classified as
+        success or failure on the whole.  <br>  <br>The enum value is according
+        to the respective scenarios listed below:  <br>  <br>1) Successfully
+        onboarded with ZATCA's Fatoora Portal - **SUCCESS**2) OnboardiNg failed
+        with ZATCA's Fatoora Portal due to various errors - **ERROR**  <br>This
+        field will not be present for request level errors(field format errors)
+        | SUCCESS |
+
+        | `errors` | list | If onboarding fails because of error from the APIs
+        in ZATCA layer, the corresponding API error messages will be returned
+        here. Please log this error response for RCA. | \[...\] |
+
+        | `code` | string | Error status code of the failed ZATCA API. | 400
+        BAD_REQUEST |
+
+        | `message` | string | Error message from the corresponding API | OTP is
+        required field |
       requestBody:
         content:
           application/json:
             schema:
               type: object
               example:
-                invoiceData:
-                  documentType: SIMPLIFIED_TAX_INVOICE
-                  referenceId: ''
-                  documentIssueDateTime: '2022-10-21T12:53:13.000Z'
-                  documentDueDateTime: '2022-10-26T12:53:13.000Z'
-                  sellerName: Company Name
-                  sellerAddress:
-                    addrLine1: Makkah
-                    addrLine2: Al Alam Street
-                    city: Riyadh
-                    state: Riyadh
-                    zipCode: '24211'
-                    phone: '2121'
-                    fax: '8228'
-                    district: Riyadh
-                    country: Saudi Arabia
-                    additionalNo: ''
-                  buyerName: Antna
-                  buyerAddress:
-                    attention: Meiyappan MM
-                    countryOrRegion: SA
-                    addrLine1: 12, Masjid Street
-                    addrLine2: Amjad Building
-                    city: Dammam
-                    state: Riyadh
-                    zipCode: '12313'
-                    phone: '2121'
-                    fax: '8228'
-                    district: Riyadh
-                    country: SA
-                  documentLineItems:
-                    - lineItemDesc: Ball point pen
-                      lineItemPrice: 10
-                      lineItemQty: 10
-                      lineItemTaxableAmount: 100
-                      discountOnLineItem: 0
-                      vatRateOnLineItem: 15
-                      lineItemVatAmount: 15
-                      lineItemSubTotal: 115
-                  totalExcludingVat: 100
-                  totalTaxableAmountExcludingVat: 100
-                  vatTotal: 15
-                  documentTotal: 115
-                  isSpecialBillingAgreement: 'false'
-                  isTransactionType: 'false'
-                  isSelfBilled: 'false'
-                  isThirdParty: 'true'
-                  isNominalSupply: 'false'
-                  isExport: 'false'
-                  isSummary: 'false'
-                  supplyDate: '2022-10-21T12:53:13.000Z'
-                  sellerVatRegistrationNumber: '300055184400003'
-                  sellerGroupVatRegistrationNumber: ''
-                  additionalSellerIdType: CRN
-                  additionalSellerIdNumber: '1122334455667788'
-                  discountOnDocumentTotal: 0
-                  specialTaxTreatment: '0'
-                  currency: SAR
-                  documentId: 2022100627
-      security:
-        - bearerAuth: []             
+                email: example@example.com
+                password: ''
       responses:
         '200':
-          description: OK
-          headers:
-            Date:
-              schema:
-                type: string
-                example: Thu, 03 Nov 2022 04:09:31 GMT
-            Content-Type:
-              schema:
-                type: string
-                example: application/json
-            Content-Length:
-              schema:
-                type: integer
-                example: '433'
-            Connection:
-              schema:
-                type: string
-                example: keep-alive
-            x-amzn-RequestId:
-              schema:
-                type: string
-                example: 5cd50847-9ae0-4658-a452-2d8514d1f733
-            Access-Control-Allow-Origin:
-              schema:
-                type: string
-                example: '*'
-            Access-Control-Allow-Headers:
-              schema:
-                type: string
-                example: >-
-                  Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,x-requested-with,UUID
-            x-amz-apigw-id:
-              schema:
-                type: string
-                example: bAbHIGn-hcwFseQ=
-            Access-Control-Allow-Methods:
-              schema:
-                type: string
-                example: DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT, ANY
-            Access-Control-Expose-Headers:
-              schema:
-                type: string
-                example: >-
-                  Access-Control-Allow-Origin, Access-Control-Allow-Headers,
-                  Access-Control-Allow-Methods
-            X-Amzn-Trace-Id:
-              schema:
-                type: string
-                example: Root=1-63633efa-0f4fd26f2a1ba8085aaae8cd;Sampled=0
+          description: Successful response
           content:
-            application/json:
-              schema:
-                type: object
+            application/json: {}
+  /dev/api/v1/proto/signIn:
+    post:
+      tags:
+        - Zatca
+      summary: Sign In
+      description: >-
+        Use this API to onboard your EGS(E-Invoice Generation Solution) in the
+        ZATCA sandbox environment.
+
+
+        You have to pass all the required params in the specified format at the
+        minimum to onboard your EGS successfully. You can add additional
+        parameters if applicable as per your preference.
+
+
+        #### Request Parameters:
+
+
+        | **PARAMS** | **REQUIRED** | **DATA TYPE** | **DESCRIPTION** |
+        **EXAMPLE** |
+
+        | --- | --- | --- | --- | --- |
+
+        | `csrInputs` | YES | _json_ | The csr(certificate signing request)
+        details you need to provide for onboarding the EGS. | {} |
+
+        | `otp` | YES | _string_ | The OTP that you'll get from the Fatoora
+        Portal(logged in using taxpayer credentials) after following the ZATCA
+        onboarding process as per Antna Guidelines document. | 123345 |
+
+        | `commonName` | YES | _string_ | A Unique Name or Asset Tracking Number
+        of your EGS. There is no specific format, any free text will be
+        accepted. | TST-886431145-300055184400003 |
+
+        | `serialNumber` | YES | _string_ | Unique identification code for the
+        EGS. Serial number should be in this **"1-xxx | 2-xxx |
+
+        | `organizationIdentifier` | YES | _string_ | It is the organization VAT
+        number. It is a **15** digit number with starting and ending digits as
+        **'3'.** | 300055184400003 |
+
+        | `organizationUnitName` | YES | _string_ | The branch name for
+        Taxpayers. In case of VAT Groups , this field should contain the
+        10-digit TIN number of the individual group member whose EGS Unit is
+        being onboarded. **If 11th digit of Organization Identifier is not = 1
+        then Free text and if 11th digit of Organization Identifier = 1 then
+        needs to be a 10 digit number.** | 3123456789 |
+
+        | `organizationName` | YES | _string_ | Name of the Taxpayer. It can be
+        free text. | Antna Technologies Private Limited |
+
+        | `countryName` | YES | _string_ | Name of the country.  <br>2 letter
+        code (**ISO 3166 Alpha-2**) | SA |
+
+        | `invoiceType` | YES | _string_ | The document type that the Taxpayer’s
+        solution unit will be issuing/generating. It can be one or a combination
+        of Standard Tax Invoice (T), Simplified Tax Invoice (S), (X), (Y). The
+        input should be using the digits 0 & 1 and mapping those to “TSXY”
+        where:  <br>0 = False/Not supported  <br>1= True/Supported  <br>(X) and
+        (Y) are for future use and should be set to 0 by default for the time
+        being.  <br>For example: 1000 would mean Solution will be generating
+        Standard Invoices only. 0100 would mean Solution will be generating
+        Simplified invoices (B2C) only and 1100 means Solution will be
+        generating both Standard (B2B) and Simplified invoices (B2C). | 1100 |
+
+        | `location` | YES | _string_ | The address of the Branch or location
+        where the device or solution unit is primarily situated (could be
+        website address for e-commerce). **Preferably(not mandatory)** in the
+        Short Address format of the Saudi National Address
+        [https://splonline](https://splonline). com.sa/en/national- address-1/.
+        Free text will be accepted.  <br> | Riyadh |
+
+        | `industry` | YES | _string_ | Industry or sector for which the device
+        or solution(EGS) will generate invoices. Free text will be accepted. |
+        Petroleum |
+
+
+        #### **Response Parameters:**
+
+
+        | **PARAMS** | **DATA TYPE** | **DESCRIPTION** | **EXAMPLE** |
+
+        | --- | --- | --- | --- |
+
+        | `status` | string | Status of onboarding by ZATCA.  <br> 
+        <br>Onboarding involves multiple internal steps(API calls) with the
+        ZATCA platform and, for API simplification the status is classified as
+        success or failure on the whole.  <br>  <br>The enum value is according
+        to the respective scenarios listed below:  <br>  <br>1) Successfully
+        onboarded with ZATCA's Fatoora Portal - **SUCCESS**2) OnboardiNg failed
+        with ZATCA's Fatoora Portal due to various errors - **ERROR**  <br>This
+        field will not be present for request level errors(field format errors)
+        | SUCCESS |
+
+        | `errors` | list | If onboarding fails because of error from the APIs
+        in ZATCA layer, the corresponding API error messages will be returned
+        here. Please log this error response for RCA. | \[...\] |
+
+        | `code` | string | Error status code of the failed ZATCA API. | 400
+        BAD_REQUEST |
+
+        | `message` | string | Error message from the corresponding API | OTP is
+        required field |
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
               example:
-                encodedQrCodeData: >-
-                  AQxDb21wYW55IE5hbWUCDzMwMDA1NTE4NDQwMDAwMwMUMjAyMi0xMC0yMVQwMDo1MzoxM1oEBjExNS4wMAUFMTUuMDAGLE9QUVJpUjRlVVpnL01QbXE1eStqMlVKTlZlOGxZbGF5ZkFiZ3pnTkFpdTQ9B2BNRVlDSVFDYzFJdlM3RVVGbXVGK0NHaDlCT0x5TUQ2UkF6elFvS043ckpmOXdZaXZjUUloQU9wdFkrbGx2bXd2TXZVaThvZjFWUFZCa1d0c1NjSXprSUZkSU1HOFR1emkIWDBWMBAGByqGSM49AgEGBSuBBAAKA0IABA/8G9pYQbwSAvAp52b6LqOjs0cpsplPTVkYSMmjIRkRAQhGQeBAFawbldsV4sWOKgWH/XXXq85FvQ8HaNyJR4I=
+                refreshToken: >-
+                  eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiUlNBLU9BRVAifQ.b6fJ9QVwyNyrW8HQCHMwN2TX1qRFm9UNGR_3YlRvFCf0MOkEaJwGDvr01RBBO5KhKYnBsnVXHTUJnMTL9GjRgMIv3g0t4zS46RhQ8HV4ikOPqdSJTPuCe6rTk44bTf8OM-Yr3Ekf46K_RV8z1g-xT0cks-M89-bV-eoecHyF-QNTUSgxZRBOxmsWJs0N5DdIyGGgloO4SkCoMaG3D_oAZNhFVO80JR5VUsNXsfDC_JLtdm-QrLZvMg_L-k1WtHwzgFjG_Z5Cq4rCP2RckwQ2suLNkz-8iYi6u1vyljSdPKuWqy6UaFOtJ8sOKoLKpxyFBLTRSR98UYL_Bv6uTU3Bbw.orOpxI-iuCkfpCD2.zaqhHo2HQPuKFklFce6vgBSmz_V22tOUSuqKO-Bx2Ay32mC7WcrWh7QPIReDXS6Ho-FyeXnHDDGnGiV0kHz9kkHsnY_qcZo2Q4wrEdSc61i7qMVzm_2YrJ8t_7iaCyLvr4JlZNkWIyo-00ei2uYXxy0f95-sdCqrJh4OWWcBhcmYj9frqT1P5EGgOK0_dluomf-41LiLWIiYpcSB75bfN9o01M6ykjIJVn5ZgUFlQQ2yU9zjZ38-syN9JG_5Ny4QoLMZQEIaFBG1ySqHk1sqEHzIDgQbbmYy5c4pYhmOsWHD_SDI1vMUZij0q1pS3Lx84V2j_i46K6gW-Cio73oQWPdYRFdY8d80M4IwzafSKkR5cZItJe_s_QIOD0N1_WxC7RNZJ6nvQZyTVzrYisajnRfOpBxkLIzLa3_iVC9KGCQELG67Ys1Z8IFQ1gW_igc5zxkTGYwW6Quwj5aubD_rH2Hj_N8RhDpc3Sd3U1L3jlWAFcS4ckWHuDTh22yxil5opNpUr5zRqRn9pV6l7xhmJj0JBsCkdI0mOqdt34yFZ7-LpQwQeAEAKf-7PeGe1-8QLJobVdPZ6VC5AAO82O8HNpFMoHXFSbOKXwTwVsUjXkByJTBrT7jStHutQ9oympHm1tI_7iWMSOA0Tn38QlqhPaz11DcrHt0ViEEinAs5POG57kQHAbTMwJQreN7B-FwIGTwQCOiXClPIOdbiZGGYfIZ37wvdDm6KQfy-eOXSCBpr61OjQC5yBaUQZDiwByemnoJoFLYwuVBXqLRe8VkAb1IcTDcrcdyeei38ulvw66RT0Ka9stAJhbV7P_cmIfqG_qw-N699G5Lomk5XVcquWYsYxJHGl5ao5cRRDxksQ77X8ZGuovL22vTSkqAdXkefWXdSc9YC3EKg29zD6EIrjiC0EJXv0icpHUSGaEHF6ocADNQ1rBcrUllCU33ibCJNBQHot9lFesHkaJQBgEi_bsEsp5e4d6hfjmekP5y3kcZVq5Zjeje8OYz8ZTKp_hiQoQ24C0yyghWvEn6OMfXGT0jq4shelO6WsJ2v2AdOtVmslaQDc8ZJIoBu124Nph6eiUNB9wN_dfWEkO0ixe8yLpH4JT-YV0SkZs23o1QFdgVPkGJl8T5NL63QplWKqcHFyEx8KgaBGRe6yMZeDqc6dIggjr1FwkkQ9SybRenhYKFP1sDfNzWRhrg3qRPdtNQBqWDV58iRz2p0MzqtyIoHD6DMmpYBUZafwU2Ih4yXQCywieVpb15PGYhUxpDS5Z3vBLcDQ7Ny2JQkDuSTG2yHhO1vpt2PvWtukmBNuBlg2gE9h00GIjwt0s2MkS119g.f36JJs3DouKY-bf-USkGAg
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
