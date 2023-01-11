@@ -787,7 +787,7 @@ paths:
                   sellerAddress:
                     addrLine1: 12, Masjid Street
                     addrLine2: Amjad Building
-                    additionalNumber: '1234'
+                    additionalNo: '1234'
                     buildingNumber: '1234'
                     city: Dammam
                     state: Riyadh
@@ -1117,7 +1117,7 @@ paths:
                   sellerAddress:
                     addrLine1: 12, Masjid Street
                     addrLine2: Amjad Building
-                    additionalNumber: '1234'
+                    additionalNo: '1234'
                     buildingNumber: '1234'
                     city: Dammam
                     state: Riyadh
