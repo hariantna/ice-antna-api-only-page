@@ -401,8 +401,8 @@ paths:
 
         | --- | --- | --- | --- | --- |
 
-        | `csrInputs` | YES | _json_ | The csr(certificate signing request)
-        details you need to provide for onboarding the EGS. | { } |
+        | `csrInputs` | YES | pipes | The csr(certificate signing request)
+        details you need to provide for onboarding the EGS. | Refer to the sample request body |
 
         | `otp` | YES | _string_ | The OTP that you'll get from the Fatoora
         Portal(logged in using taxpayer credentials) after following the ZATCA
@@ -413,9 +413,9 @@ paths:
         accepted. | TST-886431145-300055184400003 |
 
         | `serialNumber` | YES | _string_ | Unique identification code for the
-        EGS. Serial number should be in this "1-(.+)\\|2-(.+)\\|3-(.+)" regular
-        expression format | "1-TST|2-TST|3-ed22f1d8-e6a2-1118-9b58-d9a8f11e44yt"
-        |
+        EGS. Serial number should be in this "1-(.+) 2-(.+) 3-(.+)" regular
+        expression format | 1-TST 2-TST 3-ed22f1d8-e6a2-1118-9b58-d9a8f11e44yt <br> (Refer to the 
+        sample request body for the correct format) |
 
         | `organizationIdentifier` | YES | _string_ | It is the organization VAT
         number. It is a **15** digit number with starting and ending digits as
@@ -610,17 +610,16 @@ paths:
         mentioned fields. | {  <br>"addrLine1": "Makkah",  <br>"addrLine2": "Al
         Alam Street",  <br>"additionalNo": "1234", "buildingNumber": "1234" 
         <br>"city": "Riyadh",  <br>"state": "Riyadh",  <br>"zipCode": "24211", 
-        <br>"district": "Riyadh",  <br>"country": "Saudi Arabia"  <br>} |
+        <br>"district": "Riyadh",  <br>"country": "SA"  <br>} |
 
         | `buyerName` | CONDITIONAL | string | Buyer Name is mandatory to be
         filled as per the transactions mentioned in article 53 (7) and for
         private education and private healthcare to citizens. | Vignesh K |
 
-        | `buyerAddress` | NO | json | Buyer address | {  <br>"addrLine1": "12,
-        Masjid Street",  <br>"addrLine2": "Amjad Building", "additionalNo":
-        "1234", "buildingNumber": "1234",  <br>"city": "Dammam",  <br>"state":
-        "Riyadh",  <br>"zipCode": "12313",  <br>"district": "Riyadh", 
-        <br>"country": "SA"  <br>} |
+        | `buyerAddress` | NO | json | Buyer address | {  <br>"addrLine1": "Makkah",  <br>"addrLine2": "Al
+        Alam Street",  <br>"additionalNo": "1234", "buildingNumber": "1234" 
+        <br>"city": "Riyadh",  <br>"state": "Riyadh",  <br>"zipCode": "24211", 
+        <br>"district": "Riyadh",  <br>"country": "SA"  <br>} |
 
         | `addrLine1` | YES | _string_ | Address Line 1 | Makkah |
 
@@ -636,7 +635,8 @@ paths:
 
         | `district` | YES\` | string | district | Riyadh |
 
-        | `country` | YES | string | Country code | SA |
+        | `country` | YES | string | Country code.  <br>2 letter
+        code (**ISO 3166 Alpha-2**) | SA |
 
         | `zipCode` | YES | string | Postal Code(5 digits) | 24211 |
 
@@ -943,19 +943,18 @@ paths:
 
         | `sellerAddress` | YES | _json_ | Address of the seller with the below
         mentioned fields. | {  <br>"addrLine1": "Makkah",  <br>"addrLine2": "Al
-        Alam Street",  <br>"additionalNo": "1234", "buildingNumber":"1234", 
+        Alam Street",  <br>"additionalNo": "1234", "buildingNumber": "1234" 
         <br>"city": "Riyadh",  <br>"state": "Riyadh",  <br>"zipCode": "24211", 
-        <br>"district": "Riyadh",  <br>"country": "Saudi Arabia",  <br>} |
+        <br>"district": "Riyadh",  <br>"country": "SA"  <br>} |
 
         | `buyerName` | CONDITIONAL | string | Buyer Name is mandatory to be
         filled as per the transactions mentioned in article 53 (7) and for
         private education and private healthcare to citizens. | Vignesh K |
 
-        | buyerAddress | NO | json | Buyer address | {  <br>"addrLine1": "12,
-        Masjid Street",  <br>"addrLine2": "Amjad Building", "additionalNo":
-        "1234", "buildingNumber":"1234",  <br>"city": "Dammam",  <br>"state":
-        "Riyadh",  <br>"zipCode": "12313",  <br>"district": "Riyadh", 
-        <br>"country": "SA"  <br>} |
+        | buyerAddress | NO | json | Buyer address | {  <br>"addrLine1": "Makkah",  <br>"addrLine2": "Al
+        Alam Street",  <br>"additionalNo": "1234", "buildingNumber": "1234" 
+        <br>"city": "Riyadh",  <br>"state": "Riyadh",  <br>"zipCode": "24211", 
+        <br>"district": "Riyadh",  <br>"country": "SA"  <br>} |
 
         | `addrLine1` | YES | _string_ | Address Line 1 | Makkah |
 
@@ -970,6 +969,9 @@ paths:
         | `state` | YES | _string_ | State | Riyadh |
 
         | `zipCode` | YES | string | Postal Code(5 digits) | 24211 |
+
+        | `country` | YES | string | Country code.  <br>2 letter
+        code (**ISO 3166 Alpha-2**) | SA |
 
         | `documentLineItems` | YES | list | Line items list | \[...\] |
 
@@ -1293,21 +1295,18 @@ paths:
 
         | `sellerAddress` | YES | _json_ | Address of the seller with the below
         mentioned fields. | {  <br>"addrLine1": "Makkah",  <br>"addrLine2": "Al
-        Alam Street",  <br>"city": "Riyadh",  <br>"state": "Riyadh", 
-        <br>"zipCode": "24211",  <br>"phone": "2121",  <br>"fax": "8228", 
-        <br>"district": "Riyadh",  <br>"country": "Saudi Arabia", 
-        <br>"additionalNo": ""  <br>} |
+        Alam Street",  <br>"additionalNo": "1234", "buildingNumber": "1234" 
+        <br>"city": "Riyadh",  <br>"state": "Riyadh",  <br>"zipCode": "24211", 
+        <br>"district": "Riyadh",  <br>"country": "SA"  <br>} |
 
         | `buyerName` | YES | string | Buyer Name is mandatory to be filled as
         per the transactions mentioned in article 53 (7) and for private
         education and private healthcare to citizens |  |
 
-        | buyerAddress | YES | json | Buyer address | {  <br>"attention":
-        "Meiyappan MM",  <br>"countryOrRegion": "SA",  <br>"addrLine1": "12,
-        Masjid Street",  <br>"addrLine2": "Amjad Building",  <br>"city":
-        "Dammam",  <br>"state": "Riyadh",  <br>"zipCode": "12313",  <br>"phone":
-        "2121",  <br>"fax": "8228",  <br>"district": "Riyadh",  <br>"country":
-        "SA"  <br>} |
+        | buyerAddress | YES | json | Buyer address | {  <br>"addrLine1": "Makkah",  <br>"addrLine2": "Al
+        Alam Street",  <br>"additionalNo": "1234", "buildingNumber": "1234" 
+        <br>"city": "Riyadh",  <br>"state": "Riyadh",  <br>"zipCode": "24211", 
+        <br>"district": "Riyadh",  <br>"country": "SA"  <br>} |
 
         | `addrLine1` | YES | _string_ | Address Line 1 | Makkah |
 
@@ -1322,10 +1321,9 @@ paths:
         | `state` | YES | _string_ | State | Riyadh |
 
         | `zipCode` | YES | string | Postal Code(5 digits) | 24211 |
-
-        | `phone` | YES | string | Phone | 2121 |
-
-        | `fax` | YES | string | Fax | 5646465654545 |
+        
+        | `country` | YES | string | Country code.  <br>2 letter
+        code (**ISO 3166 Alpha-2**) | SA |
 
         | `documentLineItems` | YES | list | Line items list | \[...\] |
 
@@ -1492,25 +1490,24 @@ paths:
                   documentDueDateTime: '2022-12-31T04:33:41.000Z'
                   sellerName: ahmad abdurrahman
                   sellerAddress:
-                    addrLine1: Riyadh
-                    addrLine2: alnakheel
-                    buildingNumber: '1234'
-                    city: Riyadh
-                    state: Riyadh
-                    zipCode: '24211'
-                    district: Riyadh
-                    country: SA
+                    addrLine1: 12, Masjid Street
+                    addrLine2: Amjad Building
                     additionalNo: '1234'
-                  buyerName: Zahid Gani
-                  buyerAddress:
-                    addrLine1: 423 North Main
-                    addrLine2: 423 North Main
                     buildingNumber: '1234'
-                    additionalNo: '1234'
-                    city: Riyadh
+                    city: Dammam
                     state: Riyadh
                     zipCode: '12313'
-                    phone: '7503360649'
+                    district: Riyadh
+                    country: SA
+                  buyerName: Zahid Gani
+                  buyerAddress:
+                    addrLine1: 12, Masjid Street
+                    addrLine2: Amjad Building
+                    additionalNo: '1234'
+                    buildingNumber: '1234'
+                    city: Dammam
+                    state: Riyadh
+                    zipCode: '12313'
                     district: Riyadh
                     country: SA
                   documentLineItems:
