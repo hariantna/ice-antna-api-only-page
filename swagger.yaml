@@ -129,6 +129,9 @@ servers:
   - url: https://kixq9sqvjc.execute-api.ap-south-1.amazonaws.com
 components:
   securitySchemes:
+    noauthAuth:
+      type: http
+      scheme: noauth
     oauth2Auth:
       type: http
       scheme: oauth2
@@ -137,26 +140,7 @@ security:
 tags:
   - name: Zatca
     description: >-
-      # API Workflows:
-
-
-      ## B2C Tax Document Flow:
-
-
-      <img
-      src="https://content.pstmn.io/6a1be8f8-141e-4e7f-b003-d8df79e5a874/RnJhbWUgNDEucG5n"
-      alt="">
-
-
-      ## B2B Tax Document Flow:
-
-
-      <img
-      src="https://content.pstmn.io/18fd0f1f-147a-4ba8-98d8-a8057f1c9841/RnJhbWUgNDIucG5n"
-      alt="">
-
-
-      **ZATCA APIs:**
+      # **ZATCA APIs:**
 
 
       This folder consists of the APIs that will help your application get ZATCA
@@ -181,13 +165,12 @@ paths:
         - Zatca
       summary: Sign Up
       description: >-
-        Use this API to onboard your EGS(E-Invoice Generation Solution) in the
-        ZATCA sandbox environment.
+        Use this API to create an account in the Antna's test environment to use
+        the ZATCA APIs(Onboarding, report & clear).
 
 
         You have to pass all the required params in the specified format at the
-        minimum to onboard your EGS successfully. You can add additional
-        parameters if applicable as per your preference.
+        minimum to create your account successfully.
 
 
         #### Request Parameters:
@@ -198,58 +181,12 @@ paths:
 
         | --- | --- | --- | --- | --- |
 
-        | `csrInputs` | YES | _json_ | The csr(certificate signing request)
-        details you need to provide for onboarding the EGS. | {} |
+        | `email` | YES | _string_ | The email for the account you want to
+        create | [example123@example.com](mailto:example123@example.com) |
 
-        | `otp` | YES | _string_ | The OTP that you'll get from the Fatoora
-        Portal(logged in using taxpayer credentials) after following the ZATCA
-        onboarding process as per Antna Guidelines document. | 123345 |
-
-        | `commonName` | YES | _string_ | A Unique Name or Asset Tracking Number
-        of your EGS. There is no specific format, any free text will be
-        accepted. | TST-886431145-300055184400003 |
-
-        | `serialNumber` | YES | _string_ | Unique identification code for the
-        EGS. Serial number should be in this **"1-xxx | 2-xxx |
-
-        | `organizationIdentifier` | YES | _string_ | It is the organization VAT
-        number. It is a **15** digit number with starting and ending digits as
-        **'3'.** | 300055184400003 |
-
-        | `organizationUnitName` | YES | _string_ | The branch name for
-        Taxpayers. In case of VAT Groups , this field should contain the
-        10-digit TIN number of the individual group member whose EGS Unit is
-        being onboarded. **If 11th digit of Organization Identifier is not = 1
-        then Free text and if 11th digit of Organization Identifier = 1 then
-        needs to be a 10 digit number.** | 3123456789 |
-
-        | `organizationName` | YES | _string_ | Name of the Taxpayer. It can be
-        free text. | Antna Technologies Private Limited |
-
-        | `countryName` | YES | _string_ | Name of the country.  <br>2 letter
-        code (**ISO 3166 Alpha-2**) | SA |
-
-        | `invoiceType` | YES | _string_ | The document type that the Taxpayer’s
-        solution unit will be issuing/generating. It can be one or a combination
-        of Standard Tax Invoice (T), Simplified Tax Invoice (S), (X), (Y). The
-        input should be using the digits 0 & 1 and mapping those to “TSXY”
-        where:  <br>0 = False/Not supported  <br>1= True/Supported  <br>(X) and
-        (Y) are for future use and should be set to 0 by default for the time
-        being.  <br>For example: 1000 would mean Solution will be generating
-        Standard Invoices only. 0100 would mean Solution will be generating
-        Simplified invoices (B2C) only and 1100 means Solution will be
-        generating both Standard (B2B) and Simplified invoices (B2C). | 1100 |
-
-        | `location` | YES | _string_ | The address of the Branch or location
-        where the device or solution unit is primarily situated (could be
-        website address for e-commerce). **Preferably(not mandatory)** in the
-        Short Address format of the Saudi National Address
-        [https://splonline](https://splonline). com.sa/en/national- address-1/.
-        Free text will be accepted.  <br> | Riyadh |
-
-        | `industry` | YES | _string_ | Industry or sector for which the device
-        or solution(EGS) will generate invoices. Free text will be accepted. |
-        Petroleum |
+        | `password` | YES | _string_ | Password for your Antna test account.
+        The password should contain atleast one Caps letter, Special character &
+        number. | Example@123 |
 
 
         #### **Response Parameters:**
@@ -259,38 +196,188 @@ paths:
 
         | --- | --- | --- | --- |
 
-        | `status` | string | Status of onboarding by ZATCA.  <br> 
-        <br>Onboarding involves multiple internal steps(API calls) with the
-        ZATCA platform and, for API simplification the status is classified as
-        success or failure on the whole.  <br>  <br>The enum value is according
-        to the respective scenarios listed below:  <br>  <br>1) Successfully
-        onboarded with ZATCA's Fatoora Portal - **SUCCESS**2) OnboardiNg failed
-        with ZATCA's Fatoora Portal due to various errors - **ERROR**  <br>This
-        field will not be present for request level errors(field format errors)
-        | SUCCESS |
-
-        | `errors` | list | If onboarding fails because of error from the APIs
-        in ZATCA layer, the corresponding API error messages will be returned
-        here. Please log this error response for RCA. | \[...\] |
-
-        | `code` | string | Error status code of the failed ZATCA API. | 400
-        BAD_REQUEST |
-
-        | `message` | string | Error message from the corresponding API | OTP is
-        required field |
+        | `refreshToken` | string | The refresh token is a permanent token. It
+        is valid for one year. You need to securely save this to get temporary
+        accessToken for every 24 hrs. |
+        eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiUlNBLU9BRVAifQ.KRDvJ0DCgVcVFvn_S0iIWJ-cKM2x3l_Qh2484VS2jeu9s5gH-iX_LIg-B4QatusdLseifdvkxu-_CCZQT_PE_OKmOjt2y_5NXpqQSwSKE9i81rRTITMSX3FIZ7eeZcxua-ZVoj2leVuwB1qg5l9Wk70OEJBG2DOM_rKJ3ktSMOn4XcNONM_hwtqoPiX_CcKD3KJ6lHjNry9d0DrA9EVBt-kk9Mrp_9Ffmwr8edeg4SoSgNAm5aXyWYXRaZKoPzEvVsZqCE8TNpx2PDqx4u-IXNb8lTAjGmW1Kg5wF1P4-mrcrC7SJtH6JScF_e4Zo4lUkqTPG_RhOcFne3wCL-9ttQ.ewtpvdb6RdRdnOpJ.ggjcQgmORDPiIH2F8pCtOwL-DIk0B2jKD4UFdVxS1Ki_z1wZTQgCxFXZiwk0QDGUlfq96zNrZdJ2FPEK85Xfb44oUGCiIvDlv7k2NjbomhfX2w60NMV_Atmyrj3I5Uot5lIqQRApfMZRLtg0S6fZzGexl88693rAolEH8M_3SZu1Xa1IRzp_xnnTuYks9jHIN-CbzBzuIVVTvgXSPix77XQH-JimdjKgekW922-zhghcM9ut641oIshNKFoqjUVTWEAOlkFtdlAtkJM3UpGTnuDEc-NZcfyZYWTs6J_PNGZGrK708HpZ7L1plgCkGDLXRozcU__fmRj8vnKx5Kmy_yv692BAFxgc36LHQoOTEIAepA1WWpGZyy7PmxbW-eDUwc1LjxPPj9PnRiV1aWkdwZyRUTDAniosKqs_zNas3zD1TQVCes4-Hs3pViVrG9gyd7VkQMIZWAKav7pqbdliAzGgIDf6W_zOc_fOZg1bqli6Tpk1f9oK6lGPiDYnx2zY5DZdjudBRB65G6M865L-jR2enMXRbUobfkyHvGwHxDFdhbSawykjYiivVkTWitBUrFC7iVUT2Se44YHwD0JZ-PDtljmvsOBHpKqx73XZ9NehZ4HY7u4KKnH1GYUqzP_jG7NHE9QV49avvqu18o071CwWmXngsCHrMNHt22ijgnY4e5SJ8R5lxEamQH4skn-gyjIWN7iWVzmuemFMwEPBFJrNBiUodXC1EwB0WyJXS2Mjn-xLBnKI_hZCiqEXjTZpkcuHObXCmh04F_6Vt8hb_yFwWArl8Ldk1miNUCkRbnGkACzeJS-I096MKElPqs69BcrDCL0gfFZLNEqSwt3ogTp2AdoX_oRw-iHkHPBVTLK7ZDKaXPuqiVZ6htfIFUwAol-_mvOz5k7zkr9XQakCZgPeuF9unsnRVT7HQSV5T_1Yb6mSwVqo1GRkcwHgwS5O9dyvW3ahfNWUMlI7Il2zGUnnRtAbhxcu37OIBnHEQNSRfCIKx3wzKD5V5AILe8MPzB73jBqR_Lg1OciXEKdeiSuQzYHHr7y48mW_a36h9JDwPuxb8Hk1jF7CRPvXbnSH8SMHKyL3hrdkQjuECRiNfWnI1EE7ah0w_xBQ_UdZatp0CXxvcibfah1jDIqCRa3tBm0iVofOfcAexdDliW283HgBq7dv40draSZOvoH7h2jCBhNC9BYu-y3R24pwUfap_KcHqUrKCcB-Q7Nx4JBSb18Hw4dm_qJM2CdEo9TQwtJgKdFunDOzCyMhagzBkkVcN_9428c9pfJ-SEzIjLA5s-HJcqOgQdB-v5_dXEc-ATYbEe7qvzEy-gZ8WcUGMw.yA4sRDd5mFmumcjofmYpgg
+        |
       requestBody:
         content:
           application/json:
             schema:
               type: object
               example:
-                email: harik9917@gmail.com
+                email: example562234@gmail.com
                 password: Example@123
+      security:
+        - noauthAuth: []
       responses:
         '200':
-          description: Successful response
+          description: OK
+          headers:
+            Date:
+              schema:
+                type: string
+                example: Sat, 07 Jan 2023 10:22:43 GMT
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '1807'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            x-amzn-RequestId:
+              schema:
+                type: string
+                example: 2fd12628-72a0-4410-b39a-4283489a991c
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: >-
+                  Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,x-requested-with,UUID
+            x-amz-apigw-id:
+              schema:
+                type: string
+                example: eXgrSGdahcwFboA=
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT, ANY
+            Access-Control-Expose-Headers:
+              schema:
+                type: string
+                example: >-
+                  Access-Control-Allow-Origin, Access-Control-Allow-Headers,
+                  Access-Control-Allow-Methods
+            X-Amzn-Trace-Id:
+              schema:
+                type: string
+                example: Root=1-63b947e1-3ea571447b0004b718854730;Sampled=0
           content:
-            application/json: {}
+            application/json:
+              schema:
+                type: object
+              example:
+                refreshToken: >-
+                  eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiUlNBLU9BRVAifQ.KRDvJ0DCgVcVFvn_S0iIWJ-cKM2x3l_Qh2484VS2jeu9s5gH-iX_LIg-B4QatusdLseifdvkxu-_CCZQT_PE_OKmOjt2y_5NXpqQSwSKE9i81rRTITMSX3FIZ7eeZcxua-ZVoj2leVuwB1qg5l9Wk70OEJBG2DOM_rKJ3ktSMOn4XcNONM_hwtqoPiX_CcKD3KJ6lHjNry9d0DrA9EVBt-kk9Mrp_9Ffmwr8edeg4SoSgNAm5aXyWYXRaZKoPzEvVsZqCE8TNpx2PDqx4u-IXNb8lTAjGmW1Kg5wF1P4-mrcrC7SJtH6JScF_e4Zo4lUkqTPG_RhOcFne3wCL-9ttQ.ewtpvdb6RdRdnOpJ.ggjcQgmORDPiIH2F8pCtOwL-DIk0B2jKD4UFdVxS1Ki_z1wZTQgCxFXZiwk0QDGUlfq96zNrZdJ2FPEK85Xfb44oUGCiIvDlv7k2NjbomhfX2w60NMV_Atmyrj3I5Uot5lIqQRApfMZRLtg0S6fZzGexl88693rAolEH8M_3SZu1Xa1IRzp_xnnTuYks9jHIN-CbzBzuIVVTvgXSPix77XQH-JimdjKgekW922-zhghcM9ut641oIshNKFoqjUVTWEAOlkFtdlAtkJM3UpGTnuDEc-NZcfyZYWTs6J_PNGZGrK708HpZ7L1plgCkGDLXRozcU__fmRj8vnKx5Kmy_yv692BAFxgc36LHQoOTEIAepA1WWpGZyy7PmxbW-eDUwc1LjxPPj9PnRiV1aWkdwZyRUTDAniosKqs_zNas3zD1TQVCes4-Hs3pViVrG9gyd7VkQMIZWAKav7pqbdliAzGgIDf6W_zOc_fOZg1bqli6Tpk1f9oK6lGPiDYnx2zY5DZdjudBRB65G6M865L-jR2enMXRbUobfkyHvGwHxDFdhbSawykjYiivVkTWitBUrFC7iVUT2Se44YHwD0JZ-PDtljmvsOBHpKqx73XZ9NehZ4HY7u4KKnH1GYUqzP_jG7NHE9QV49avvqu18o071CwWmXngsCHrMNHt22ijgnY4e5SJ8R5lxEamQH4skn-gyjIWN7iWVzmuemFMwEPBFJrNBiUodXC1EwB0WyJXS2Mjn-xLBnKI_hZCiqEXjTZpkcuHObXCmh04F_6Vt8hb_yFwWArl8Ldk1miNUCkRbnGkACzeJS-I096MKElPqs69BcrDCL0gfFZLNEqSwt3ogTp2AdoX_oRw-iHkHPBVTLK7ZDKaXPuqiVZ6htfIFUwAol-_mvOz5k7zkr9XQakCZgPeuF9unsnRVT7HQSV5T_1Yb6mSwVqo1GRkcwHgwS5O9dyvW3ahfNWUMlI7Il2zGUnnRtAbhxcu37OIBnHEQNSRfCIKx3wzKD5V5AILe8MPzB73jBqR_Lg1OciXEKdeiSuQzYHHr7y48mW_a36h9JDwPuxb8Hk1jF7CRPvXbnSH8SMHKyL3hrdkQjuECRiNfWnI1EE7ah0w_xBQ_UdZatp0CXxvcibfah1jDIqCRa3tBm0iVofOfcAexdDliW283HgBq7dv40draSZOvoH7h2jCBhNC9BYu-y3R24pwUfap_KcHqUrKCcB-Q7Nx4JBSb18Hw4dm_qJM2CdEo9TQwtJgKdFunDOzCyMhagzBkkVcN_9428c9pfJ-SEzIjLA5s-HJcqOgQdB-v5_dXEc-ATYbEe7qvzEy-gZ8WcUGMw.yA4sRDd5mFmumcjofmYpgg
+  /dev/api/v1/proto/signIn:
+    post:
+      tags:
+        - Zatca
+      summary: Sign In
+      description: >-
+        Use this API to signin to your Antna account and get `accessToken` to
+        access the other Antna APIs.
+
+
+        You have to pass all the required params in the specified format at the
+        minimum to create your account successfully.
+
+
+        #### Request Parameters:
+
+
+        | **PARAMS** | **REQUIRED** | **DATA TYPE** | **DESCRIPTION** |
+        **EXAMPLE** |
+
+        | --- | --- | --- | --- | --- |
+
+        | `refreshToken` | YES | _string_ | The refresh token is a permanent
+        token obtained while signup. It is valid for one year from the time of
+        creation. |
+        eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiUlNBLU9BRVAifQ.KRDvJ0DCgVcVFvn_S0iIWJ-cKM2x3l_Qh2484VS2jeu9s5gH-iX_LIg-B4QatusdLseifdvkxu-_CCZQT_PE_OKmOjt2y_5NXpqQSwSKE9i81rRTITMSX3FIZ7eeZcxua-ZVoj2leVuwB1qg5l9Wk70OEJBG2DOM_rKJ3ktSMOn4XcNONM_hwtqoPiX_CcKD3KJ6lHjNry9d0DrA9EVBt-kk9Mrp_9Ffmwr8edeg4SoSgNAm5aXyWYXRaZKoPzEvVsZqCE8TNpx2PDqx4u-IXNb8lTAjGmW1Kg5wF1P4-mrcrC7SJtH6JScF_e4Zo4lUkqTPG_RhOcFne3wCL-9ttQ.ewtpvdb6RdRdnOpJ.ggjcQgmORDPiIH2F8pCtOwL-DIk0B2jKD4UFdVxS1Ki_z1wZTQgCxFXZiwk0QDGUlfq96zNrZdJ2FPEK85Xfb44oUGCiIvDlv7k2NjbomhfX2w60NMV_Atmyrj3I5Uot5lIqQRApfMZRLtg0S6fZzGexl88693rAolEH8M_3SZu1Xa1IRzp_xnnTuYks9jHIN-CbzBzuIVVTvgXSPix77XQH-JimdjKgekW922-zhghcM9ut641oIshNKFoqjUVTWEAOlkFtdlAtkJM3UpGTnuDEc-NZcfyZYWTs6J_PNGZGrK708HpZ7L1plgCkGDLXRozcU__fmRj8vnKx5Kmy_yv692BAFxgc36LHQoOTEIAepA1WWpGZyy7PmxbW-eDUwc1LjxPPj9PnRiV1aWkdwZyRUTDAniosKqs_zNas3zD1TQVCes4-Hs3pViVrG9gyd7VkQMIZWAKav7pqbdliAzGgIDf6W_zOc_fOZg1bqli6Tpk1f9oK6lGPiDYnx2zY5DZdjudBRB65G6M865L-jR2enMXRbUobfkyHvGwHxDFdhbSawykjYiivVkTWitBUrFC7iVUT2Se44YHwD0JZ-PDtljmvsOBHpKqx73XZ9NehZ4HY7u4KKnH1GYUqzP_jG7NHE9QV49avvqu18o071CwWmXngsCHrMNHt22ijgnY4e5SJ8R5lxEamQH4skn-gyjIWN7iWVzmuemFMwEPBFJrNBiUodXC1EwB0WyJXS2Mjn-xLBnKI_hZCiqEXjTZpkcuHObXCmh04F_6Vt8hb_yFwWArl8Ldk1miNUCkRbnGkACzeJS-I096MKElPqs69BcrDCL0gfFZLNEqSwt3ogTp2AdoX_oRw-iHkHPBVTLK7ZDKaXPuqiVZ6htfIFUwAol-_mvOz5k7zkr9XQakCZgPeuF9unsnRVT7HQSV5T_1Yb6mSwVqo1GRkcwHgwS5O9dyvW3ahfNWUMlI7Il2zGUnnRtAbhxcu37OIBnHEQNSRfCIKx3wzKD5V5AILe8MPzB73jBqR_Lg1OciXEKdeiSuQzYHHr7y48mW_a36h9JDwPuxb8Hk1jF7CRPvXbnSH8SMHKyL3hrdkQjuECRiNfWnI1EE7ah0w_xBQ_UdZatp0CXxvcibfah1jDIqCRa3tBm0iVofOfcAexdDliW283HgBq7dv40draSZOvoH7h2jCBhNC9BYu-y3R24pwUfap_KcHqUrKCcB-Q7Nx4JBSb18Hw4dm_qJM2CdEo9TQwtJgKdFunDOzCyMhagzBkkVcN_9428c9pfJ-SEzIjLA5s-HJcqOgQdB-v5_dXEc-ATYbEe7qvzEy-gZ8WcUGMw.yA4sRDd5mFmumcjofmYpgg
+        |
+
+
+        #### **Response Parameters:**
+
+
+        | **PARAMS** | **DATA TYPE** | **DESCRIPTION** | **EXAMPLE** |
+
+        | --- | --- | --- | --- |
+
+        | `accessToken` | string | The access token is a temporary token. It is
+        valid for one day from the time of creation. Use this access token in
+        the 'Authorization' header to access the other Antna APIs. |
+        eyJraWQiOiJYbUU2MnZzZkdkZWI0bzEyUWlcL0F5OEcrcUQxand2N0JwRGN6aWdrM2ZVaz0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJjYmIyYTBlYy02ZWJiLTQ3ZDgtOGFhZC1kNjFjNDgyMDRiYTMiLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAuYXAtc291dGgtMS5hbWF6b25hd3MuY29tXC9hcC1zb3V0aC0xX0pBUHpIMk9hRSIsImNsaWVudF9pZCI6IjZxNWoydmo5YjB1cXAzZWtrdXJvc2gxOWVmIiwib3JpZ2luX2p0aSI6IjQwNDNjNDZjLTYwMDktNGJiOS05YTliLTE2N2JkYjk5OWI1NyIsImV2ZW50X2lkIjoiYWE4Nzg2ZDItZDc0Mi00MmNmLTg2MWUtMTIzZGRkMzA2NGEwIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwic2NvcGUiOiJhd3MuY29nbml0by5zaWduaW4udXNlci5hZG1pbiIsImF1dGhfdGltZSI6MTY3MzA4Njk2MiwiZXhwIjoxNjczNDQ4NjU4LCJpYXQiOjE2NzMzNjIyNTgsImp0aSI6IjI2YTk4NmQzLTE3YjktNDI3OC1hZDQ0LTk0Mzc2OTY4YWNmNiIsInVzZXJuYW1lIjoiY2JiMmEwZWMtNmViYi00N2Q4LThhYWQtZDYxYzQ4MjA0YmEzIn0.TkcGvbFASIzgJb47DODccoNL8HhmDYvau6gQ2vVhnWSFAWhNzog2mCckvpAjYadM4LNe4EoC3rTKWUaoP6ezejYqIZCKpcA5LP6GEMpxkTmQhcEgBqqDEjQT-CUgLzbpZzvqAMvXL2BorYUDIcn_QADgXEA9xtzjiCYFP4VVX0Ry_prAdVCTOphoICKJUbeMhwhra-KZTg9lkdmDS7cJ1QJ-Y8USNSYgRLG56zTnFjS98yMMZI4qhpZ2mn84eE2ynukNioFdok-U03v5fk12Yhdo7eSnjLGwf0L9iUSl-QdeS-PCEungC5cvXeY0-JdTvImYVkxUI8o5xDdG1TN-wA
+        |
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                refreshToken: >-
+                  eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiUlNBLU9BRVAifQ.vIQlHk6vMsCXHRI-SjVgK3jKOWxpuF_7vEL0ouxTZ0haTtWJ8rHsgcbIHK7exfkV45q2gdy2bamTt_QpHq1WAQxdepQU5wIO0vWQJHyLloxAr-tows2s6ZNov-qHIyZ5j1q1p4R0q8DvG7G27mzlVlG9jNVzOtxW6l4ZnDpyArhdvA1bh_7m5C_aTCiXVfICsS3dlz6-Bhjql7xuviL5I3FWTCgJgiMeEpa-wvXd8mo1mOcn2uXOtBRSlPQ9CXm-qegKhYJ0fYOpsdfPLVNNx8j5biKiQl_zD-Fd9CI0i-y9UH7lruY-4HxdcvsjN_29nhxUSiRCWgsk6bQQ8t2AHA.GZEpXTpg988Uo7tF.EeJ6grBYAmqUIAllZq3c-LrDKaDVwjBNmX8MZSStDSYsjHQSmXXe0s-W_3nIc4l93E9v3m4Gg8T116eTEgqTvxw0x9JwXr_kVerf7Kjgrf5w1zXruv0AFt0joJwypv57lXzPvMubPQlVqZIFwlC1HAdZ2m6ljlXSXTbsUQVGIJdl2UpqePbKA5-j3_WHt90Rq_RjkCSmroCqdLlSx4n-EcPbnTD1AvFwbUusZ51OOJskMkOcaFH-1G4DT_ba0uZVkAHcHP_PY2TWWXw4dPJxZwroAEtNktXBIo5f8QddnWW1rQzcX7qImbxNjIN-c69UZ3oj991hmMN-BS_oppTammWa8bOh0ojjbmpLJKVAw55rGmzUHCnfwsknOxksC1BE0Vsn7iLOFnNP9eaCuHML-BgqPUBaTLaTe_nmMLBXFbPcitZH_15jLMUwqtTzQpvAC6LzCROAc56igcFHVs43mKRNdJ99hr0VBh4ixBd4uvAuWZb9rrsfGfcNw6iFavJfjxYKyL_i90z0Fpu0z_q7sG9_4KRLQX_0X6lrxQYT0FpLRzcCgIHPMqobi-pkZSlUHXJpj9ADpgQ0945fobvclyRDI3w3Xaet2CreC3vCTydmMk1JezKkx7cRLQTWDURnigbts_25UOh46YW_YDCapXNsCdVEbQXKEnMIe5m4ewrukqdWc49S3rBwDnSy76-oR6Hd6kLm0ay9g40Mf3LcBl-3kfqRGYwqyFixEnextBiYwZEMwl5zlsnj-vGDGYyptkCqBJ9gRUqgwhfnrgC0rMZuQuxcLukn-yFRCkYHPRNB7AdvgioE7JlwwgQ_EchypQ8967cyOqSHJLwk_hsH7tpWjsnIy31j4-vIhSBH9jqaTGy3pYWsVlRCYTQBbzGIksxAxrFOQH_v1fAzmpYHayj1AxtJJQX7SQQbNUyrEMiFSMnfLfpyW7RtudjFsVCrMK26OBRzZCvgKXNRFsIIlqWPpN5c4-Qol26yhmnf_oCg8iZWIU2FkLrlDvgqqxaCuwHjTvqawGT_dJsOBSfmWBIBx23aV37mZc9j7Kgb9AeXwaW6BezZ-GH4BW3WuSrXgkRQtIYyIPkwJjKJKp5Yc2bOQiXwETiCOrorT-J5erqiqWXsVtscsfMPYOmAntp5F_O_nJ3Q7HtEAYbTr2FtPKfINRn2V5Xwc6DcUT9oHgSBdCEvYL_uqZUaZ-4O1xMCbLN0tqsomy_IwDWxJB_GKHgk6bT5Eh-3VApxYkKTzWZVi2jKUmCBegPv3UZrYx5mOP9ZS24cAdWCeUr8f1IuHMbaivTYQnmUeyHVRBMaETvKxE1-2aT2RKmE1lLSmw.a7U8dMq_CfIxsv6RbTjpng
+      security:
+        - noauthAuth: []
+      responses:
+        '200':
+          description: OK
+          headers:
+            Date:
+              schema:
+                type: string
+                example: Tue, 10 Jan 2023 14:50:58 GMT
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '1093'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            x-amzn-RequestId:
+              schema:
+                type: string
+                example: e1c5b5f7-a561-453f-ae41-cd385492c08f
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: >-
+                  Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,x-requested-with,UUID
+            x-amz-apigw-id:
+              schema:
+                type: string
+                example: eiAzhEieBcwFWYA=
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT, ANY
+            Access-Control-Expose-Headers:
+              schema:
+                type: string
+                example: >-
+                  Access-Control-Allow-Origin, Access-Control-Allow-Headers,
+                  Access-Control-Allow-Methods
+            X-Amzn-Trace-Id:
+              schema:
+                type: string
+                example: Root=1-63bd7b49-46d47a9957b80fea5ef855a4;Sampled=0
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                accessToken: >-
+                  eyJraWQiOiJYbUU2MnZzZkdkZWI0bzEyUWlcL0F5OEcrcUQxand2N0JwRGN6aWdrM2ZVaz0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJjYmIyYTBlYy02ZWJiLTQ3ZDgtOGFhZC1kNjFjNDgyMDRiYTMiLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAuYXAtc291dGgtMS5hbWF6b25hd3MuY29tXC9hcC1zb3V0aC0xX0pBUHpIMk9hRSIsImNsaWVudF9pZCI6IjZxNWoydmo5YjB1cXAzZWtrdXJvc2gxOWVmIiwib3JpZ2luX2p0aSI6IjQwNDNjNDZjLTYwMDktNGJiOS05YTliLTE2N2JkYjk5OWI1NyIsImV2ZW50X2lkIjoiYWE4Nzg2ZDItZDc0Mi00MmNmLTg2MWUtMTIzZGRkMzA2NGEwIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwic2NvcGUiOiJhd3MuY29nbml0by5zaWduaW4udXNlci5hZG1pbiIsImF1dGhfdGltZSI6MTY3MzA4Njk2MiwiZXhwIjoxNjczNDQ4NjU4LCJpYXQiOjE2NzMzNjIyNTgsImp0aSI6IjI2YTk4NmQzLTE3YjktNDI3OC1hZDQ0LTk0Mzc2OTY4YWNmNiIsInVzZXJuYW1lIjoiY2JiMmEwZWMtNmViYi00N2Q4LThhYWQtZDYxYzQ4MjA0YmEzIn0.TkcGvbFASIzgJb47DODccoNL8HhmDYvau6gQ2vVhnWSFAWhNzog2mCckvpAjYadM4LNe4EoC3rTKWUaoP6ezejYqIZCKpcA5LP6GEMpxkTmQhcEgBqqDEjQT-CUgLzbpZzvqAMvXL2BorYUDIcn_QADgXEA9xtzjiCYFP4VVX0Ry_prAdVCTOphoICKJUbeMhwhra-KZTg9lkdmDS7cJ1QJ-Y8USNSYgRLG56zTnFjS98yMMZI4qhpZ2mn84eE2ynukNioFdok-U03v5fk12Yhdo7eSnjLGwf0L9iUSl-QdeS-PCEungC5cvXeY0-JdTvImYVkxUI8o5xDdG1TN-wA
   /test/api/v1/proto/csrRequest:
     post:
       tags:
@@ -315,7 +402,7 @@ paths:
         | --- | --- | --- | --- | --- |
 
         | `csrInputs` | YES | _json_ | The csr(certificate signing request)
-        details you need to provide for onboarding the EGS. | {} |
+        details you need to provide for onboarding the EGS. | { } |
 
         | `otp` | YES | _string_ | The OTP that you'll get from the Fatoora
         Portal(logged in using taxpayer credentials) after following the ZATCA
@@ -326,7 +413,9 @@ paths:
         accepted. | TST-886431145-300055184400003 |
 
         | `serialNumber` | YES | _string_ | Unique identification code for the
-        EGS. Serial number should be in this **"1-xxx | 2-xxx |
+        EGS. Serial number should be in this "1-(.+)\\|2-(.+)\\|3-(.+)" regular
+        expression format | "1-TST|2-TST|3-ed22f1d8-e6a2-1118-9b58-d9a8f11e44yt"
+        |
 
         | `organizationIdentifier` | YES | _string_ | It is the organization VAT
         number. It is a **15** digit number with starting and ending digits as
@@ -337,7 +426,7 @@ paths:
         10-digit TIN number of the individual group member whose EGS Unit is
         being onboarded. **If 11th digit of Organization Identifier is not = 1
         then Free text and if 11th digit of Organization Identifier = 1 then
-        needs to be a 10 digit number.** | 3123456789 |
+        needs to be a 10 digit number.** | Riyadh |
 
         | `organizationName` | YES | _string_ | Name of the Taxpayer. It can be
         free text. | Antna Technologies Private Limited |
@@ -403,14 +492,14 @@ paths:
                 csrInputs:
                   otp: '123345'
                   commonName: TST-886431145-300055184400003
-                  serialNumber: 1-TST|2-TST|3-ed22f1d8-e6a2-1118-9b58-d9a8f11e445e
+                  serialNumber: 1-TST|2-TST|3-ed22f1d8-e6a2-1118-9b58-d9a8f11e44yt
                   organizationIdentifier: '300055184400003'
-                  organizationUnitName: '3123456789'
-                  organizationName: '3123456789'
+                  organizationUnitName: Riyadh
+                  organizationName: Antna Technologies
                   countryName: SA
                   invoiceType: '1100'
-                  location: TST
-                  industry: TST
+                  location: Riyadh
+                  industry: Civil
       responses:
         '200':
           description: OK
@@ -519,27 +608,25 @@ paths:
 
         | `sellerAddress` | YES | _json_ | Address of the seller with the below
         mentioned fields. | {  <br>"addrLine1": "Makkah",  <br>"addrLine2": "Al
-        Alam Street",  <br>"city": "Riyadh",  <br>"state": "Riyadh", 
-        <br>"zipCode": "24211",  <br>"phone": "2121",  <br>"fax": "8228", 
-        <br>"district": "Riyadh",  <br>"country": "Saudi Arabia", 
-        <br>"additionalNo": ""  <br>} |
+        Alam Street",  <br>"additionalNo": "1234", "buildingNumber": "1234" 
+        <br>"city": "Riyadh",  <br>"state": "Riyadh",  <br>"zipCode": "24211", 
+        <br>"district": "Riyadh",  <br>"country": "Saudi Arabia"  <br>} |
 
         | `buyerName` | CONDITIONAL | string | Buyer Name is mandatory to be
         filled as per the transactions mentioned in article 53 (7) and for
         private education and private healthcare to citizens. | Vignesh K |
 
-        | buyerAddress | NO | json | Buyer address | {  <br>"attention":
-        "Meiyappan MM",  <br>"countryOrRegion": "SA",  <br>"addrLine1": "12,
-        Masjid Street",  <br>"addrLine2": "Amjad Building",  <br>"city":
-        "Dammam",  <br>"state": "Riyadh",  <br>"zipCode": "12313",  <br>"phone":
-        "2121",  <br>"fax": "8228",  <br>"district": "Riyadh",  <br>"country":
-        "SA"  <br>} |
+        | `buyerAddress` | NO | json | Buyer address | {  <br>"addrLine1": "12,
+        Masjid Street",  <br>"addrLine2": "Amjad Building", "additionalNo":
+        "1234", "buildingNumber": "1234",  <br>"city": "Dammam",  <br>"state":
+        "Riyadh",  <br>"zipCode": "12313",  <br>"district": "Riyadh", 
+        <br>"country": "SA"  <br>} |
 
         | `addrLine1` | YES | _string_ | Address Line 1 | Makkah |
 
         | `addrLine2` | YES | _string_ | Address Line 2 | Al Alam Street |
 
-        | `buildingNumber` | YES | string | Building Number | 20211 |
+        | `buildingNumber` | YES | string | Building Number | 2021 |
 
         | `additionalNo` | YES | string | Additional Number(4 digits) | 2134 |
 
@@ -547,11 +634,11 @@ paths:
 
         | `state` | YES | _string_ | State | Riyadh |
 
+        | `district` | YES\` | string | district | Riyadh |
+
+        | `country` | YES | string | Country code | SA |
+
         | `zipCode` | YES | string | Postal Code(5 digits) | 24211 |
-
-        | `phone` | YES | string | Phone | 2121 |
-
-        | `fax` | YES | string | Fax | 5646465654545 |
 
         | `documentLineItems` | YES | list | Line items list | \[...\] |
 
@@ -701,31 +788,38 @@ paths:
                     addrLine1: 12, Masjid Street
                     addrLine2: Amjad Building
                     buildingNumber: '1234'
-                    additionalNo: '1234'
                     city: Dammam
                     state: Riyadh
                     zipCode: '12313'
-                    phone: '2121'
                     district: Riyadh
                     country: SA
                   buyerName: Zahid Gani
                   documentLineItems:
                     - lineItemDesc: HP Laptop/Hp Laptop
-                      lineItemPrice: 85
-                      lineItemQty: '1'
-                      lineItemTaxableAmount: 85
-                      discountOnLineItem: 0
-                      vatRateOnLineItem: '15'
-                      lineItemVatAmount: '12.75'
-                      lineItemSubTotal: 97.75
-                  totalExcludingVat: 85
-                  totalTaxableAmountExcludingVat: 85
-                  vatTotal: 12.75
-                  documentTotal: 97.75
+                      lineItemPrice: 578
+                      lineItemQty: 1
+                      lineItemTaxableAmount: 573
+                      discountOnLineItem: 5
+                      vatRateOnLineItem: 15
+                      lineItemVatAmount: 85.95
+                      lineItemSubTotal: 658.95
+                    - lineItemDesc: HP Laptop/Hp Laptop
+                      lineItemPrice: 578
+                      lineItemQty: 1
+                      lineItemTaxableAmount: 573
+                      discountOnLineItem: 5
+                      vatRateOnLineItem: 15
+                      lineItemVatAmount: 85.95
+                      lineItemSubTotal: 658.95
+                  totalExcludingVat: 1112
+                  totalTaxableAmountExcludingVat: 1146
+                  vatTotal: 166.8
+                  documentTotal: 1278.8
+                  discountOnDocumentTotal: 34
                   isSpecialBillingAgreement: 'false'
                   isTransactionType: 'false'
                   isSelfBilled: 'false'
-                  isThirdParty: 'true'
+                  isThirdParty: 'false'
                   isNominalSupply: 'false'
                   isExport: 'false'
                   isSummary: 'false'
@@ -734,10 +828,9 @@ paths:
                   sellerGroupVatRegistrationNumber: ''
                   additionalSellerIdType: CRN
                   additionalSellerIdNumber: ''
-                  discountOnDocumentTotal: 0
                   specialTaxTreatment: '0'
                   currency: SAR
-                  documentId: '0009'
+                  documentId: '001'
       responses:
         '200':
           description: OK
@@ -849,27 +942,25 @@ paths:
 
         | `sellerAddress` | YES | _json_ | Address of the seller with the below
         mentioned fields. | {  <br>"addrLine1": "Makkah",  <br>"addrLine2": "Al
-        Alam Street",  <br>"city": "Riyadh",  <br>"state": "Riyadh", 
-        <br>"zipCode": "24211",  <br>"phone": "2121",  <br>"fax": "8228", 
-        <br>"district": "Riyadh",  <br>"country": "Saudi Arabia", 
-        <br>"additionalNo": ""  <br>} |
+        Alam Street",  <br>"additionalNo": "1234", "buildingNumber":"1234", 
+        <br>"city": "Riyadh",  <br>"state": "Riyadh",  <br>"zipCode": "24211", 
+        <br>"district": "Riyadh",  <br>"country": "Saudi Arabia",  <br>} |
 
         | `buyerName` | CONDITIONAL | string | Buyer Name is mandatory to be
         filled as per the transactions mentioned in article 53 (7) and for
         private education and private healthcare to citizens. | Vignesh K |
 
-        | buyerAddress | NO | json | Buyer address | {  <br>"attention":
-        "Meiyappan MM",  <br>"countryOrRegion": "SA",  <br>"addrLine1": "12,
-        Masjid Street",  <br>"addrLine2": "Amjad Building",  <br>"city":
-        "Dammam",  <br>"state": "Riyadh",  <br>"zipCode": "12313",  <br>"phone":
-        "2121",  <br>"fax": "8228",  <br>"district": "Riyadh",  <br>"country":
-        "SA"  <br>} |
+        | buyerAddress | NO | json | Buyer address | {  <br>"addrLine1": "12,
+        Masjid Street",  <br>"addrLine2": "Amjad Building", "additionalNo":
+        "1234", "buildingNumber":"1234",  <br>"city": "Dammam",  <br>"state":
+        "Riyadh",  <br>"zipCode": "12313",  <br>"district": "Riyadh", 
+        <br>"country": "SA"  <br>} |
 
         | `addrLine1` | YES | _string_ | Address Line 1 | Makkah |
 
         | `addrLine2` | YES | _string_ | Address Line 2 | Al Alam Street |
 
-        | `buildingNumber` | YES | string | Building Number | 20211 |
+        | `buildingNumber` | YES | string | Building Number | 2221 |
 
         | `additionalNo` | YES | string | Additional Number(4 digits) | 2134 |
 
@@ -878,10 +969,6 @@ paths:
         | `state` | YES | _string_ | State | Riyadh |
 
         | `zipCode` | YES | string | Postal Code(5 digits) | 24211 |
-
-        | `phone` | YES | string | Phone | 2121 |
-
-        | `fax` | YES | string | Fax | 5646465654545 |
 
         | `documentLineItems` | YES | list | Line items list | \[...\] |
 
@@ -1030,31 +1117,38 @@ paths:
                     addrLine1: 12, Masjid Street
                     addrLine2: Amjad Building
                     buildingNumber: '1234'
-                    additionalNo: '1234'
                     city: Dammam
                     state: Riyadh
                     zipCode: '12313'
-                    phone: '2121'
                     district: Riyadh
                     country: SA
                   buyerName: Zahid Gani
                   documentLineItems:
                     - lineItemDesc: HP Laptop/Hp Laptop
-                      lineItemPrice: 85
-                      lineItemQty: '1'
-                      lineItemTaxableAmount: 85
-                      discountOnLineItem: 0
-                      vatRateOnLineItem: '15'
-                      lineItemVatAmount: '12.75'
-                      lineItemSubTotal: 97.75
-                  totalExcludingVat: 85
-                  totalTaxableAmountExcludingVat: 85
-                  vatTotal: 12.75
-                  documentTotal: 97.75
+                      lineItemPrice: 578
+                      lineItemQty: 1
+                      lineItemTaxableAmount: 573
+                      discountOnLineItem: 5
+                      vatRateOnLineItem: 15
+                      lineItemVatAmount: 85.95
+                      lineItemSubTotal: 658.95
+                    - lineItemDesc: HP Laptop/Hp Laptop
+                      lineItemPrice: 578
+                      lineItemQty: 1
+                      lineItemTaxableAmount: 573
+                      discountOnLineItem: 5
+                      vatRateOnLineItem: 15
+                      lineItemVatAmount: 85.95
+                      lineItemSubTotal: 658.95
+                  totalExcludingVat: 1112
+                  totalTaxableAmountExcludingVat: 1146
+                  vatTotal: 166.8
+                  documentTotal: 1278.8
+                  discountOnDocumentTotal: 34
                   isSpecialBillingAgreement: 'false'
                   isTransactionType: 'false'
                   isSelfBilled: 'false'
-                  isThirdParty: 'true'
+                  isThirdParty: 'false'
                   isNominalSupply: 'false'
                   isExport: 'false'
                   isSummary: 'false'
@@ -1063,10 +1157,9 @@ paths:
                   sellerGroupVatRegistrationNumber: ''
                   additionalSellerIdType: CRN
                   additionalSellerIdNumber: ''
-                  discountOnDocumentTotal: 0
                   specialTaxTreatment: '0'
                   currency: SAR
-                  documentId: '0007'
+                  documentId: '001'
       responses:
         '200':
           description: OK
@@ -1393,64 +1486,63 @@ paths:
                 invoiceData:
                   documentType: TAX_INVOICE
                   referenceId: ''
-                  documentIssueDateTime: '2022-10-21T12:53:13.000Z'
-                  documentDueDateTime: '2022-10-26T12:53:13.000Z'
-                  sellerName: Company Name
+                  documentIssueDateTime: '2022-12-31T04:33:41.000Z'
+                  documentDueDateTime: '2022-12-31T04:33:41.000Z'
+                  sellerName: ahmad abdurrahman
                   sellerAddress:
-                    addrLine1: 12, Masjid Street
-                    addrLine2: Amjad Building
+                    addrLine1: Riyadh
+                    addrLine2: alnakheel
                     buildingNumber: '1234'
-                    additionalNo: '1234'
-                    city: Dammam
+                    city: Riyadh
                     state: Riyadh
-                    zipCode: '12313'
-                    phone: '2121'
+                    zipCode: '24211'
                     district: Riyadh
                     country: SA
-                  buyerName: Antna
+                    additionalNo: '1234'
+                  buyerName: Zahid Gani
                   buyerAddress:
-                    addrLine1: 12, Masjid Street
-                    addrLine2: Amjad Building
+                    addrLine1: 423 North Main
+                    addrLine2: 423 North Main
                     buildingNumber: '1234'
                     additionalNo: '1234'
-                    city: Dammam
+                    city: Riyadh
                     state: Riyadh
                     zipCode: '12313'
-                    phone: '2121'
+                    phone: '7503360649'
                     district: Riyadh
                     country: SA
                   documentLineItems:
-                    - lineItemDesc: Ball point pen
-                      lineItemPrice: 10
-                      lineItemQty: 10
-                      lineItemTaxableAmount: 100
-                      discountOnLineItem: 0
+                    - lineItemDesc: Macbook air m2
+                      lineItemPrice: 578
+                      lineItemQty: 1
+                      lineItemTaxableAmount: 573
+                      discountOnLineItem: 5
                       vatRateOnLineItem: 15
-                      lineItemVatAmount: 15
-                      lineItemSubTotal: 115
-                  totalExcludingVat: 100
-                  totalTaxableAmountExcludingVat: 100
-                  vatTotal: 15
-                  documentTotal: 115
+                      lineItemVatAmount: 85.95
+                      lineItemSubTotal: 658.95
+                  totalExcludingVat: 539
+                  totalTaxableAmountExcludingVat: 573
+                  vatTotal: 80.85
+                  documentTotal: 619.85
+                  discountOnDocumentTotal: 34
                   isSpecialBillingAgreement: 'false'
                   isTransactionType: 'false'
                   isSelfBilled: 'false'
-                  isThirdParty: 'true'
+                  isThirdParty: 'false'
                   isNominalSupply: 'false'
                   isExport: 'false'
                   isSummary: 'false'
-                  supplyDate: '2022-10-21T12:53:13.000Z'
-                  sellerVatRegistrationNumber: '300055184400003'
-                  additionalSellerIdType: CRN
-                  additionalSellerIdNumber: '1122334455667788'
+                  supplyDate: '2022-12-31T04:33:41.000Z'
+                  sellerVatRegistrationNumber: '310175397400003'
                   sellerGroupVatRegistrationNumber: ''
-                  additionalBuyerIdType: CRN
-                  additionalBuyerIdNumber: '1122334455667788'
-                  buyerGroupVatRegistrationNumber: '300244974200003'
-                  discountOnDocumentTotal: 0
+                  additionalSellerIdType: CRN
+                  additionalSellerIdNumber: '34523452345234'
                   specialTaxTreatment: '0'
+                  additionalBuyerIdType: CRN
+                  additionalBuyerIdNumber: '12345678'
                   currency: SAR
-                  documentId: '2022100642'
+                  paymentMeans: CREDIT
+                  documentId: '0002'
       responses:
         '200':
           description: OK
@@ -1540,13 +1632,12 @@ paths:
         - Zatca
       summary: Add user
       description: >-
-        Use this API to onboard your EGS(E-Invoice Generation Solution) in the
-        ZATCA sandbox environment.
+        Use this API to add a new user to your Antna account. This new user can
+        be used to onboard another EGS with the ZATCA test environment
 
 
         You have to pass all the required params in the specified format at the
-        minimum to onboard your EGS successfully. You can add additional
-        parameters if applicable as per your preference.
+        minimum to create your account successfully.
 
 
         #### Request Parameters:
@@ -1557,58 +1648,12 @@ paths:
 
         | --- | --- | --- | --- | --- |
 
-        | `csrInputs` | YES | _json_ | The csr(certificate signing request)
-        details you need to provide for onboarding the EGS. | {} |
+        | `email` | YES | _string_ | The email for the account you want to
+        create | [example123@example.com](mailto:example123@example.com) |
 
-        | `otp` | YES | _string_ | The OTP that you'll get from the Fatoora
-        Portal(logged in using taxpayer credentials) after following the ZATCA
-        onboarding process as per Antna Guidelines document. | 123345 |
-
-        | `commonName` | YES | _string_ | A Unique Name or Asset Tracking Number
-        of your EGS. There is no specific format, any free text will be
-        accepted. | TST-886431145-300055184400003 |
-
-        | `serialNumber` | YES | _string_ | Unique identification code for the
-        EGS. Serial number should be in this **"1-xxx | 2-xxx |
-
-        | `organizationIdentifier` | YES | _string_ | It is the organization VAT
-        number. It is a **15** digit number with starting and ending digits as
-        **'3'.** | 300055184400003 |
-
-        | `organizationUnitName` | YES | _string_ | The branch name for
-        Taxpayers. In case of VAT Groups , this field should contain the
-        10-digit TIN number of the individual group member whose EGS Unit is
-        being onboarded. **If 11th digit of Organization Identifier is not = 1
-        then Free text and if 11th digit of Organization Identifier = 1 then
-        needs to be a 10 digit number.** | 3123456789 |
-
-        | `organizationName` | YES | _string_ | Name of the Taxpayer. It can be
-        free text. | Antna Technologies Private Limited |
-
-        | `countryName` | YES | _string_ | Name of the country.  <br>2 letter
-        code (**ISO 3166 Alpha-2**) | SA |
-
-        | `invoiceType` | YES | _string_ | The document type that the Taxpayer’s
-        solution unit will be issuing/generating. It can be one or a combination
-        of Standard Tax Invoice (T), Simplified Tax Invoice (S), (X), (Y). The
-        input should be using the digits 0 & 1 and mapping those to “TSXY”
-        where:  <br>0 = False/Not supported  <br>1= True/Supported  <br>(X) and
-        (Y) are for future use and should be set to 0 by default for the time
-        being.  <br>For example: 1000 would mean Solution will be generating
-        Standard Invoices only. 0100 would mean Solution will be generating
-        Simplified invoices (B2C) only and 1100 means Solution will be
-        generating both Standard (B2B) and Simplified invoices (B2C). | 1100 |
-
-        | `location` | YES | _string_ | The address of the Branch or location
-        where the device or solution unit is primarily situated (could be
-        website address for e-commerce). **Preferably(not mandatory)** in the
-        Short Address format of the Saudi National Address
-        [https://splonline](https://splonline). com.sa/en/national- address-1/.
-        Free text will be accepted.  <br> | Riyadh |
-
-        | `industry` | YES | _string_ | Industry or sector for which the device
-        or solution(EGS) will generate invoices. Free text will be accepted. |
-        Petroleum |
+        | `password` | YES | _string_ | Password for your Antna test account.
+        The password should contain atleast one Caps letter, Special character &
+        number. | Example@123 |
 
 
         #### **Response Parameters:**
@@ -1618,151 +1663,72 @@ paths:
 
         | --- | --- | --- | --- |
 
-        | `status` | string | Status of onboarding by ZATCA.  <br> 
-        <br>Onboarding involves multiple internal steps(API calls) with the
-        ZATCA platform and, for API simplification the status is classified as
-        success or failure on the whole.  <br>  <br>The enum value is according
-        to the respective scenarios listed below:  <br>  <br>1) Successfully
-        onboarded with ZATCA's Fatoora Portal - **SUCCESS**2) OnboardiNg failed
-        with ZATCA's Fatoora Portal due to various errors - **ERROR**  <br>This
-        field will not be present for request level errors(field format errors)
-        | SUCCESS |
-
-        | `errors` | list | If onboarding fails because of error from the APIs
-        in ZATCA layer, the corresponding API error messages will be returned
-        here. Please log this error response for RCA. | \[...\] |
-
-        | `code` | string | Error status code of the failed ZATCA API. | 400
-        BAD_REQUEST |
-
-        | `message` | string | Error message from the corresponding API | OTP is
-        required field |
+        | `refreshToken` | string | The refresh token is a permanent token. It
+        is valid for one year. | SUCCESS |
       requestBody:
         content:
           application/json:
             schema:
               type: object
               example:
-                email: example@example.com
-                password: ''
+                email: admin125@example.com
+                password: Example@123
       responses:
         '200':
-          description: Successful response
+          description: OK
+          headers:
+            Date:
+              schema:
+                type: string
+                example: Wed, 11 Jan 2023 08:23:35 GMT
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '1822'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            x-amzn-RequestId:
+              schema:
+                type: string
+                example: 90af64da-1276-4231-8394-f200f8976dbb
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: >-
+                  Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,x-requested-with,UUID
+            x-amz-apigw-id:
+              schema:
+                type: string
+                example: eka-rGUHBcwFUkA=
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT, ANY
+            Access-Control-Expose-Headers:
+              schema:
+                type: string
+                example: >-
+                  Access-Control-Allow-Origin, Access-Control-Allow-Headers,
+                  Access-Control-Allow-Methods
+            X-Amzn-Trace-Id:
+              schema:
+                type: string
+                example: Root=1-63be71f7-752dfdc209cb1a060937e188;Sampled=0
           content:
-            application/json: {}
-  /dev/api/v1/proto/signIn:
-    post:
-      tags:
-        - Zatca
-      summary: Sign In
-      description: >-
-        Use this API to onboard your EGS(E-Invoice Generation Solution) in the
-        ZATCA sandbox environment.
-
-
-        You have to pass all the required params in the specified format at the
-        minimum to onboard your EGS successfully. You can add additional
-        parameters if applicable as per your preference.
-
-
-        #### Request Parameters:
-
-
-        | **PARAMS** | **REQUIRED** | **DATA TYPE** | **DESCRIPTION** |
-        **EXAMPLE** |
-
-        | --- | --- | --- | --- | --- |
-
-        | `csrInputs` | YES | _json_ | The csr(certificate signing request)
-        details you need to provide for onboarding the EGS. | {} |
-
-        | `otp` | YES | _string_ | The OTP that you'll get from the Fatoora
-        Portal(logged in using taxpayer credentials) after following the ZATCA
-        onboarding process as per Antna Guidelines document. | 123345 |
-
-        | `commonName` | YES | _string_ | A Unique Name or Asset Tracking Number
-        of your EGS. There is no specific format, any free text will be
-        accepted. | TST-886431145-300055184400003 |
-
-        | `serialNumber` | YES | _string_ | Unique identification code for the
-        EGS. Serial number should be in this **"1-xxx | 2-xxx |
-
-        | `organizationIdentifier` | YES | _string_ | It is the organization VAT
-        number. It is a **15** digit number with starting and ending digits as
-        **'3'.** | 300055184400003 |
-
-        | `organizationUnitName` | YES | _string_ | The branch name for
-        Taxpayers. In case of VAT Groups , this field should contain the
-        10-digit TIN number of the individual group member whose EGS Unit is
-        being onboarded. **If 11th digit of Organization Identifier is not = 1
-        then Free text and if 11th digit of Organization Identifier = 1 then
-        needs to be a 10 digit number.** | 3123456789 |
-
-        | `organizationName` | YES | _string_ | Name of the Taxpayer. It can be
-        free text. | Antna Technologies Private Limited |
-
-        | `countryName` | YES | _string_ | Name of the country.  <br>2 letter
-        code (**ISO 3166 Alpha-2**) | SA |
-
-        | `invoiceType` | YES | _string_ | The document type that the Taxpayer’s
-        solution unit will be issuing/generating. It can be one or a combination
-        of Standard Tax Invoice (T), Simplified Tax Invoice (S), (X), (Y). The
-        input should be using the digits 0 & 1 and mapping those to “TSXY”
-        where:  <br>0 = False/Not supported  <br>1= True/Supported  <br>(X) and
-        (Y) are for future use and should be set to 0 by default for the time
-        being.  <br>For example: 1000 would mean Solution will be generating
-        Standard Invoices only. 0100 would mean Solution will be generating
-        Simplified invoices (B2C) only and 1100 means Solution will be
-        generating both Standard (B2B) and Simplified invoices (B2C). | 1100 |
-
-        | `location` | YES | _string_ | The address of the Branch or location
-        where the device or solution unit is primarily situated (could be
-        website address for e-commerce). **Preferably(not mandatory)** in the
-        Short Address format of the Saudi National Address
-        [https://splonline](https://splonline). com.sa/en/national- address-1/.
-        Free text will be accepted.  <br> | Riyadh |
-
-        | `industry` | YES | _string_ | Industry or sector for which the device
-        or solution(EGS) will generate invoices. Free text will be accepted. |
-        Petroleum |
-
-
-        #### **Response Parameters:**
-
-
-        | **PARAMS** | **DATA TYPE** | **DESCRIPTION** | **EXAMPLE** |
-
-        | --- | --- | --- | --- |
-
-        | `status` | string | Status of onboarding by ZATCA.  <br> 
-        <br>Onboarding involves multiple internal steps(API calls) with the
-        ZATCA platform and, for API simplification the status is classified as
-        success or failure on the whole.  <br>  <br>The enum value is according
-        to the respective scenarios listed below:  <br>  <br>1) Successfully
-        onboarded with ZATCA's Fatoora Portal - **SUCCESS**2) OnboardiNg failed
-        with ZATCA's Fatoora Portal due to various errors - **ERROR**  <br>This
-        field will not be present for request level errors(field format errors)
-        | SUCCESS |
-
-        | `errors` | list | If onboarding fails because of error from the APIs
-        in ZATCA layer, the corresponding API error messages will be returned
-        here. Please log this error response for RCA. | \[...\] |
-
-        | `code` | string | Error status code of the failed ZATCA API. | 400
-        BAD_REQUEST |
-
-        | `message` | string | Error message from the corresponding API | OTP is
-        required field |
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
+            application/json:
+              schema:
+                type: object
               example:
                 refreshToken: >-
-                  eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiUlNBLU9BRVAifQ.b6fJ9QVwyNyrW8HQCHMwN2TX1qRFm9UNGR_3YlRvFCf0MOkEaJwGDvr01RBBO5KhKYnBsnVXHTUJnMTL9GjRgMIv3g0t4zS46RhQ8HV4ikOPqdSJTPuCe6rTk44bTf8OM-Yr3Ekf46K_RV8z1g-xT0cks-M89-bV-eoecHyF-QNTUSgxZRBOxmsWJs0N5DdIyGGgloO4SkCoMaG3D_oAZNhFVO80JR5VUsNXsfDC_JLtdm-QrLZvMg_L-k1WtHwzgFjG_Z5Cq4rCP2RckwQ2suLNkz-8iYi6u1vyljSdPKuWqy6UaFOtJ8sOKoLKpxyFBLTRSR98UYL_Bv6uTU3Bbw.orOpxI-iuCkfpCD2.zaqhHo2HQPuKFklFce6vgBSmz_V22tOUSuqKO-Bx2Ay32mC7WcrWh7QPIReDXS6Ho-FyeXnHDDGnGiV0kHz9kkHsnY_qcZo2Q4wrEdSc61i7qMVzm_2YrJ8t_7iaCyLvr4JlZNkWIyo-00ei2uYXxy0f95-sdCqrJh4OWWcBhcmYj9frqT1P5EGgOK0_dluomf-41LiLWIiYpcSB75bfN9o01M6ykjIJVn5ZgUFlQQ2yU9zjZ38-syN9JG_5Ny4QoLMZQEIaFBG1ySqHk1sqEHzIDgQbbmYy5c4pYhmOsWHD_SDI1vMUZij0q1pS3Lx84V2j_i46K6gW-Cio73oQWPdYRFdY8d80M4IwzafSKkR5cZItJe_s_QIOD0N1_WxC7RNZJ6nvQZyTVzrYisajnRfOpBxkLIzLa3_iVC9KGCQELG67Ys1Z8IFQ1gW_igc5zxkTGYwW6Quwj5aubD_rH2Hj_N8RhDpc3Sd3U1L3jlWAFcS4ckWHuDTh22yxil5opNpUr5zRqRn9pV6l7xhmJj0JBsCkdI0mOqdt34yFZ7-LpQwQeAEAKf-7PeGe1-8QLJobVdPZ6VC5AAO82O8HNpFMoHXFSbOKXwTwVsUjXkByJTBrT7jStHutQ9oympHm1tI_7iWMSOA0Tn38QlqhPaz11DcrHt0ViEEinAs5POG57kQHAbTMwJQreN7B-FwIGTwQCOiXClPIOdbiZGGYfIZ37wvdDm6KQfy-eOXSCBpr61OjQC5yBaUQZDiwByemnoJoFLYwuVBXqLRe8VkAb1IcTDcrcdyeei38ulvw66RT0Ka9stAJhbV7P_cmIfqG_qw-N699G5Lomk5XVcquWYsYxJHGl5ao5cRRDxksQ77X8ZGuovL22vTSkqAdXkefWXdSc9YC3EKg29zD6EIrjiC0EJXv0icpHUSGaEHF6ocADNQ1rBcrUllCU33ibCJNBQHot9lFesHkaJQBgEi_bsEsp5e4d6hfjmekP5y3kcZVq5Zjeje8OYz8ZTKp_hiQoQ24C0yyghWvEn6OMfXGT0jq4shelO6WsJ2v2AdOtVmslaQDc8ZJIoBu124Nph6eiUNB9wN_dfWEkO0ixe8yLpH4JT-YV0SkZs23o1QFdgVPkGJl8T5NL63QplWKqcHFyEx8KgaBGRe6yMZeDqc6dIggjr1FwkkQ9SybRenhYKFP1sDfNzWRhrg3qRPdtNQBqWDV58iRz2p0MzqtyIoHD6DMmpYBUZafwU2Ih4yXQCywieVpb15PGYhUxpDS5Z3vBLcDQ7Ny2JQkDuSTG2yHhO1vpt2PvWtukmBNuBlg2gE9h00GIjwt0s2MkS119g.f36JJs3DouKY-bf-USkGAg
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
+                  eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiUlNBLU9BRVAifQ.LodXXVxlXPN5d-3PjlcuR7VPIAOYYM2k16gGVVEXtDBLjrebuYhkI_Bnxs750CzJqLfuktNsKGVABTBd_kx4Vy3PlyyPeO326cIIGUHDukwL87DJ86G-XFWrkesY_WKKrov50NPc3h3rQ-7NZqxPoORFKP36x4XrCIG_wmZjIrSHVeQIPZ8leisZNi29SohxDDVP-O18l072iClbhknyL6vHaTDuPOntoIp2l614DoFpyZcw_pzrbZmQEFxWsM33kA67il92dajlnkt122MDgL3IiosSrpndyd7kvEJiaqI5vbBC7IpLR-Q_rS7l4l1lL6EGnHsW2F4e4lKfQWlrzA.wd-JFKEujcypjAUT.YKtcjE3xAJLck1-L4GhkmPW4GwddKc6Llm8cwEIdNbuBMG8NZFcVUYyhtNF4_r49vdEioj_jAyeJSymDABz56CF5yKH3_9YjT3v1XSW8GDEuCK7UYrK10e4bY99EUisqkf0_6Gpuv6-es9uTIV-jFvYw9hL0Q-PG000sqBEWkUZSU1GSt7_pfG4f1sjL2dOKmwjCm1khrwxdXhaqO8FmOxxSR0B80WLq3V-H1F-NWGGpe03d3TC7iLh7RwcR5DVRe4bLKvv57ZNMkI4nlz3_4hzodvAa75So9yt2UlCMR3HZi_XzeMR2e4hFhesrUGVkgLhNwfEzJKei5ix9bI8QEjzATuPLGyzasvyHway6uZvRGRjqC4dJaHhwyYPay4elYCk1nPiJpLR6O6u3C2QWaxz-1ebQH0uBdZBhf367oEKtkplWSzSJnucr851clMr1I-JeYstTmhcKeAJn2lnO5gXP5gBmJCelfmhQIEhbnus_eUutTHxEZKVPE45fXJcvETNyJOiQJErtkbEDyEmMXWbTTeAVk6O2j4qPLbm7c3p0UF6ja5YW-NMyYql1LuS76j00RR2lN6K6_u_3V9N9jeEsArUjdJKB2BGFEoAzBWvKQb8xVZMLbOj05RV5hj-X2RkY6h8bYg8RAq9S8Z0YWDwA0qVQZvJq7d-Gcce3jf_M-tqXCvgkLZe_apcRsMvHIrQgii7ki6btINIr0ZhKhtDk7RS2I_18FH_lF_rj_WW_wXTD0ej6KPvihR9Naq37kfnVLaaGQwbcpIlkiZNoKo4aOk2dsWQUciKyLFYDAhYtOSAvpg0Jdku2OZIWRjfrvMZ0k90wQHMuVlhec8GHNfUqSR-K5KRGHE3UHE6An4rnrT_lZvowMper5VHMDXT2sd_8QsbAaPEcfMCRuMLy6I1lnS4BIBpq2qOgkaViWsb3tKmzbDLrxfhBPsvJTWASVm4JLzflXXOg8oeeiuhQ5MU4FcRTXWZpPJ-hPAc4z2ByHJwGPo-7wSGfEwectPl9SDDDqgPy4yHL6FaWr2gbCe1oArLDCO4FFzgE68ry7DTTfjZWATUfwkhpfqz0ZfNmic2KHCuzn11IRABWG96cNGTLIvtZJLiF-cH1CMAj1ocY855x9wTZUrs7chSbP_xDvOeyh6pvKZxBxnTasoj2asTnyp1omMQXlQzH4mEiIXFdDb7L-4MllWSsqpWt4oZBhNNH7dapGPuhNRorFy7b3Kf_XMjGIqX2UK2Prq-pO_oc10gWQ_3OFD0BpGL0YdM-oARPFr8p6EgYBL9JTPBABYef9g0eGo5H3NPPX91F63aMHzfJdBnBg7BC_DSuaw.eZ4gG_CFeTrH_2wqISrPxw
+                isAdded: true
