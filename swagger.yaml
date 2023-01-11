@@ -828,7 +828,7 @@ paths:
                   sellerVatRegistrationNumber: '300055184400003'
                   sellerGroupVatRegistrationNumber: ''
                   additionalSellerIdType: CRN
-                  additionalSellerIdNumber: ''
+                  additionalSellerIdNumber: '1112233344'
                   specialTaxTreatment: '0'
                   currency: SAR
                   documentId: '001'
@@ -1160,7 +1160,7 @@ paths:
                   sellerVatRegistrationNumber: '300055184400003'
                   sellerGroupVatRegistrationNumber: ''
                   additionalSellerIdType: CRN
-                  additionalSellerIdNumber: ''
+                  additionalSellerIdNumber: '1112233344'
                   specialTaxTreatment: '0'
                   currency: SAR
                   documentId: '001'
