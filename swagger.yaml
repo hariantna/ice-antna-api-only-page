@@ -140,7 +140,7 @@ security:
 tags:
   - name: Zatca
     description: >-
-      # **ZATCA APIs:**
+      # ZATCA APIs:
 
 
       This folder consists of the APIs that will help your application get ZATCA
