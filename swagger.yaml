@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: ZATCA
+  title: Complyance API - Antna APIs for ZATCA E-Invoicing
   description: >-
     Welcome to Antna's API Documentation. We've designed this document to help
     developers and Antna users fully understand and integrate our API for a
@@ -787,6 +787,7 @@ paths:
                   sellerAddress:
                     addrLine1: 12, Masjid Street
                     addrLine2: Amjad Building
+                    additionalNumber: '1234'
                     buildingNumber: '1234'
                     city: Dammam
                     state: Riyadh
@@ -1116,6 +1117,7 @@ paths:
                   sellerAddress:
                     addrLine1: 12, Masjid Street
                     addrLine2: Amjad Building
+                    additionalNumber: '1234'
                     buildingNumber: '1234'
                     city: Dammam
                     state: Riyadh
