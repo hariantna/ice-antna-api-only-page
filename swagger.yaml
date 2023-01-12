@@ -752,13 +752,14 @@ paths:
         treatment applied to the supply” as per Article 53 of the VAT
         Implementing Regulation.  <br>  <br>Narration to be entered if Tax is
         not charged at basic rate. | 0 |
+        
+        | `noteIssuanceReason` | CONDITIONAL | string | Reason for issuing credit/debit note. <br> Reasons for issuance of credit / debit note as per Article 40 (paragraph 1) and Article 54 (3) of KSA VAT regulations, a Credit and Debit Note is issued for these 5 instances: <br> 1) Cancellation or suspension of the supplies after its occurrence either wholly or partially <br> 2) <br> 3) In case of essential change or amendment in the supply, which leads to the change of the VAT due; <br> 4) Amendment of the supply value which is pre-agreed upon between the supplier and consumer; <br> 5) In case of goods or services refund. In case of change in Seller's or Buyer's information | Cancellation or suspension of the supplies after its occurrence either wholly or partially |
 
         | `currency` | YES | string | Transaction Currency of the document | SAR
         |
 
         | `documentId` | YES | string | A unique identification of the Invoice -
         Invoice Reference number(IRN) | 2022100627 |
-
 
         #### **Response Parameters:**
 
@@ -1075,6 +1076,8 @@ paths:
         treatment applied to the supply” as per Article 53 of the VAT
         Implementing Regulation.  <br>  <br>Narration to be entered if Tax is
         not charged at basic rate. | 0 |
+
+        | `noteIssuanceReason` | CONDITIONAL | string | Reason for issuing credit/debit note. <br> Reasons for issuance of credit / debit note as per Article 40 (paragraph 1) and Article 54 (3) of KSA VAT regulations, a Credit and Debit Note is issued for these 5 instances: <br> 1) Cancellation or suspension of the supplies after its occurrence either wholly or partially <br> 2) <br> 3) In case of essential change or amendment in the supply, which leads to the change of the VAT due; <br> 4) Amendment of the supply value which is pre-agreed upon between the supplier and consumer; <br> 5) In case of goods or services refund. In case of change in Seller's or Buyer's information | Cancellation or suspension of the supplies after its occurrence either wholly or partially |
 
         | `currency` | YES | string | Transaction Currency of the document | SAR
         |
@@ -1437,6 +1440,8 @@ paths:
         treatment applied to the supply” as per Article 53 of the VAT
         Implementing Regulation.  <br>  <br>Narration to be entered if Tax is
         not charged at basic rate. | 0 |
+
+        | `noteIssuanceReason` | CONDITIONAL | string | Reason for issuing credit/debit note. <br> Reasons for issuance of credit / debit note as per Article 40 (paragraph 1) and Article 54 (3) of KSA VAT regulations, a Credit and Debit Note is issued for these 5 instances: <br> 1) Cancellation or suspension of the supplies after its occurrence either wholly or partially <br> 2) <br> 3) In case of essential change or amendment in the supply, which leads to the change of the VAT due; <br> 4) Amendment of the supply value which is pre-agreed upon between the supplier and consumer; <br> 5) In case of goods or services refund. In case of change in Seller's or Buyer's information | Cancellation or suspension of the supplies after its occurrence either wholly or partially |
 
         | `currency` | YES | string | Transaction Currency of the document | SAR
         |
